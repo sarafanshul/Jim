@@ -1,6 +1,6 @@
 package com.projectdelta.jim.data.model
 
-typealias BaseId = Int
+import com.projectdelta.jim.util.BaseId
 
 abstract class BaseModel {
     abstract val id : BaseId

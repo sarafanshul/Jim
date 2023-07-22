@@ -4,25 +4,28 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
+import com.projectdelta.jim.data.model.Exercise
 import com.projectdelta.jim.data.repository.ExerciseRepository
 import com.projectdelta.jim.ui.theme.JimTheme
-import dagger.Provides
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,13 +37,15 @@ class MainActivity(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val exercises = viewModel.exercisesPager.collectAsLazyPagingItems()
+
             JimTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Test(viewModel)
+                    Test(exercises)
                 }
             }
         }
@@ -48,13 +53,27 @@ class MainActivity(
 }
 
 @Composable
-fun Test(viewModel: MViewModel) {
-    val list by viewModel.exercises.observeAsState(initial = listOf())
+fun Test(exercises : LazyPagingItems<Exercise>) {
+    Timber.d("item count : ${exercises.itemCount}")
+    when (exercises.loadState.refresh){
+        LoadState.Loading -> {
 
-    LazyColumn(){
-        items(list){ex ->
-            Row {
-                Text(text = ex.name)
+        }
+        is LoadState.Error -> {
+
+        }
+        is LoadState.NotLoading -> {
+            LazyColumn{
+                items(
+                    count = exercises.itemCount,
+                    key = exercises.itemKey { it.id },
+                ) { index ->
+                    val exercise = exercises[index] ?: return@items
+                    Timber.d("index : $index, ex : ${exercise.name}")
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Text(text = exercise.name)
+                    }
+                }
             }
         }
     }
@@ -73,6 +92,8 @@ class MViewModel @Inject constructor(
 ) : ViewModel() {
 
     val exercises = repository.getAllExercises().asLiveData()
+
+    val exercisesPager = repository.getAllExercisesPaged()
 
 }
 

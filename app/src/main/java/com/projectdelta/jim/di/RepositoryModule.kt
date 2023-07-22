@@ -1,8 +1,11 @@
 package com.projectdelta.jim.di
 
 import com.projectdelta.jim.data.local.ExerciseDao
+import com.projectdelta.jim.data.local.WorkoutSessionDao
 import com.projectdelta.jim.data.repository.ExerciseRepository
 import com.projectdelta.jim.data.repository.ExerciseRepositoryImpl
+import com.projectdelta.jim.data.repository.WorkoutSessionRepository
+import com.projectdelta.jim.data.repository.WorkoutSessionRepositoryImpl
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import dagger.Module
 import dagger.Provides
@@ -22,5 +25,14 @@ object RepositoryModule {
         @IODispatcher dispatcher: CoroutineDispatcher
     ): ExerciseRepository{
         return ExerciseRepositoryImpl(dao, dispatcher)
+    }
+
+    @Singleton
+    @Provides
+    fun provideWorkoutSessionRepository(
+        dao : WorkoutSessionDao,
+        @IODispatcher dispatcher: CoroutineDispatcher
+    ): WorkoutSessionRepository{
+        return WorkoutSessionRepositoryImpl(dao, dispatcher)
     }
 }

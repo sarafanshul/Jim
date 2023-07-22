@@ -3,6 +3,7 @@ package com.projectdelta.jim.di
 import android.app.Application
 import com.projectdelta.jim.data.local.ExerciseDao
 import com.projectdelta.jim.data.local.JimDatabase
+import com.projectdelta.jim.data.local.WorkoutSessionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,4 +25,11 @@ object DatabaseModule {
     fun provideExerciseDao(database: JimDatabase) : ExerciseDao {
         return database.exerciseDao()
     }
+
+    @Singleton
+    @Provides
+    fun provideWorkoutSessionDao(database: JimDatabase) : WorkoutSessionDao {
+        return database.workoutSessionDao()
+    }
+
 }

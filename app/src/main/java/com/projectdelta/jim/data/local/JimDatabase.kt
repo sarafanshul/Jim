@@ -9,15 +9,18 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.projectdelta.jim.R
 import com.projectdelta.jim.data.model.Exercise
 import com.projectdelta.jim.data.model.ExerciseWrapper
+import com.projectdelta.jim.data.model.WorkoutSession
 import com.projectdelta.jim.util.Constants.Database.VERSION
 import com.projectdelta.jim.util.Constants.Database.NAME
 import com.projectdelta.jim.util.Converters
 import com.projectdelta.jim.util.JSONUtils
+import timber.log.Timber
 import java.util.concurrent.Executors
 
 @Database(
     entities = [
         Exercise::class,
+        WorkoutSession::class,
     ],
     version = VERSION,
     exportSchema = true,
@@ -28,6 +31,8 @@ import java.util.concurrent.Executors
 abstract class JimDatabase : RoomDatabase() {
 
     abstract fun exerciseDao() : ExerciseDao
+
+    abstract fun workoutSessionDao() : WorkoutSessionDao
 
     companion object{
 
@@ -57,7 +62,7 @@ abstract class JimDatabase : RoomDatabase() {
                     Executors.newSingleThreadExecutor().execute {
                         INSTANCE?.let {
                             // Prepopulate data here if needed
-
+                            Timber.d("PrePopulating data")
                             val data = JSONUtils.getJsonFileAsClass(application.resources, R.raw.exercises, ExerciseWrapper::class.java)
                             if( data.isPresent )
                                 it.exerciseDao().insertAll(data.get().exercises)

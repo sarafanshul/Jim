@@ -5,13 +5,14 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.projectdelta.jim.util.Constants.Table
+import com.projectdelta.jim.util.BaseId
 import com.projectdelta.jim.util.Constants.Table.DEFAULT_VALUE_STR
+import com.projectdelta.jim.util.Constants.Table.EXERCISE_TABLE
 import java.io.Serializable
 import kotlin.random.Random
 
 @Keep
-@Entity(tableName = Table.EXERCISE_TABLE)
+@Entity(tableName = EXERCISE_TABLE)
 data class Exercise(
 
     @PrimaryKey(autoGenerate = false)
