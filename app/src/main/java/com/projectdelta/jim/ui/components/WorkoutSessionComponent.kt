@@ -16,8 +16,14 @@ import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
 import com.projectdelta.jim.util.onClick
 
+/**
+ * Component for preview-ing a workout session.
+ * @param workoutSession [WorkoutSession] info
+ * @param modifier view [Modifier]
+ * @param onClickAction single item click listener with [Workout] arg.
+ */
 @Composable
-fun WorkoutSessionBox(
+fun WorkoutSessionComponent(
     workoutSession: WorkoutSession,
     modifier: Modifier,
     onClickAction: onClick<Workout>? = null
@@ -26,7 +32,7 @@ fun WorkoutSessionBox(
         modifier = modifier
     ){
         items(workoutSession.workouts) {workout ->
-            WorkoutLogBox(
+            WorkoutLogComponent(
                 workout = workout,
                 modifier = Modifier
                     .padding(PADDING_NORMAL)
@@ -96,7 +102,7 @@ fun WorkoutSessionBoxPreview() {
         )
     )
     JimTheme {
-        WorkoutSessionBox(
+        WorkoutSessionComponent(
             workoutSession = session,
             modifier = Modifier
                 .fillMaxSize()
