@@ -23,7 +23,7 @@ class WorkoutSessionRepositoryImpl(
                 WorkoutSessionState.Session(it)
             else
                 WorkoutSessionState.NoSession
-        }
+        }.flowOn(workerDispatcher)
     }
 
     override fun getById(id: BaseId): Flow<WorkoutSession?> {

@@ -22,6 +22,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.projectdelta.jim.data.model.Exercise
 import com.projectdelta.jim.data.repository.ExerciseRepository
+import com.projectdelta.jim.ui.screen.home.HomeScreen
 import com.projectdelta.jim.ui.theme.JimTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,13 +41,7 @@ class MainActivity(
             val exercises = viewModel.exercisesPager.collectAsLazyPagingItems()
 
             JimTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Test(exercises)
-                }
+                HomeScreen()
             }
         }
     }

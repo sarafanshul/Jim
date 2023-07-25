@@ -1,4 +1,4 @@
-package com.projectdelta.jim.ui.screen
+package com.projectdelta.jim.ui.screen.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,6 +45,7 @@ import com.projectdelta.jim.data.model.WorkoutSession
 import com.projectdelta.jim.data.model.WorkoutSet
 import com.projectdelta.jim.data.state.WorkoutSessionState
 import com.projectdelta.jim.ui.components.WorkoutSessionComponent
+import com.projectdelta.jim.ui.events.WorkoutSessionScreenEventsHandler
 import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.Constants
 import com.projectdelta.jim.util.Constants.StringRes.NO_WORKOUT_LOG
@@ -73,7 +74,7 @@ fun ImageButton(
     text: String,
     painter: Painter,
     onClick: onClick<Unit>,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     contentDescription: String =  ""
 ){
     Card(
@@ -123,7 +124,7 @@ fun ImageButton(
 @Composable
 fun EmptyWorkoutSessionComponent(
     eventsHandler: WorkoutSessionScreenEventsHandler,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ){
     val ioScope = rememberCoroutineScope()
     Column(
@@ -201,7 +202,7 @@ fun EmptyWorkoutSessionComponent(
 fun DayInfoTopBarComponent(
     currentDay: Int,
     eventsHandler: WorkoutSessionScreenEventsHandler,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ){
     val coroutineScope = rememberCoroutineScope()
     Column(
@@ -300,7 +301,7 @@ fun WorkoutSessionScreen(
                 .weight(9.5f)
                 .fillMaxSize(),
         ) {day ->
-            LaunchedEffect(Unit){
+            LaunchedEffect(day){
                 currentDay.value = day
             }
             val workoutSessionState = eventsHandler
@@ -330,25 +331,6 @@ fun WorkoutSessionScreen(
             }
         }
     }
-}
-
-/**
- * Workout Session Event handle
- */
-interface WorkoutSessionScreenEventsHandler{
-
-    fun loadSessionForDay( day : Int ) : Flow<WorkoutSessionState>
-
-    fun addNewWorkout()
-
-    fun copyPreviousWorkout()
-
-    fun moveDayPrevious()
-
-    fun moveDayForward()
-
-    fun onWorkoutSelected( workout: Workout )
-
 }
 
 @Preview(showBackground = true)
@@ -456,6 +438,7 @@ fun WorkoutSessionScreenPreview(){
             state = pagerState,
             eventsHandler = eventHandler,
             modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize()
         )
     }
