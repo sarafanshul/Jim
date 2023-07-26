@@ -1,20 +1,18 @@
 package com.projectdelta.jim.ui.screen.home
 
-import androidx.compose.foundation.pager.PagerState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.projectdelta.jim.data.model.Workout
 import com.projectdelta.jim.data.repository.ExerciseRepository
 import com.projectdelta.jim.data.repository.WorkoutSessionRepository
 import com.projectdelta.jim.data.state.WorkoutSessionState
 import com.projectdelta.jim.di.qualifiers.IODispatcher
-import com.projectdelta.jim.ui.events.WorkoutSessionScreenEventsHandler
-import com.projectdelta.jim.util.TimeUtil
+import com.projectdelta.jim.util.TimeUtil.getCurrentDayFromEpoch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,43 +21,68 @@ class HomeScreenViewModel @Inject constructor(
     private val exerciseRepository: ExerciseRepository,
     private val workoutRepository: WorkoutSessionRepository,
     @IODispatcher private val worker: CoroutineDispatcher,
-): ViewModel(), WorkoutSessionScreenEventsHandler {
+) : ViewModel() {
 
-    val pagerState = PagerState(
-        initialPage = TimeUtil
-            .millisecondsToDays(System.currentTimeMillis())
+    private val _homeScreenState = MutableStateFlow(
+        HomeScreenState(getCurrentDayFromEpoch())
     )
+    val homeScreenState = _homeScreenState.asStateFlow()
 
-    override fun loadSessionForDay(day: Int): Flow<WorkoutSessionState> {
-        return workoutRepository.getSessionByDay(day)
+    private val _workoutSessionState = MutableStateFlow<WorkoutSessionState>(
+        WorkoutSessionState.NoSession
+    )
+    val workoutSessionState = _workoutSessionState.asStateFlow()
+
+    init {
+        registerObserver()
     }
 
-    override fun addNewWorkout() {
-        // TODO("Not yet implemented")
-    }
-
-    override fun copyPreviousWorkout() {
-        // TODO("Not yet implemented")
-    }
-
-    override fun moveDayPrevious() {
+    fun registerObserver() {
         viewModelScope.launch(worker) {
-            pagerState.animateScrollToPage(
-                pagerState.currentPage - 1
-            )
+            homeScreenState.collectLatest { state ->
+                workoutRepository.getSessionByDay(state.currentDay).collectLatest {
+                    _workoutSessionState.value = it
+                }
+            }
         }
     }
 
-    override fun moveDayForward() {
-        viewModelScope.launch(worker) {
-            pagerState.animateScrollToPage(
-                pagerState.currentPage + 1
-            )
+    fun handleEvent(event: HomeScreenEvent) = viewModelScope.launch(worker) {
+        when (event) {
+            is HomeScreenEvent.TopBarDateClickEvent -> {
+                _homeScreenState.update {
+                    it.copy(currentDay = getCurrentDayFromEpoch())
+                }
+            }
+
+            is HomeScreenEvent.TopBarBackClickEvent -> {
+                _homeScreenState.update {
+                    it.copy(currentDay = it.currentDay - 1)
+                }
+            }
+
+            is HomeScreenEvent.TopBarNextClickEvent -> {
+                _homeScreenState.update {
+                    it.copy(currentDay = it.currentDay + 1)
+                }
+            }
+
+            is HomeScreenEvent.CreateNewWorkoutEvent -> {
+            }
+
+            is HomeScreenEvent.CopyPreviousWorkoutEvent -> {
+                // TODO (IMPL)
+            }
+
+            is HomeScreenEvent.DateChangeEvent -> {
+                _homeScreenState.update {
+                    it.copy(currentDay = event.newDate)
+                }
+            }
+
+            is HomeScreenEvent.WorkoutSelectedEvent -> {
+                // TODO (IMPL)
+            }
         }
     }
-
-    override fun onWorkoutSelected(workout: Workout) {
-        // TODO("Not yet implemented")
-    }
-
 }

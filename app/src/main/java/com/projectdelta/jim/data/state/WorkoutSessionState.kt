@@ -9,6 +9,6 @@ sealed class WorkoutSessionState{
 
     object NoSession : WorkoutSessionState()
 
-    data class Session( val session: List<WorkoutSession> ) : WorkoutSessionState()
+    data class Session( val session: WorkoutSession ) : WorkoutSessionState()
 
 }

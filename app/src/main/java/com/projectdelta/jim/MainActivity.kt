@@ -23,6 +23,7 @@ import androidx.paging.compose.itemKey
 import com.projectdelta.jim.data.model.Exercise
 import com.projectdelta.jim.data.repository.ExerciseRepository
 import com.projectdelta.jim.ui.screen.home.HomeScreen
+import com.projectdelta.jim.ui.screen.home.HomeScreenViewModel
 import com.projectdelta.jim.ui.theme.JimTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,62 +34,16 @@ import javax.inject.Inject
 class MainActivity(
 ) : ComponentActivity() {
 
-    private val viewModel : MViewModel by viewModels()
+    private val viewModel : HomeScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val exercises = viewModel.exercisesPager.collectAsLazyPagingItems()
-
             JimTheme {
-                HomeScreen()
+                HomeScreen(
+                    viewModel = viewModel,
+                )
             }
         }
     }
 }
-
-@Composable
-fun Test(exercises : LazyPagingItems<Exercise>) {
-    Timber.d("item count : ${exercises.itemCount}")
-    when (exercises.loadState.refresh){
-        LoadState.Loading -> {
-
-        }
-        is LoadState.Error -> {
-
-        }
-        is LoadState.NotLoading -> {
-            LazyColumn{
-                items(
-                    count = exercises.itemCount,
-                    key = exercises.itemKey { it.id },
-                ) { index ->
-                    val exercise = exercises[index] ?: return@items
-                    Timber.d("index : $index, ex : ${exercise.name}")
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        Text(text = exercise.name)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    JimTheme {
-    }
-}
-
-@HiltViewModel
-class MViewModel @Inject constructor(
-    private val repository: ExerciseRepository
-) : ViewModel() {
-
-    val exercises = repository.getAllExercises().asLiveData()
-
-    val exercisesPager = repository.getAllExercisesPaged()
-
-}
-

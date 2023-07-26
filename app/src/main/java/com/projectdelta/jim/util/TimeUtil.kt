@@ -28,6 +28,9 @@ object TimeUtil {
     fun dayToMilliseconds( day : Int ) =
         day * DAY_TO_MILLISECOND
 
+    fun getCurrentDayFromEpoch() =
+        millisecondsToDays(System.currentTimeMillis())
+
     private val calendarInstance = Calendar.getInstance() // cached calendar instance
 
     /**

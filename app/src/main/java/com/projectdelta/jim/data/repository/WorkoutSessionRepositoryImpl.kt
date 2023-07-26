@@ -20,7 +20,7 @@ class WorkoutSessionRepositoryImpl(
         val session = getByTime( TimeUtil.dayToMilliseconds(day) )
         return session.map {
             if(it.isNotEmpty())
-                WorkoutSessionState.Session(it)
+                WorkoutSessionState.Session(it.first()) // FIXME : a day can only have one session
             else
                 WorkoutSessionState.NoSession
         }.flowOn(workerDispatcher)

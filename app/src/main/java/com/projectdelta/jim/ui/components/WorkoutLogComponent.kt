@@ -32,19 +32,19 @@ import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
 import com.projectdelta.jim.util.Constants.UI.ROUND_RADIUS_NORMAL
 import com.projectdelta.jim.util.Constants.UI.TEXT_NOT_THAT_LARGE
 import com.projectdelta.jim.util.Constants.UI.TEXT_SMALL_PLUS
-import com.projectdelta.jim.util.onClick
+import com.projectdelta.jim.util.onClickWParam
 
 /**
  * Component for Logging [Workout]
  * @param workout [Workout] data
  * @param modifier view [Modifier]
- * @param onClickListener click listener attachment
+ * @param onClickWParamListener click listener attachment
  */
 @Composable
 fun WorkoutLogComponent(
     workout: Workout,
     modifier: Modifier,
-    onClickListener: onClick<Workout>? = null
+    onClickWParamListener: onClickWParam<Workout>? = null
 ){
     Card(
         shape = RoundedCornerShape(ROUND_RADIUS_NORMAL),
@@ -55,7 +55,7 @@ fun WorkoutLogComponent(
             .background(Color.White, RoundedCornerShape(ROUND_RADIUS_NORMAL))
             .fillMaxWidth(),
         onClick = {
-            onClickListener?.invoke(workout)
+            onClickWParamListener?.invoke(workout)
         }
     ) {
         Column {
