@@ -44,7 +44,6 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
-
             )
         }
     )

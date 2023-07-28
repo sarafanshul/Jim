@@ -3,6 +3,7 @@ package com.projectdelta.jim.data.model
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.projectdelta.jim.util.BaseId
@@ -12,11 +13,19 @@ import java.io.Serializable
 import kotlin.random.Random
 
 @Keep
-@Entity(tableName = EXERCISE_TABLE)
+@Entity(
+    tableName = EXERCISE_TABLE,
+    indices = [
+        Index(
+            value = ["name"],
+            unique = true
+        )
+    ]
+)
 data class Exercise(
 
-    @PrimaryKey(autoGenerate = false)
-    override val id : BaseId = Random.nextInt(),
+    @PrimaryKey(autoGenerate = true)
+    override var id : BaseId = 0,
 
     @[SerializedName("name") ColumnInfo(name = "name")]
     val name: String = DEFAULT_VALUE_STR,

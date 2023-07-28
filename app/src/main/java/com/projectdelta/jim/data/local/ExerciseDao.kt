@@ -17,7 +17,7 @@ interface ExerciseDao : BaseDao<Exercise> {
      * @return [Exercise] if found.
      */
     @Query("SELECT * FROM $EXERCISE_TABLE WHERE id = :id")
-    fun getById(id : BaseId) : Flow<Exercise?>
+    fun getById(id: BaseId): Flow<Exercise?>
 
     /**
      * Fetches [Exercise] by names
@@ -25,20 +25,36 @@ interface ExerciseDao : BaseDao<Exercise> {
      * @return [List]<[Exercise]>
      */
     @Query("SELECT * FROM $EXERCISE_TABLE WHERE name = :name")
-    fun getByName(name : String) : Flow<List<Exercise>>
+    fun getByName(name: String): Flow<List<Exercise>>
 
     /**
      * Fetches all [Exercise] from database
      * @return [List] of all [Exercise]
      */
     @Query("SELECT * FROM $EXERCISE_TABLE ORDER BY name ASC")
-    fun getAllExercises() : Flow<List<Exercise>>
+    fun getAllExercises(): Flow<List<Exercise>>
 
     /**
      * Fetches all [Exercise] in database, Paged, ORDER_BY ASC
      * @return [PagingSource]<[Int],[Exercise]>
      */
     @Query("SELECT * FROM $EXERCISE_TABLE ORDER BY name ASC")
-    fun getAllExercisesPaged() : PagingSource<Int, Exercise>
+    fun getAllExercisesPaged(): PagingSource<Int, Exercise>
+
+    /**
+     * Fetches all [Exercise] where name `LIKE` [substring]
+     * @param substring substring to match
+     * @return [List] of all [Exercise] found
+     */
+    @Query("SELECT * FROM $EXERCISE_TABLE WHERE name LIKE '%' || :substring || '%'")
+    fun getByNameLike(substring: String): Flow<List<Exercise>>
+
+    /**
+     * Fetches all [Exercise] where name `LIKE` [substring] Paged
+     * @param substring substring to match
+     * @return [List] of all [Exercise] found
+     */
+    @Query("SELECT * FROM $EXERCISE_TABLE WHERE name LIKE '%' || :substring || '%'")
+    fun getByNameLikePaged(substring: String): PagingSource<Int, Exercise>
 
 }

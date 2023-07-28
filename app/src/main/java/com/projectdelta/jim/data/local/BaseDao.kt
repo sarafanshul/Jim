@@ -11,9 +11,18 @@ interface BaseDao<in T : BaseModel> {
     /**
      * Inserts item in database
      * @param obj item to be inserted
+     * @return new id of inserted object
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert( obj : T )
+    fun insert(obj: T): Long
+
+    /**
+     * Inserts item in database
+     * @param obj item to be inserted
+     * @return new id of inserted object
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg obj: T): List<Long>
 
     /**
      * Insert a list in the database. If the item already exists, replace it.
@@ -21,7 +30,7 @@ interface BaseDao<in T : BaseModel> {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     @JvmSuppressWildcards
-    fun insertAll( objects : List<T> )
+    fun insertAll( objects : List<T> ) : List<Long>
 
     /**
      * Updates the item in database

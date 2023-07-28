@@ -16,8 +16,8 @@ import kotlin.random.Random
 @Entity(tableName = WORKOUT_SESSION_TABLE)
 data class WorkoutSession(
 
-    @PrimaryKey(autoGenerate = false)
-    override val id: BaseId = Random.nextInt(),
+    @PrimaryKey(autoGenerate = true)
+    override var id: BaseId = 0,
 
     @[SerializedName("timeMs") ColumnInfo(name = "timeMs")]
     val timeMs: Long = 0,

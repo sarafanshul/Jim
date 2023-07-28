@@ -21,12 +21,16 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimeInput
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
@@ -49,7 +53,9 @@ import com.projectdelta.jim.util.Constants.UI.TEXT_SMALL_PLUS
 import com.projectdelta.jim.util.TimeUtil
 import com.projectdelta.jim.util.onClick
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Image clickable card with transparent background
@@ -264,17 +270,8 @@ fun WorkoutSessionScreen(
         initialPage = uiState.currentDay
     )
 
-    LaunchedEffect(pagerState.currentPage) {
-        launch{
-            delay(200) // https://stackoverflow.com/questions/73714228/accompanist-pager-animatescrolltopage-doesnt-scroll-to-next-page-correctly
-            if (pagerState.currentPage != uiState.currentDay)
-                viewModel.handleEvent(HomeScreenEvent.DateChangeEvent(pagerState.currentPage))
-        }
-    }
-
-    LaunchedEffect(uiState) {
-        if (uiState.currentDay != pagerState.currentPage)
-            pagerState.animateScrollToPage(uiState.currentDay, 0f)
+    LaunchedEffect(uiState) {// handle ui state changes
+        pagerState.animateScrollToPage(uiState.currentDay, 0f)
     }
 
     Column(
@@ -283,15 +280,22 @@ fun WorkoutSessionScreen(
     ) {
 
         DayInfoTopBarComponent(
-            currentDay = uiState.currentDay,
+            currentDay = pagerState.currentPage,
             onDateClick = {
-                viewModel.handleEvent(HomeScreenEvent.TopBarDateClickEvent)
+                viewModel.handleEvent(HomeScreenEvent.DateChangeEvent(
+                    TimeUtil.getCurrentDayFromEpoch()
+                ))
             },
             onBackClick = {
-                viewModel.handleEvent(HomeScreenEvent.TopBarBackClickEvent)
+                viewModel.handleEvent(HomeScreenEvent.DateChangeEvent(
+                    pagerState.currentPage - 1
+                ))
             },
             onNextClick = {
-                viewModel.handleEvent(HomeScreenEvent.TopBarNextClickEvent)
+                viewModel.handleEvent(
+                    HomeScreenEvent.DateChangeEvent(
+                    pagerState.currentPage + 1
+                ))
             },
             modifier = Modifier
                 .weight(0.5f)
@@ -313,10 +317,11 @@ fun WorkoutSessionScreen(
             state = pagerState,
             modifier = Modifier
                 .weight(9.5f)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(bottom = PADDING_SMALL),
             flingBehavior = fling
-        ) { _ ->
-            val workoutSessionState by viewModel.workoutSessionState.collectAsState()
+        ) { day ->
+            val workoutSessionState by viewModel.getWorkoutByDay(day).collectAsState()
 
             when (workoutSessionState) {
                 is WorkoutSessionState.NoSession -> {

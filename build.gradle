@@ -22,6 +22,11 @@ plugins {
     id 'com.google.devtools.ksp' version '1.8.21-1.0.11' apply false
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
+}
+
+tasks.register('clearAppData', Exec) {
+    def clearDataCommand = ['adb', 'shell', 'pm', 'clear', 'com.projectdelta.jim']
+    commandLine clearDataCommand
 }

@@ -4,13 +4,7 @@ import com.projectdelta.jim.data.model.Workout
 
 sealed class HomeScreenEvent{
 
-    data class DateChangeEvent( val newDate : Int ) : HomeScreenEvent()
-
-    object TopBarDateClickEvent : HomeScreenEvent()
-
-    object TopBarBackClickEvent : HomeScreenEvent()
-
-    object TopBarNextClickEvent : HomeScreenEvent()
+    data class DateChangeEvent( val newDate : Int, val forceScroll: Boolean = false ) : HomeScreenEvent()
 
     object CreateNewWorkoutEvent : HomeScreenEvent()
 

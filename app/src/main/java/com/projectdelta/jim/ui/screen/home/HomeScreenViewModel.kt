@@ -10,10 +10,12 @@ import com.projectdelta.jim.util.TimeUtil.getCurrentDayFromEpoch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,25 +49,17 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    fun getWorkoutByDay(day : Int) : StateFlow<WorkoutSessionState> {
+        viewModelScope.launch(worker){
+            workoutRepository.getSessionByDay(day).collectLatest { state ->
+                _workoutSessionState.update { state }
+            }
+        }
+        return workoutSessionState
+    }
+
     fun handleEvent(event: HomeScreenEvent) = viewModelScope.launch(worker) {
         when (event) {
-            is HomeScreenEvent.TopBarDateClickEvent -> {
-                _homeScreenState.update {
-                    it.copy(currentDay = getCurrentDayFromEpoch())
-                }
-            }
-
-            is HomeScreenEvent.TopBarBackClickEvent -> {
-                _homeScreenState.update {
-                    it.copy(currentDay = it.currentDay - 1)
-                }
-            }
-
-            is HomeScreenEvent.TopBarNextClickEvent -> {
-                _homeScreenState.update {
-                    it.copy(currentDay = it.currentDay + 1)
-                }
-            }
 
             is HomeScreenEvent.CreateNewWorkoutEvent -> {
             }
