@@ -1,7 +1,6 @@
 package com.projectdelta.jim.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,28 +27,38 @@ import com.projectdelta.jim.util.TextWithSubscript
 fun SetLogComponent(
     modifier: Modifier,
     set: WorkoutSet,
-){
-    Row(modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ){
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Image(
             modifier = Modifier
-                .align(Alignment.CenterVertically),
+                .align(Alignment.CenterVertically)
+                .weight(3f),
             painter = painterResource(
                 id = R.drawable.baseline_message_24,
             ),
             colorFilter = ColorFilter.tint(
-                color = if( set.note.isNotBlank() ) MaterialTheme.colorScheme.primary else Color.Transparent
+                color = if (set.note.isNotBlank()) MaterialTheme.colorScheme.primary else Color.Transparent
             ),
             contentDescription = "message"
         )
         TextWithSubscript(
-            textNormal = set.weight.toString(),
+            textNormal = set.weight
+                .toString().padEnd(5, ' '),
             textSubscript = "Kgs",
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .weight(3f),
         )
         TextWithSubscript(
-            textNormal = set.reps.toString(),
+            textNormal = set.reps
+                .toString().padEnd(2, ' '),
             textSubscript = "reps",
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .weight(3f),
         )
     }
 }
@@ -59,17 +68,17 @@ fun SetLogComponent(
 fun SetLogBoxPreview() {
     val log = Workout(
         exerciseName = "Barbell Row",
-        sets = List(10){
+        sets = List(10) {
             WorkoutSet(
                 weight = 50.0,
                 reps = 10,
-                note = if(it % 2 == 0) "The scope provided to your pager content allows apps to easily reference the" else ""
+                note = if (it % 2 == 0) "The scope provided to your pager content allows apps to easily reference the" else ""
             )
         }
     )
     JimTheme {
-        LazyColumn{
-            items(log.sets){
+        LazyColumn {
+            items(log.sets) {
                 SetLogComponent(
                     set = it,
                     modifier = Modifier

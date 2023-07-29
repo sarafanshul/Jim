@@ -3,9 +3,12 @@ package com.projectdelta.jim.ui.screen.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,6 +38,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -87,7 +93,11 @@ fun ImageButton(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(
+                    horizontal = PADDING_SMALL,
+                    vertical = PADDING_NORMAL
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
@@ -104,7 +114,9 @@ fun ImageButton(
                 text = text,
                 fontWeight = FontWeight.Light,
                 fontSize = TEXT_SMALL_PLUS,
-                modifier = Modifier.weight(3f)
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(3f)
             )
         }
     }
@@ -153,14 +165,14 @@ fun EmptyWorkoutSessionComponent(
             ),
             onClick = startNewWorkoutOnClick,
             modifier = Modifier
-                .weight(0.8f)
+                .weight(1.2f)
                 .fillMaxWidth(0.5f)
-                .padding(PADDING_NORMAL, PADDING_SMALL)
+                .padding(PADDING_SMALL, PADDING_SMALL)
         )
 
         Spacer(
             modifier = Modifier
-                .weight(0.5f)
+                .weight(0.15f)
         )
 
         ImageButton(
@@ -170,9 +182,9 @@ fun EmptyWorkoutSessionComponent(
             ),
             onClick = copyPreviousWorkoutOnClick,
             modifier = Modifier
-                .weight(0.87f)
+                .weight(1.2f)
                 .fillMaxWidth(0.5f)
-                .padding(PADDING_NORMAL, PADDING_SMALL)
+                .padding(PADDING_SMALL, PADDING_SMALL)
         )
     }
 }
@@ -199,7 +211,7 @@ fun DayInfoTopBarComponent(
         Row(
             modifier = Modifier
                 .weight(9.5f),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(
@@ -223,7 +235,8 @@ fun DayInfoTopBarComponent(
                     .fillMaxSize()
                     .wrapContentHeight()
                     .align(Alignment.CenterVertically)
-                    .clickable(onClick = onDateClick),
+                    .clickable(onClick = onDateClick)
+                    .semantics { role = Role.Button },
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
@@ -274,6 +287,10 @@ fun WorkoutSessionScreen(
         pagerState.animateScrollToPage(uiState.currentDay, 0f)
     }
 
+    LaunchedEffect(pagerState.currentPage) {
+        viewModel.updateCurrentDaySilently(pagerState.currentPage)
+    }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -282,20 +299,25 @@ fun WorkoutSessionScreen(
         DayInfoTopBarComponent(
             currentDay = pagerState.currentPage,
             onDateClick = {
-                viewModel.handleEvent(HomeScreenEvent.DateChangeEvent(
-                    TimeUtil.getCurrentDayFromEpoch()
-                ))
+                viewModel.handleEvent(
+                    HomeScreenEvent.DateChangeEvent(
+                        TimeUtil.getCurrentDayFromEpoch()
+                    )
+                )
             },
             onBackClick = {
-                viewModel.handleEvent(HomeScreenEvent.DateChangeEvent(
-                    pagerState.currentPage - 1
-                ))
+                viewModel.handleEvent(
+                    HomeScreenEvent.DateChangeEvent(
+                        pagerState.currentPage - 1
+                    )
+                )
             },
             onNextClick = {
                 viewModel.handleEvent(
                     HomeScreenEvent.DateChangeEvent(
-                    pagerState.currentPage + 1
-                ))
+                        pagerState.currentPage + 1
+                    )
+                )
             },
             modifier = Modifier
                 .weight(0.5f)
@@ -304,14 +326,6 @@ fun WorkoutSessionScreen(
                 )
         )
 
-        val fling = PagerDefaults
-            .flingBehavior(
-                state = pagerState,
-                pagerSnapDistance = PagerSnapDistance.atMost(
-                    1
-                )
-            )
-
         HorizontalPager(
             pageCount = Int.MAX_VALUE,
             state = pagerState,
@@ -319,9 +333,10 @@ fun WorkoutSessionScreen(
                 .weight(9.5f)
                 .fillMaxSize()
                 .padding(bottom = PADDING_SMALL),
-            flingBehavior = fling
         ) { day ->
-            val workoutSessionState by viewModel.getWorkoutByDay(day).collectAsState()
+            // FIXME : This spams db for queries (left, right for every scroll), bad refactor this.
+            val workoutSessionState by viewModel.getWorkoutByDay(day)
+                .collectAsState(WorkoutSessionState.NoSession)
 
             when (workoutSessionState) {
                 is WorkoutSessionState.NoSession -> {
@@ -339,7 +354,8 @@ fun WorkoutSessionScreen(
                 is WorkoutSessionState.Session -> {
                     WorkoutSessionComponent(
                         workoutSession = (workoutSessionState as WorkoutSessionState.Session).session,
-                        modifier = Modifier,
+                        modifier = Modifier
+                            .fillMaxHeight(),
                         onClickWParamAction = {
                             viewModel.handleEvent(HomeScreenEvent.WorkoutSelectedEvent(it))
                             true

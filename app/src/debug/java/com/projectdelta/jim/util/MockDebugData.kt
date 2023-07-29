@@ -31,7 +31,7 @@ object MockDebugData {
             exercises[i].id = id++
 
         val sessions = mutableListOf<WorkoutSession>()
-        for( day in 10 .. 2500){
+        for( day in 19500 .. 19600){
             if( Random.nextInt() % 3 == 0 )
                 continue
             val session = WorkoutSession(

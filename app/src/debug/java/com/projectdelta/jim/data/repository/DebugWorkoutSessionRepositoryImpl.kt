@@ -1,5 +1,6 @@
 package com.projectdelta.jim.data.repository
 
+import androidx.paging.PagingData
 import com.projectdelta.jim.data.local.WorkoutSessionDao
 import com.projectdelta.jim.data.model.WorkoutSession
 import com.projectdelta.jim.data.state.WorkoutSessionState
@@ -10,6 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 
 class DebugWorkoutSessionRepositoryImpl (
     private val dao: WorkoutSessionDao,
@@ -19,6 +21,7 @@ class DebugWorkoutSessionRepositoryImpl (
     override fun getSessionByDay(day: Int): Flow<WorkoutSessionState> {
         val session = getByTime( TimeUtil.dayToMilliseconds(day) )
         return session.map {
+            Timber.d("day : $day, data : $it")
             if(it.isNotEmpty())
                 WorkoutSessionState.Session(it.first()) // FIXME : a day can only have one session
             else
@@ -34,4 +37,7 @@ class DebugWorkoutSessionRepositoryImpl (
         return dao.getByTime(timeMs).flowOn(workerDispatcher)
     }
 
+    override fun getAllWorkoutSessionsPaged(): Flow<PagingData<WorkoutSession>> {
+        TODO("Not yet implemented")
+    }
 }

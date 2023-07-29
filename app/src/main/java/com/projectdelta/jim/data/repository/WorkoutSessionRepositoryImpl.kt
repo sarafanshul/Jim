@@ -1,15 +1,19 @@
 package com.projectdelta.jim.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingData
 import com.projectdelta.jim.data.local.WorkoutSessionDao
 import com.projectdelta.jim.data.model.WorkoutSession
 import com.projectdelta.jim.data.state.WorkoutSessionState
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.util.BaseId
+import com.projectdelta.jim.util.Constants
 import com.projectdelta.jim.util.TimeUtil
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 
 class WorkoutSessionRepositoryImpl(
     private val dao: WorkoutSessionDao,
@@ -17,6 +21,7 @@ class WorkoutSessionRepositoryImpl(
 ) : WorkoutSessionRepository {
 
     override fun getSessionByDay(day: Int): Flow<WorkoutSessionState> {
+        Timber.d("fetched for day: $day")
         val session = getByTime( TimeUtil.dayToMilliseconds(day) )
         return session.map {
             if(it.isNotEmpty())
@@ -24,6 +29,15 @@ class WorkoutSessionRepositoryImpl(
             else
                 WorkoutSessionState.NoSession
         }.flowOn(workerDispatcher)
+    }
+
+    override fun getAllWorkoutSessionsPaged(): Flow<PagingData<WorkoutSession>> {
+        return Pager(
+            config = Constants.PagingSource.defaultPagingConfig,
+            pagingSourceFactory = {
+                dao.getAllSessionsPaged()
+            }
+        ).flow
     }
 
     override fun getById(id: BaseId): Flow<WorkoutSession?> {

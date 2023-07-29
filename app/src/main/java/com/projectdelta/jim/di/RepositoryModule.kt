@@ -1,9 +1,7 @@
 package com.projectdelta.jim.di
 
-import com.projectdelta.jim.BuildConfig
 import com.projectdelta.jim.data.local.ExerciseDao
 import com.projectdelta.jim.data.local.WorkoutSessionDao
-import com.projectdelta.jim.data.repository.DebugWorkoutSessionRepositoryImpl
 import com.projectdelta.jim.data.repository.ExerciseRepository
 import com.projectdelta.jim.data.repository.ExerciseRepositoryImpl
 import com.projectdelta.jim.data.repository.WorkoutSessionRepository
@@ -35,8 +33,6 @@ object RepositoryModule {
         dao : WorkoutSessionDao,
         @IODispatcher dispatcher: CoroutineDispatcher
     ): WorkoutSessionRepository{
-        if( BuildConfig.DEBUG )
-            return DebugWorkoutSessionRepositoryImpl(dao, dispatcher)
         return WorkoutSessionRepositoryImpl(dao, dispatcher)
     }
 }

@@ -1,8 +1,8 @@
 package com.projectdelta.jim.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -45,7 +45,7 @@ fun WorkoutLogComponent(
     workout: Workout,
     modifier: Modifier,
     onClickWParamListener: onClickWParam<Workout>? = null
-){
+) {
     Card(
         shape = RoundedCornerShape(ROUND_RADIUS_NORMAL),
         elevation = CardDefaults.cardElevation(
@@ -65,6 +65,7 @@ fun WorkoutLogComponent(
                     vertical = PADDING_SMALL,
                 ),
                 text = workout.exerciseName,
+                fontWeight = FontWeight.Normal,
                 fontSize = TEXT_NOT_THAT_LARGE
             )
             Divider(
@@ -73,7 +74,7 @@ fun WorkoutLogComponent(
                     .fillMaxWidth()
                     .height(1.dp)
             )
-            for( set in workout.sets.take(5) ){ // take only first 5
+            for (set in workout.sets.take(5)) { // take only first 5
                 SetLogComponent(
                     modifier = Modifier
                         .padding(0.dp, PADDING_SMALL, 0.dp, 1.dp) // top padding
@@ -81,7 +82,7 @@ fun WorkoutLogComponent(
                     set = set
                 )
             }
-            if( workout.sets.size > 5 ){
+            if (workout.sets.size > 5) {
                 Text(
                     buildAnnotatedString {
                         withStyle(
@@ -90,7 +91,7 @@ fun WorkoutLogComponent(
                                 fontWeight = FontWeight.Light,
                                 fontSize = TEXT_SMALL_PLUS
                             )
-                        ){
+                        ) {
                             append("${workout.sets.size - 5} more")
                         }
                     },
@@ -99,10 +100,9 @@ fun WorkoutLogComponent(
                         .align(Alignment.End)
                 )
             }
-            Box(
-                modifier =
-                    Modifier
-                        .padding(0.dp, 0.dp, 0.dp, PADDING_SMALL)
+            Spacer(
+                modifier = Modifier
+                    .padding(bottom = PADDING_SMALL)
             )
         }
     }
@@ -113,11 +113,11 @@ fun WorkoutLogComponent(
 fun WorkoutLogBoxPreview() {
     val log = Workout(
         exerciseName = "Barbell Row",
-        sets = List(10){
+        sets = List(10) {
             WorkoutSet(
                 weight = 50.0,
                 reps = 10,
-                note = if(it % 2 == 0) "The scope provided to your pager content allows apps to easily reference the" else ""
+                note = if (it % 2 == 0) "The scope provided to your pager content allows apps to easily reference the" else ""
             )
         }
     )

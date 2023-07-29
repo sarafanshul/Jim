@@ -30,31 +30,29 @@ fun Modifier.shadow(
     offsetX: Dp = 0.dp,
     offsetY: Dp = 0.dp,
     blurRadius: Dp = 0.dp,
-) = then(
-    drawBehind {
-        drawIntoCanvas { canvas ->
-            val paint = Paint()
-            val frameworkPaint = paint.asFrameworkPaint()
-            if (blurRadius != 0.dp) {
-                frameworkPaint.maskFilter = (BlurMaskFilter(blurRadius.toPx(), Blur.NORMAL))
-            }
-            frameworkPaint.color = color.toArgb()
-
-            val leftPixel = offsetX.toPx()
-            val topPixel = offsetY.toPx()
-            val rightPixel = size.width + topPixel
-            val bottomPixel = size.height + leftPixel
-
-            canvas.drawRect(
-                left = leftPixel,
-                top = topPixel,
-                right = rightPixel,
-                bottom = bottomPixel,
-                paint = paint,
-            )
+) = then(drawBehind {
+    drawIntoCanvas { canvas ->
+        val paint = Paint()
+        val frameworkPaint = paint.asFrameworkPaint()
+        if (blurRadius != 0.dp) {
+            frameworkPaint.maskFilter = (BlurMaskFilter(blurRadius.toPx(), Blur.NORMAL))
         }
+        frameworkPaint.color = color.toArgb()
+
+        val leftPixel = offsetX.toPx()
+        val topPixel = offsetY.toPx()
+        val rightPixel = size.width + topPixel
+        val bottomPixel = size.height + leftPixel
+
+        canvas.drawRect(
+            left = leftPixel,
+            top = topPixel,
+            right = rightPixel,
+            bottom = bottomPixel,
+            paint = paint,
+        )
     }
-)
+})
 
 /**
  * Text with subscript
@@ -66,25 +64,28 @@ fun TextWithSubscript(
     modifier: Modifier = Modifier,
     fontSizeNormal: TextUnit = Constants.UI.TEXT_MEDIUM,
     fontSizeSubscript: TextUnit = Constants.UI.TEXT_SMALL,
-){
+) {
     Text(
         buildAnnotatedString {
-            withStyle(style = SpanStyle(
-                fontSize = fontSizeNormal,
-            )
+            withStyle(
+                style = SpanStyle(
+                    fontSize = fontSizeNormal,
+                    fontWeight = FontWeight.Medium
+                )
             ) {
                 append(textNormal)
             }
             append(" ")
-            withStyle(style = SpanStyle(
-                fontSize = fontSizeSubscript,
-                fontStyle = FontStyle.Italic,
-                fontWeight = FontWeight.Light
-            )
+            withStyle(
+                style = SpanStyle(
+                    fontSize = fontSizeSubscript,
+                    fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.Light
+                )
             ) {
                 append(textSubscript)
             }
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }

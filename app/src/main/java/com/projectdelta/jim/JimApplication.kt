@@ -12,7 +12,7 @@ class JimApplication : Application(){
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-            setupStrictMode()
+//            setupStrictMode()
         }
 
     }
