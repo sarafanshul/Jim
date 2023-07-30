@@ -1,7 +1,7 @@
 package com.projectdelta.jim.di
 
-import com.projectdelta.jim.data.local.ExerciseDao
-import com.projectdelta.jim.data.local.WorkoutSessionDao
+import com.projectdelta.jim.data.local.dao.ExerciseDao
+import com.projectdelta.jim.data.local.dao.WorkoutSessionDao
 import com.projectdelta.jim.data.repository.ExerciseRepository
 import com.projectdelta.jim.data.repository.ExerciseRepositoryImpl
 import com.projectdelta.jim.data.repository.WorkoutSessionRepository

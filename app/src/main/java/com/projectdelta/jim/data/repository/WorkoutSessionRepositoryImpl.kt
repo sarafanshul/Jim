@@ -2,9 +2,8 @@ package com.projectdelta.jim.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingData
-import com.projectdelta.jim.data.local.WorkoutSessionDao
-import com.projectdelta.jim.data.model.WorkoutSession
-import com.projectdelta.jim.data.state.WorkoutSessionState
+import com.projectdelta.jim.data.local.dao.WorkoutSessionDao
+import com.projectdelta.jim.data.model.entity.WorkoutSession
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.util.BaseId
 import com.projectdelta.jim.util.Constants
@@ -31,7 +30,7 @@ class WorkoutSessionRepositoryImpl(
         }.flowOn(workerDispatcher)
     }
 
-    override fun getAllWorkoutSessionsPaged(): Flow<PagingData<WorkoutSession>> {
+    override fun getAllPaged(): Flow<PagingData<WorkoutSession>> {
         return Pager(
             config = Constants.PagingSource.defaultPagingConfig,
             pagingSourceFactory = {
@@ -42,10 +41,6 @@ class WorkoutSessionRepositoryImpl(
 
     override fun getById(id: BaseId): Flow<WorkoutSession?> {
         return dao.getById(id).flowOn(workerDispatcher)
-    }
-
-    override fun getByTime(timeMs: Long): Flow<List<WorkoutSession>> {
-        return dao.getByTime(timeMs).flowOn(workerDispatcher)
     }
 
 }

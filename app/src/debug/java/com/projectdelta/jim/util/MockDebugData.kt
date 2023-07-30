@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.res.Resources
 import androidx.annotation.RawRes
 import com.projectdelta.jim.data.model.ExerciseWrapper
-import com.projectdelta.jim.data.model.Workout
-import com.projectdelta.jim.data.model.WorkoutSession
-import com.projectdelta.jim.data.model.WorkoutSet
+import com.projectdelta.jim.data.model.entity.Workout
+import com.projectdelta.jim.data.model.entity.WorkoutSession
+import com.projectdelta.jim.data.model.entity.WorkoutSet
 import java.io.FileNotFoundException
 import java.io.IOException
 import kotlin.random.Random

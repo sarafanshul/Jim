@@ -1,12 +1,12 @@
-package com.projectdelta.jim.data.local
+package com.projectdelta.jim.data.local.dao
 
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Update
-import com.projectdelta.jim.data.model.BaseModel
+import com.projectdelta.jim.data.model.entity.BaseDBModel
 
-interface BaseDao<in T : BaseModel> {
+interface BaseDao<in T : BaseDBModel> {
 
     /**
      * Inserts item in database

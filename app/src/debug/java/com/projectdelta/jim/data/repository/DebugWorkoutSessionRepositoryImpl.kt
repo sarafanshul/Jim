@@ -1,8 +1,8 @@
 package com.projectdelta.jim.data.repository
 
 import androidx.paging.PagingData
-import com.projectdelta.jim.data.local.WorkoutSessionDao
-import com.projectdelta.jim.data.model.WorkoutSession
+import com.projectdelta.jim.data.local.dao.WorkoutSessionDao
+import com.projectdelta.jim.data.model.entity.WorkoutSession
 import com.projectdelta.jim.data.state.WorkoutSessionState
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.util.BaseId

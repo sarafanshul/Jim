@@ -23,8 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.projectdelta.jim.data.model.Workout
-import com.projectdelta.jim.data.model.WorkoutSet
+import com.projectdelta.jim.data.model.entity.Workout
+import com.projectdelta.jim.data.model.entity.WorkoutSet
 import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.Constants.UI.ELEVATION_NORMAL
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL

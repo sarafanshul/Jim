@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.projectdelta.jim.R
-import com.projectdelta.jim.data.model.Workout
-import com.projectdelta.jim.data.model.WorkoutSet
+import com.projectdelta.jim.data.model.entity.Workout
+import com.projectdelta.jim.data.model.entity.WorkoutSet
 import com.projectdelta.jim.ui.theme.JimTheme
 
 /**

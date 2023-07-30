@@ -2,11 +2,10 @@ package com.projectdelta.jim.ui.common
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.projectdelta.jim.data.model.Workout
-import com.projectdelta.jim.data.model.WorkoutSession
+import com.projectdelta.jim.data.model.entity.Workout
+import com.projectdelta.jim.data.model.entity.WorkoutSession
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
 import com.projectdelta.jim.util.onClickWParam
 

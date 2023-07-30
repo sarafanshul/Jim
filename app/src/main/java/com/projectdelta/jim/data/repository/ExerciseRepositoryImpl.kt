@@ -2,8 +2,8 @@ package com.projectdelta.jim.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingData
-import com.projectdelta.jim.data.local.ExerciseDao
-import com.projectdelta.jim.data.model.Exercise
+import com.projectdelta.jim.data.local.dao.ExerciseDao
+import com.projectdelta.jim.data.model.entity.Exercise
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.util.Constants.PagingSource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,11 +15,11 @@ class ExerciseRepositoryImpl(
     @IODispatcher private val workerDispatcher: CoroutineDispatcher,
 ) : ExerciseRepository{
 
-    override fun getAllExercises(): Flow<List<Exercise>> {
+    override fun getAll(): Flow<List<Exercise>> {
         return dao.getAllExercises().flowOn(workerDispatcher)
     }
 
-    override fun getAllExercisesPaged(): Flow<PagingData<Exercise>> {
+    override fun getAllPaged(): Flow<PagingData<Exercise>> {
         return Pager(
             config = PagingSource.defaultPagingConfig,
             pagingSourceFactory = {

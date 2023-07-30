@@ -1,6 +1,6 @@
 package com.projectdelta.jim.ui.home.states
 
-import com.projectdelta.jim.data.model.Workout
+import com.projectdelta.jim.data.model.entity.Workout
 
 sealed class UIState {
 
