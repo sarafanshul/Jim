@@ -1,4 +1,4 @@
-package com.projectdelta.jim.ui.components
+package com.projectdelta.jim.ui.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -16,7 +16,6 @@ import com.projectdelta.jim.R
 import com.projectdelta.jim.data.model.Workout
 import com.projectdelta.jim.data.model.WorkoutSet
 import com.projectdelta.jim.ui.theme.JimTheme
-import com.projectdelta.jim.util.TextWithSubscript
 
 /**
  * Component for logging [WorkoutSet] info
@@ -46,7 +45,7 @@ fun SetLogComponent(
         )
         TextWithSubscript(
             textNormal = set.weight
-                .toString().padEnd(5, ' '),
+                .toString().padStart(5, ' '),
             textSubscript = "Kgs",
             modifier = Modifier
                 .align(Alignment.CenterVertically)
@@ -54,7 +53,7 @@ fun SetLogComponent(
         )
         TextWithSubscript(
             textNormal = set.reps
-                .toString().padEnd(2, ' '),
+                .toString().padStart(2, ' '),
             textSubscript = "reps",
             modifier = Modifier
                 .align(Alignment.CenterVertically)

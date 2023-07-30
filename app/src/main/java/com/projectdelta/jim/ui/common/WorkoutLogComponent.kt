@@ -1,4 +1,4 @@
-package com.projectdelta.jim.ui.components
+package com.projectdelta.jim.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

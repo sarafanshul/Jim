@@ -1,10 +1,12 @@
-package com.projectdelta.jim.ui.screen.home
+package com.projectdelta.jim.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.projectdelta.jim.data.repository.ExerciseRepository
 import com.projectdelta.jim.data.repository.WorkoutSessionRepository
 import com.projectdelta.jim.di.qualifiers.IODispatcher
+import com.projectdelta.jim.ui.home.events.HomeScreenEvent
+import com.projectdelta.jim.ui.home.states.HomeScreenState
 import com.projectdelta.jim.util.TimeUtil.getCurrentDayFromEpoch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,10 +45,7 @@ class HomeScreenViewModel @Inject constructor(
         when (event) {
 
             is HomeScreenEvent.CreateNewWorkoutEvent -> {
-            }
-
-            is HomeScreenEvent.CopyPreviousWorkoutEvent -> {
-                // TODO (IMPL)
+                Timber.d("Create new workout")
             }
 
             is HomeScreenEvent.DateChangeEvent -> {
@@ -57,7 +56,31 @@ class HomeScreenViewModel @Inject constructor(
             }
 
             is HomeScreenEvent.WorkoutSelectedEvent -> {
-                // TODO (IMPL)
+                Timber.d("Explore Workout : ${event.workout}")
+            }
+
+            is HomeScreenEvent.NavigationAppIconClickEvent -> {
+                Timber.d("Nav App Icon Clicked")
+            }
+
+            is HomeScreenEvent.LaunchCalendarEvent -> {
+                Timber.d("Launch calendar, copy : ${event.copy}")
+            }
+
+            is HomeScreenEvent.LaunchSettingScreenEvent -> {
+                Timber.d("Open Settings")
+            }
+
+            is HomeScreenEvent.ShareWorkoutEvent -> {
+                Timber.d("Share called for day: ${event.day}")
+            }
+
+            is HomeScreenEvent.LaunchBodyTrackScreenEvent -> {
+                Timber.d("Launch body Tracker")
+            }
+
+            is HomeScreenEvent.LaunchAnalysisScreenEvent -> {
+                Timber.d("Launch analysis screen")
             }
         }
     }

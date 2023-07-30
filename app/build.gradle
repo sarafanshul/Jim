@@ -81,6 +81,10 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
+    // icons (bad thing as a dependency, adds 18+Mb size to builds)
+//    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+
+
     // material 3
     implementation "androidx.compose.material3:material3:$material3_version"
     implementation "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha09"

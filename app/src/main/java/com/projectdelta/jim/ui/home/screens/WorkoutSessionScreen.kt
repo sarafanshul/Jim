@@ -1,10 +1,8 @@
-package com.projectdelta.jim.ui.screen.home
+package com.projectdelta.jim.ui.home.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerDefaults
-import androidx.compose.foundation.pager.PagerSnapDistance
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -24,16 +20,12 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TimeInput
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
@@ -49,7 +41,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.projectdelta.jim.R
 import com.projectdelta.jim.data.state.WorkoutSessionState
-import com.projectdelta.jim.ui.components.WorkoutSessionComponent
+import com.projectdelta.jim.ui.common.WorkoutSessionComponent
+import com.projectdelta.jim.ui.home.events.HomeScreenEvent
+import com.projectdelta.jim.ui.home.HomeScreenViewModel
 import com.projectdelta.jim.util.Constants
 import com.projectdelta.jim.util.Constants.StringRes.NO_WORKOUT_LOG
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
@@ -58,10 +52,6 @@ import com.projectdelta.jim.util.Constants.UI.TEXT_LARGE
 import com.projectdelta.jim.util.Constants.UI.TEXT_SMALL_PLUS
 import com.projectdelta.jim.util.TimeUtil
 import com.projectdelta.jim.util.onClick
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Image clickable card with transparent background
@@ -345,7 +335,7 @@ fun WorkoutSessionScreen(
                             viewModel.handleEvent(HomeScreenEvent.CreateNewWorkoutEvent)
                         },
                         copyPreviousWorkoutOnClick = {
-                            viewModel.handleEvent(HomeScreenEvent.CopyPreviousWorkoutEvent)
+                            viewModel.handleEvent(HomeScreenEvent.LaunchCalendarEvent(copy = true))
                         },
                         modifier = Modifier
                     )
