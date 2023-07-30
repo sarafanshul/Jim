@@ -1,4 +1,4 @@
-package com.projectdelta.jim
+package com.projectdelta.jim.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,9 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity(
 ) : ComponentActivity() {
-
-    private val viewModel : HomeScreenViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -27,6 +24,4 @@ class MainActivity(
             }
         }
     }
-
-
 }
