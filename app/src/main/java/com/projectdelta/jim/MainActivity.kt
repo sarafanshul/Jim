@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.projectdelta.jim.ui.NavGraphs
 import com.projectdelta.jim.ui.home.screens.HomeScreen
 import com.projectdelta.jim.ui.home.HomeScreenViewModel
 import com.projectdelta.jim.ui.theme.JimTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,8 +21,8 @@ class MainActivity(
         super.onCreate(savedInstanceState)
         setContent {
             JimTheme {
-                HomeScreen(
-                    viewModel = viewModel,
+                DestinationsNavHost(
+                    navGraph = NavGraphs.root
                 )
             }
         }

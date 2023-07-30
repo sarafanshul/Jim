@@ -1,12 +1,14 @@
 package com.projectdelta.jim.ui.home
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.projectdelta.jim.data.repository.ExerciseRepository
 import com.projectdelta.jim.data.repository.WorkoutSessionRepository
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.ui.home.events.HomeScreenEvent
 import com.projectdelta.jim.ui.home.states.HomeScreenState
+import com.projectdelta.jim.ui.home.states.UIState
 import com.projectdelta.jim.util.TimeUtil.getCurrentDayFromEpoch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -19,7 +21,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val exerciseRepository: ExerciseRepository,
     private val workoutRepository: WorkoutSessionRepository,
     @IODispatcher private val worker: CoroutineDispatcher,
 ) : ViewModel() {
@@ -29,17 +30,9 @@ class HomeScreenViewModel @Inject constructor(
     )
     val homeScreenState = _homeScreenState.asStateFlow()
 
-    fun getWorkoutByDay(day: Int) = workoutRepository.getSessionByDay(day)
-
-    /**
-     * Updates the [HomeScreenState.currentDay] silently without notifying the observers.
-     * This works (till now) because the object ref of the [MutableStateFlow] remains the same
-     * and only value is updated.
-     * **May god this doesn't break**.
-     */
-    fun updateCurrentDaySilently(day: Int) {
-        _homeScreenState.value.currentDay = day
-    }
+    private val _uiState = mutableStateOf<UIState>(UIState.Default)
+    val uiState: State<UIState>
+        get() = _uiState
 
     fun handleEvent(event: HomeScreenEvent) = viewModelScope.launch(worker) {
         when (event) {
@@ -57,6 +50,7 @@ class HomeScreenViewModel @Inject constructor(
 
             is HomeScreenEvent.WorkoutSelectedEvent -> {
                 Timber.d("Explore Workout : ${event.workout}")
+                _uiState.value = UIState.LaunchWorkoutInfoScreen(event.workout)
             }
 
             is HomeScreenEvent.NavigationAppIconClickEvent -> {
@@ -65,6 +59,7 @@ class HomeScreenViewModel @Inject constructor(
 
             is HomeScreenEvent.LaunchCalendarEvent -> {
                 Timber.d("Launch calendar, copy : ${event.copy}")
+                _uiState.value = UIState.LaunchCalendarScreen(-1, event.copy)
             }
 
             is HomeScreenEvent.LaunchSettingScreenEvent -> {
@@ -83,5 +78,24 @@ class HomeScreenViewModel @Inject constructor(
                 Timber.d("Launch analysis screen")
             }
         }
+    }
+
+    fun getWorkoutByDay(day: Int) = workoutRepository.getSessionByDay(day)
+
+    /**
+     * Updates the [HomeScreenState.currentDay] silently without notifying the observers.
+     * This works (till now) because the object ref of the [MutableStateFlow] remains the same
+     * and only value is updated.
+     * **May god this doesn't break**.
+     */
+    fun updateCurrentDaySilently(day: Int) {
+        _homeScreenState.value.currentDay = day
+    }
+
+    /**
+     * Resets [UIState].
+     */
+    fun resetUIState() {
+        _uiState.value = UIState.Default
     }
 }

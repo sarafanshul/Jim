@@ -2,32 +2,54 @@ package com.projectdelta.jim.ui.home.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.projectdelta.jim.R
-import com.projectdelta.jim.ui.common.SimpleOverflowMenu
-import com.projectdelta.jim.ui.common.SimpleOverflowMenuItem
+import com.projectdelta.jim.ui.destinations.CalendarPreviewScreenDestination
+import com.projectdelta.jim.ui.destinations.WorkoutInfoScreenDestination
 import com.projectdelta.jim.ui.home.HomeScreenViewModel
 import com.projectdelta.jim.ui.home.MainTopAppBar
+import com.projectdelta.jim.ui.home.states.UIState
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 /**
  * Home screen composable , with a tob bar and host screen [WorkoutSessionScreen]
  */
+@Destination(start = true)
 @Composable
 fun HomeScreen(
+    navigator: DestinationsNavigator,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
+
+    when (val uiState = viewModel.uiState.value) {
+        is UIState.LaunchCalendarScreen -> {
+            navigator.navigate(
+                CalendarPreviewScreenDestination(day = uiState.date, copy = uiState.copy)
+            )
+            viewModel.resetUIState()
+        }
+
+        is UIState.Default -> {
+
+        }
+
+        is UIState.Error -> {
+
+        }
+
+        is UIState.LaunchWorkoutInfoScreen -> {
+            navigator.navigate(
+                WorkoutInfoScreenDestination(
+                    workout = uiState.workout
+                )
+            )
+            viewModel.resetUIState()
+        }
+    }
+
     Scaffold(
         topBar = {
             MainTopAppBar(viewModel)
