@@ -5,6 +5,11 @@ import androidx.room.Relation
 import com.projectdelta.jim.data.model.entity.Workout
 import com.projectdelta.jim.data.model.entity.WorkoutSession
 
+/**
+ * Relation class for [WorkoutSession] and it's all
+ * associated [Workout], WorkoutSet, Exercise in form of
+ * [WorkoutWithSetsAndExercise] mapped
+ */
 data class SessionWithWorkoutWithSets(
 
     @Embedded
@@ -15,5 +20,5 @@ data class SessionWithWorkoutWithSets(
         entityColumn = "workoutId",
         entity = Workout::class
     )
-    val workoutWithSets: List<WorkoutWithSets>
+    val workoutWithSetAndExercises: List<WorkoutWithSetsAndExercise>
 )

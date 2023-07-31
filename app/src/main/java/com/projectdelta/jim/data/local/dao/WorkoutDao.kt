@@ -6,7 +6,7 @@ import androidx.room.Query
 import com.projectdelta.jim.data.model.entity.Workout
 import com.projectdelta.jim.data.model.entity.WorkoutSession
 import com.projectdelta.jim.data.model.entity.WorkoutSet
-import com.projectdelta.jim.data.model.relation.WorkoutWithSets
+import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
 import com.projectdelta.jim.util.BaseId
 import com.projectdelta.jim.util.Constants.Table.WORKOUT_TABLE
 import kotlinx.coroutines.flow.Flow
@@ -40,22 +40,22 @@ interface WorkoutDao : BaseDao<Workout> {
     fun getAllWorkoutsPaged(): PagingSource<Int, Workout>
 
     /**
-     * Fetches [WorkoutSet] & [Workout] managed by [WorkoutWithSets] relation
+     * Fetches [WorkoutSet] & [Workout] managed by [WorkoutWithSetsAndExercise] relation
      */
     @Query("SELECT * FROM $WORKOUT_TABLE WHERE id = :id")
-    fun getWorkoutWithSetsById(id: BaseId): Flow<List<WorkoutWithSets>>
+    fun getWorkoutWithSetsAndExerciseById(id: BaseId): Flow<List<WorkoutWithSetsAndExercise>>
 
     /**
-     * Fetches all [WorkoutWithSets] from `WORKOUT_TABLE`
-     * @return [List] of all [WorkoutWithSets]
+     * Fetches all [WorkoutWithSetsAndExercise] from `WORKOUT_TABLE`
+     * @return [List] of all [WorkoutWithSetsAndExercise]
      */
     @Query("SELECT * FROM $WORKOUT_TABLE")
-    fun getAllWorkoutWithSets(): Flow<List<WorkoutWithSets>>
+    fun getAllWorkoutWithSetsAndExercise(): Flow<List<WorkoutWithSetsAndExercise>>
 
     /**
-     * Fetches all [WorkoutWithSets] from `WORKOUT_TABLE`
-     * @return [PagingSource]<[Int],[WorkoutWithSets]>
+     * Fetches all [WorkoutWithSetsAndExercise] from `WORKOUT_TABLE`
+     * @return [PagingSource]<[Int],[WorkoutWithSetsAndExercise]>
      */
     @Query("SELECT * FROM $WORKOUT_TABLE")
-    fun getAllWorkoutWithSetsPaged(): Flow<PagingSource<Int, WorkoutWithSets>>
+    fun getAllWorkoutWithSetsAndExercisePaged(): Flow<PagingSource<Int, WorkoutWithSetsAndExercise>>
 }

@@ -59,7 +59,7 @@ interface BaseDBRepository<T : BaseDBModel> {
 
     /**
      * Fetches all [T] in Table, Paged, ORDER_BY ASC
-     * @return [PagingSource]<[Int],[T]>
+     * @return [PagingData]<[T]>
      */
     fun getAllPaged(): Flow<PagingData<T>>
 

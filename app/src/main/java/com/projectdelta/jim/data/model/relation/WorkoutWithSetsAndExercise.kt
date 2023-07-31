@@ -6,7 +6,11 @@ import com.projectdelta.jim.data.model.entity.Exercise
 import com.projectdelta.jim.data.model.entity.Workout
 import com.projectdelta.jim.data.model.entity.WorkoutSet
 
-data class WorkoutWithSets(
+/**
+ * [Relation] class for fetching a [Workout] with it's all [WorkoutSet]
+ * and associated [Exercise]
+ */
+data class WorkoutWithSetsAndExercise(
     @Embedded
     val workout: Workout,
 
@@ -22,5 +26,5 @@ data class WorkoutWithSets(
         entityColumn = "id",
         entity = Exercise::class
     )
-    val exercise: Exercise
+    val exercise: Exercise?
 )

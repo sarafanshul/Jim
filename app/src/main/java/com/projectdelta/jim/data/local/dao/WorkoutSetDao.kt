@@ -1,10 +1,10 @@
 package com.projectdelta.jim.data.local.dao
 
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import com.projectdelta.jim.data.model.entity.WorkoutSet
+import com.projectdelta.jim.data.model.relation.WorkoutSetAndWorkout
 import com.projectdelta.jim.util.BaseId
 import com.projectdelta.jim.util.Constants.Table.WORKOUT_SET_TABLE
 import kotlinx.coroutines.flow.Flow
@@ -31,10 +31,16 @@ interface WorkoutSetDao : BaseDao<WorkoutSet> {
     fun getAll(): Flow<List<WorkoutSet>>
 
     /**
-     * Fetches all [T] in Table, Paged, ORDER_BY ASC
-     * @return [PagingSource]<[Int],[T]>
+     * Fetches all [WorkoutSet] in Table
+     * @return [PagingSource]<[Int],[WorkoutSet]>
      */
     @Query("SELECT * FROM $WORKOUT_SET_TABLE")
-    fun getAllPaged(): Flow<PagingData<WorkoutSet>>
+    fun getAllPaged(): Flow<PagingSource<Int, WorkoutSet>>
+
+    /**
+     * Fetches [WorkoutSet] mapped with it's parent Workout
+     */
+    @Query("SELECT * FROM $WORKOUT_SET_TABLE WHERE id = :id")
+    fun getWorkoutSetAndWorkoutById(id: BaseId) : Flow<List<WorkoutSetAndWorkout>>
 
 }
