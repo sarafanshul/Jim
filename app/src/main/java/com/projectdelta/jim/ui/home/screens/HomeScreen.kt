@@ -43,7 +43,7 @@ fun HomeScreen(
         is UIState.LaunchWorkoutInfoScreen -> {
             navigator.navigate(
                 WorkoutInfoScreenDestination(
-                    workout = uiState.workout
+                    workout = uiState.workoutId
                 )
             )
             viewModel.resetUIState()

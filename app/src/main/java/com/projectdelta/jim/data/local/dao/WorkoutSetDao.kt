@@ -35,7 +35,7 @@ interface WorkoutSetDao : BaseDao<WorkoutSet> {
      * @return [PagingSource]<[Int],[WorkoutSet]>
      */
     @Query("SELECT * FROM $WORKOUT_SET_TABLE")
-    fun getAllPaged(): Flow<PagingSource<Int, WorkoutSet>>
+    fun getAllPaged(): PagingSource<Int, WorkoutSet>
 
     /**
      * Fetches [WorkoutSet] mapped with it's parent Workout

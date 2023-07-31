@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.projectdelta.jim.BuildConfig
 import com.projectdelta.jim.R
 import com.projectdelta.jim.data.local.dao.ExerciseDao
 import com.projectdelta.jim.data.local.dao.WorkoutDao
@@ -20,6 +21,7 @@ import com.projectdelta.jim.util.Constants.Database.VERSION
 import com.projectdelta.jim.util.Constants.Database.NAME
 import com.projectdelta.jim.util.Converters
 import com.projectdelta.jim.util.JSONUtils
+import com.projectdelta.jim.util.MockDebugData
 import java.util.concurrent.Executors
 
 @Database(
@@ -72,15 +74,27 @@ abstract class JimDatabase : RoomDatabase() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
                     Executors.newSingleThreadExecutor().execute {
-                        INSTANCE?.let {
+                        INSTANCE?.let {db ->
                             // Prepopulate data here if needed
-                            val data = JSONUtils.getJsonFileAsClass(
-                                application.resources,
-                                R.raw.exercises,
-                                ExerciseWrapper::class.java
-                            )
-                            if (data.isPresent)
-                                it.exerciseDao().insertAll(data.get().exercises)
+                            if(BuildConfig.DEBUG){
+                                MockDebugData.prePopulateDatabaseMock(
+                                    application.resources,
+                                    R.raw.exercises,
+                                    { db.exerciseDao().insert(it) },
+                                    { db.workoutSessionDao().insert(it) },
+                                    { db.workoutDao().insert(it) },
+                                    { db.workoutSetDao().insert(it) }
+                                )
+                            }
+                            else {
+                                val data = JSONUtils.getJsonFileAsClass(
+                                    application.resources,
+                                    R.raw.exercises,
+                                    ExerciseWrapper::class.java
+                                )
+                                if (data.isPresent)
+                                    db.exerciseDao().insertAll(data.get().exercises)
+                            }
                         }
                     }
                 }

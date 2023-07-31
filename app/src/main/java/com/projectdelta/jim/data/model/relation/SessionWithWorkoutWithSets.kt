@@ -17,7 +17,7 @@ data class SessionWithWorkoutWithSets(
 
     @Relation(
         parentColumn = "id",
-        entityColumn = "workoutId",
+        entityColumn = "sessionId",
         entity = Workout::class
     )
     val workoutWithSetAndExercises: List<WorkoutWithSetsAndExercise>

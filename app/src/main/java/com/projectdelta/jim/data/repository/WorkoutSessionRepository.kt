@@ -21,7 +21,7 @@ interface WorkoutSessionRepository : BaseDBRepository<WorkoutSession> {
     /**
      * Fetches [WorkoutSession] and it's Workouts in form of [SessionWithWorkouts]
      */
-    fun getSessionWithWorkouts(id: BaseId): Flow<List<SessionWithWorkouts>>
+    fun getSessionWithWorkoutsById(id: BaseId): Flow<List<SessionWithWorkouts>>
 
     /**
      * Fetches all [WorkoutSession] from database Joined [SessionWithWorkouts], ORDER_BY ASC

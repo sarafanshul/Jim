@@ -40,7 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.projectdelta.jim.R
-import com.projectdelta.jim.data.state.WorkoutSessionState
+import com.projectdelta.jim.data.state.SessionState
 import com.projectdelta.jim.ui.common.WorkoutSessionComponent
 import com.projectdelta.jim.ui.home.events.HomeScreenEvent
 import com.projectdelta.jim.ui.home.HomeScreenViewModel
@@ -113,7 +113,7 @@ fun ImageButton(
 }
 
 /**
- * Component screen to display when no workout is found ,[WorkoutSessionState.NoSession] state,
+ * Component screen to display when no workout is found ,[SessionState.Empty] state,
  * @param startNewWorkoutOnClick listener for start new workout Button
  * @param copyPreviousWorkoutOnClick listener for copy previous button
  * @param modifier view [Modifier]
@@ -326,10 +326,10 @@ fun WorkoutSessionScreen(
         ) { day ->
             // FIXME : This spams db for queries (left, right for every scroll), bad refactor this.
             val workoutSessionState by viewModel.getWorkoutByDay(day)
-                .collectAsState(WorkoutSessionState.NoSession)
+                .collectAsState(SessionState.Empty)
 
             when (workoutSessionState) {
-                is WorkoutSessionState.NoSession -> {
+                is SessionState.Empty -> {
                     EmptyWorkoutSessionComponent(
                         startNewWorkoutOnClick = {
                             viewModel.handleEvent(HomeScreenEvent.CreateNewWorkoutEvent)
@@ -341,9 +341,9 @@ fun WorkoutSessionScreen(
                     )
                 }
 
-                is WorkoutSessionState.Session -> {
+                is SessionState.Session -> {
                     WorkoutSessionComponent(
-                        workoutSession = (workoutSessionState as WorkoutSessionState.Session).session,
+                        workoutSession = (workoutSessionState as SessionState.Session).session,
                         modifier = Modifier
                             .fillMaxHeight(),
                         onClickWParamAction = {
