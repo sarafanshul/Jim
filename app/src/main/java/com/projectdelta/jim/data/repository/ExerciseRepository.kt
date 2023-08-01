@@ -1,20 +1,22 @@
 package com.projectdelta.jim.data.repository
 
 import androidx.paging.PagingData
-import com.projectdelta.jim.data.model.Exercise
+import com.projectdelta.jim.data.model.entity.Exercise
 import kotlinx.coroutines.flow.Flow
 
-interface ExerciseRepository {
+interface ExerciseRepository : BaseDBRepository<Exercise> {
 
     /**
-     * Fetches all [Exercise] from database
-     * @return [List] of all [Exercise]
+     * Fetches all [Exercise] where name `LIKE` [substring]
+     * @param substring substring to match
+     * @return [List] of all [Exercise] found
      */
-    fun getAllExercises() : Flow<List<Exercise>>
+    fun getByNameLike(substring: String): Flow<List<Exercise>>
 
     /**
-     * Fetches all [Exercise] in database, Paged, ORDER_BY ASC
-     * @return [Flow]<[PagingData]<[Exercise]>>
+     * Fetches all [Exercise] where name `LIKE` [substring] Paged
+     * @param substring substring to match
+     * @return [List] of all [Exercise] found
      */
-    fun getAllExercisesPaged() : Flow<PagingData<Exercise>>
+    fun getByNameLikePaged(substring: String): Flow<PagingData<Exercise>>
 }

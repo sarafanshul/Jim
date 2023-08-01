@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.projectdelta.jim.data.model.Workout
+import com.projectdelta.jim.util.BaseId
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -14,7 +14,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun WorkoutInfoScreen(
     navigator: DestinationsNavigator,
-    workout: Workout? = null,
+    workout: BaseId,
 ) {
     Box(
         modifier = Modifier

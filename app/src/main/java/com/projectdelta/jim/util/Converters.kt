@@ -3,8 +3,8 @@ package com.projectdelta.jim.util
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.projectdelta.jim.data.model.Workout
-import com.projectdelta.jim.data.model.WorkoutSet
+import com.projectdelta.jim.data.model.entity.Workout
+import com.projectdelta.jim.data.model.entity.WorkoutSet
 
 object Converters {
     private val m_Gson = Gson() // cached gson for type conversion

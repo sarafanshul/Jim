@@ -12,7 +12,9 @@ object Constants {
      */
     object Table {
         const val EXERCISE_TABLE = "exercise_table"
+        const val WORKOUT_TABLE = "workout_table"
         const val WORKOUT_SESSION_TABLE = "workout_session_table"
+        const val WORKOUT_SET_TABLE = "workout_set_table"
         const val DEFAULT_VALUE_STR = "404_null"
     }
 

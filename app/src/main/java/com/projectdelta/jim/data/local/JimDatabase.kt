@@ -8,21 +8,28 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.projectdelta.jim.BuildConfig
 import com.projectdelta.jim.R
-import com.projectdelta.jim.data.model.Exercise
+import com.projectdelta.jim.data.local.dao.ExerciseDao
+import com.projectdelta.jim.data.local.dao.WorkoutDao
+import com.projectdelta.jim.data.local.dao.WorkoutSessionDao
+import com.projectdelta.jim.data.local.dao.WorkoutSetDao
+import com.projectdelta.jim.data.model.entity.Exercise
 import com.projectdelta.jim.data.model.ExerciseWrapper
-import com.projectdelta.jim.data.model.WorkoutSession
+import com.projectdelta.jim.data.model.entity.Workout
+import com.projectdelta.jim.data.model.entity.WorkoutSession
+import com.projectdelta.jim.data.model.entity.WorkoutSet
 import com.projectdelta.jim.util.Constants.Database.VERSION
 import com.projectdelta.jim.util.Constants.Database.NAME
 import com.projectdelta.jim.util.Converters
 import com.projectdelta.jim.util.JSONUtils
 import com.projectdelta.jim.util.MockDebugData
-import timber.log.Timber
 import java.util.concurrent.Executors
 
 @Database(
     entities = [
         Exercise::class,
         WorkoutSession::class,
+        Workout::class,
+        WorkoutSet::class,
     ],
     version = VERSION,
     exportSchema = true,
@@ -32,16 +39,17 @@ import java.util.concurrent.Executors
 )
 abstract class JimDatabase : RoomDatabase() {
 
-    abstract fun exerciseDao() : ExerciseDao
+    abstract fun exerciseDao(): ExerciseDao
+    abstract fun workoutSessionDao(): WorkoutSessionDao
+    abstract fun workoutDao(): WorkoutDao
+    abstract fun workoutSetDao(): WorkoutSetDao
 
-    abstract fun workoutSessionDao() : WorkoutSessionDao
-
-    companion object{
+    companion object {
 
         @Volatile
         private var INSTANCE: JimDatabase? = null
 
-        fun getInstance(application: Application) : JimDatabase {
+        fun getInstance(application: Application): JimDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null)
                 return tempInstance
@@ -62,20 +70,30 @@ abstract class JimDatabase : RoomDatabase() {
                 override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
                     super.onDestructiveMigration(db)
                 }
+
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
                     Executors.newSingleThreadExecutor().execute {
-                        INSTANCE?.let {
+                        INSTANCE?.let {db ->
                             // Prepopulate data here if needed
-                            val data = JSONUtils.getJsonFileAsClass(application.resources, R.raw.exercises, ExerciseWrapper::class.java)
-                            if( data.isPresent )
-                                it.exerciseDao().insertAll(data.get().exercises)
-
-                            if( BuildConfig.DEBUG ){
-                                // prepopulate mock workout session data.
-                                val sessionData = JSONUtils.getJsonFileAsClass(application.resources, R.raw.sessions, MockDebugData.MockDebugDataWrapper::class.java)
-                                if( sessionData.isPresent )
-                                    it.workoutSessionDao().insertAll(sessionData.get().data)
+                            if(BuildConfig.DEBUG){
+                                MockDebugData.prePopulateDatabaseMock(
+                                    application.resources,
+                                    R.raw.exercises,
+                                    { db.exerciseDao().insert(it) },
+                                    { db.workoutSessionDao().insert(it) },
+                                    { db.workoutDao().insert(it) },
+                                    { db.workoutSetDao().insert(it) }
+                                )
+                            }
+                            else {
+                                val data = JSONUtils.getJsonFileAsClass(
+                                    application.resources,
+                                    R.raw.exercises,
+                                    ExerciseWrapper::class.java
+                                )
+                                if (data.isPresent)
+                                    db.exerciseDao().insertAll(data.get().exercises)
                             }
                         }
                     }

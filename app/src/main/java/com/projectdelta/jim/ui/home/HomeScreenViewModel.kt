@@ -49,8 +49,8 @@ class HomeScreenViewModel @Inject constructor(
             }
 
             is HomeScreenEvent.WorkoutSelectedEvent -> {
-                Timber.d("Explore Workout : ${event.workout}")
-                _uiState.value = UIState.LaunchWorkoutInfoScreen(event.workout)
+                Timber.d("Explore Workout : ${event.workoutWithSetsAndExercise}")
+                _uiState.value = UIState.LaunchWorkoutInfoScreen(event.workoutWithSetsAndExercise.workout.id)
             }
 
             is HomeScreenEvent.NavigationAppIconClickEvent -> {
@@ -80,7 +80,7 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    fun getWorkoutByDay(day: Int) = workoutRepository.getSessionByDay(day)
+    fun getWorkoutByDay(day: Int) = workoutRepository.getSessionSessionWithWorkoutWithSetsByDay(day)
 
     /**
      * Updates the [HomeScreenState.currentDay] silently without notifying the observers.

@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.projectdelta.jim.TestConstants
-import com.projectdelta.jim.util.TimeUtil
+import com.projectdelta.jim.data.local.dao.WorkoutDao
+import com.projectdelta.jim.data.local.dao.WorkoutSessionDao
+import com.projectdelta.jim.data.model.entity.Workout
+import com.projectdelta.jim.data.model.entity.WorkoutSession
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -22,16 +24,14 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class WorkoutSessionDaoTest {
     private lateinit var workoutSessionDao: WorkoutSessionDao
+    private lateinit var workoutDao: WorkoutDao
     private lateinit var db: JimDatabase
 
-    private val workoutSessionIds = mutableListOf<Long>()
+    data class SessionWWorkout(val id: Int, val workouts: MutableList<Int> = mutableListOf())
 
-    private fun createSessionByDay(day: Int) = TestConstants
-        .session
-        .copy(
-            timeMs = TimeUtil
-                .dayToMilliseconds(day)
-        )
+    private val workoutSessionIds = mutableListOf<SessionWWorkout>()
+
+    private fun createSessionByDay(day: Int) = WorkoutSession(day)
 
     @Before
     fun createDb() = runTest {
@@ -40,31 +40,34 @@ class WorkoutSessionDaoTest {
             context, JimDatabase::class.java
         ).build()
         workoutSessionDao = db.workoutSessionDao()
+        workoutDao = db.workoutDao()
 
         for (i in 1..10) { // 10 mock sessions
-            workoutSessionIds.add(workoutSessionDao.insert(createSessionByDay(i)))
+            val wws = SessionWWorkout(workoutSessionDao.insert(createSessionByDay(i)).toInt())
+
+            for (j in 0..7)
+                wws.workouts.add(workoutDao.insert(Workout(sessionId = wws.id)).toInt())
+
+            workoutSessionIds.add(wws)
         }
     }
 
     @After
-    @Throws(IOException::class)
     fun closeDb() = runTest {
         db.clearAllTables()
         db.close()
     }
 
     @Test
-    @Throws(Exception::class)
     fun readNotNullWorkoutTest() = runTest {
 
-        for (id in workoutSessionIds) {
-            val ex = workoutSessionDao.getById(id.toInt()).first()
+        for (session in workoutSessionIds) {
+            val ex = workoutSessionDao.getById(session.id).first()
             assertNotNull(ex)
         }
     }
 
     @Test
-    @Throws(Exception::class)
     fun readNullWorkoutTest() = runTest {
 
         for (id in listOf(1231, 3131231, 3131231)) {
@@ -74,7 +77,6 @@ class WorkoutSessionDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun readAllWorkoutTest() = runTest {
 
         val workoutSessions = workoutSessionDao.getAllSessions().first()
@@ -83,17 +85,29 @@ class WorkoutSessionDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
-    fun readWorkoutByTimeRanged() = runTest {
+    fun workoutByTimeRangedTest() = runTest {
         // at setup we have one workout session for each day form 0 to 10
         val start = 5
         val end = 8
-        val sessions = workoutSessionDao.getByTimeRange(
-            TimeUtil.dayToMilliseconds(start),
-            TimeUtil.dayToMilliseconds(end)
+        val sessions = workoutSessionDao.getByIdRanged(
+            start, end,
         ).first()
 
         assertTrue(sessions.size == (end - start) + 1)
+    }
+
+    @Test
+    fun sessionWithWorkoutsTest() = runTest {
+        for (session in workoutSessionIds) {
+            val wws = workoutSessionDao.getSessionWithWorkoutsById(session.id).first()
+            assertTrue(wws.size == 1)
+
+            assertTrue(session.workouts.size == wws[0].workouts.size)
+
+            for (idx in session.workouts.indices) {
+                assertTrue(session.workouts[idx] == wws[0].workouts[idx].id)
+            }
+        }
     }
 
 }

@@ -21,17 +21,16 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.projectdelta.jim.data.model.Workout
-import com.projectdelta.jim.data.model.WorkoutSet
-import com.projectdelta.jim.ui.theme.JimTheme
+import com.projectdelta.jim.data.model.entity.Workout
+import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
 import com.projectdelta.jim.util.Constants.UI.ELEVATION_NORMAL
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
 import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
 import com.projectdelta.jim.util.Constants.UI.ROUND_RADIUS_NORMAL
 import com.projectdelta.jim.util.Constants.UI.TEXT_NOT_THAT_LARGE
 import com.projectdelta.jim.util.Constants.UI.TEXT_SMALL_PLUS
+import com.projectdelta.jim.util.NotFound
 import com.projectdelta.jim.util.onClickWParam
 
 /**
@@ -42,9 +41,9 @@ import com.projectdelta.jim.util.onClickWParam
  */
 @Composable
 fun WorkoutLogComponent(
-    workout: Workout,
+    workout: WorkoutWithSetsAndExercise,
     modifier: Modifier,
-    onClickWParamListener: onClickWParam<Workout>? = null
+    onClickWParamListener: onClickWParam<WorkoutWithSetsAndExercise>? = null
 ) {
     Card(
         shape = RoundedCornerShape(ROUND_RADIUS_NORMAL),
@@ -64,7 +63,7 @@ fun WorkoutLogComponent(
                     horizontal = PADDING_NORMAL,
                     vertical = PADDING_SMALL,
                 ),
-                text = workout.exerciseName,
+                text = workout.exercise?.name ?: NotFound.surpriseMe(),
                 fontWeight = FontWeight.Normal,
                 fontSize = TEXT_NOT_THAT_LARGE
             )
@@ -105,23 +104,5 @@ fun WorkoutLogComponent(
                     .padding(bottom = PADDING_SMALL)
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WorkoutLogBoxPreview() {
-    val log = Workout(
-        exerciseName = "Barbell Row",
-        sets = List(10) {
-            WorkoutSet(
-                weight = 50.0,
-                reps = 10,
-                note = if (it % 2 == 0) "The scope provided to your pager content allows apps to easily reference the" else ""
-            )
-        }
-    )
-    JimTheme {
-        WorkoutLogComponent(log, Modifier)
     }
 }

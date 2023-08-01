@@ -1,6 +1,6 @@
 package com.projectdelta.jim.ui.home.events
 
-import com.projectdelta.jim.data.model.Workout
+import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
 
 sealed class HomeScreenEvent {
 
@@ -11,7 +11,7 @@ sealed class HomeScreenEvent {
 
     data class LaunchCalendarEvent(val copy: Boolean = false) : HomeScreenEvent()
 
-    data class WorkoutSelectedEvent(val workout: Workout) : HomeScreenEvent()
+    data class WorkoutSelectedEvent(val workoutWithSetsAndExercise: WorkoutWithSetsAndExercise) : HomeScreenEvent()
 
     object NavigationAppIconClickEvent : HomeScreenEvent()
 

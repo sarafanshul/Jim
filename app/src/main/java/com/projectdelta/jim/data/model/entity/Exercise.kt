@@ -1,4 +1,4 @@
-package com.projectdelta.jim.data.model
+package com.projectdelta.jim.data.model.entity
 
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
@@ -10,7 +10,6 @@ import com.projectdelta.jim.util.BaseId
 import com.projectdelta.jim.util.Constants.Table.DEFAULT_VALUE_STR
 import com.projectdelta.jim.util.Constants.Table.EXERCISE_TABLE
 import java.io.Serializable
-import kotlin.random.Random
 
 @Keep
 @Entity(
@@ -54,4 +53,4 @@ data class Exercise(
     @[SerializedName("category") ColumnInfo(name = "category")]
     val category: String? = DEFAULT_VALUE_STR
 
-) : BaseModel(), Serializable
+) : BaseDBModel(), Serializable

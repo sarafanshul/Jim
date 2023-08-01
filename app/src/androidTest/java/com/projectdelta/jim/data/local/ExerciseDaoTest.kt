@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.projectdelta.jim.TestConstants
+import com.projectdelta.jim.data.local.dao.ExerciseDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -56,7 +57,6 @@ class ExerciseDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun readNotNullExerciseTest() = runTest {
 
         for (id in exerciseIds) {
@@ -66,7 +66,6 @@ class ExerciseDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun readNullExerciseTest() = runTest {
 
         for (id in listOf(1231, 3131231, 3131231)) {
@@ -76,7 +75,6 @@ class ExerciseDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun readAllExerciseTest() = runTest {
 
         val exercises = exerciseDao.getAllExercises().first()
@@ -85,7 +83,6 @@ class ExerciseDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun readAllExercisesByNameLike() = runTest {
         val curls = exerciseDao.getByNameLike("Cur").first()
         assertNotNull(curls)
@@ -93,7 +90,6 @@ class ExerciseDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun readAllExercisesByNameLikeNull() = runTest {
         val curls = exerciseDao.getByNameLike("Squats").first()
         assertNotNull(curls)
@@ -101,7 +97,6 @@ class ExerciseDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun readAllExercisesByNameLikeCase() = runTest { // query shouldn't be case sensitive
         val curls = exerciseDao.getByNameLike("cur").first()
         assertNotNull(curls)

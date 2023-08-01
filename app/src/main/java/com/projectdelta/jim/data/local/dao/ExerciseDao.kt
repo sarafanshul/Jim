@@ -1,10 +1,10 @@
-package com.projectdelta.jim.data.local
+package com.projectdelta.jim.data.local.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import com.projectdelta.jim.util.BaseId
-import com.projectdelta.jim.data.model.Exercise
+import com.projectdelta.jim.data.model.entity.Exercise
 import com.projectdelta.jim.util.Constants.Table.EXERCISE_TABLE
 import kotlinx.coroutines.flow.Flow
 
