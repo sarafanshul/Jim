@@ -1,10 +1,14 @@
 package com.projectdelta.jim.ui.home
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets
 import com.projectdelta.jim.data.repository.WorkoutSessionRepository
+import com.projectdelta.jim.data.state.SessionState
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.ui.home.events.HomeScreenEvent
 import com.projectdelta.jim.ui.home.states.HomeScreenState
@@ -12,6 +16,7 @@ import com.projectdelta.jim.ui.home.states.UIState
 import com.projectdelta.jim.util.TimeUtil.getCurrentDayFromEpoch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -80,7 +85,16 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    fun getWorkoutByDay(day: Int) = workoutRepository.getSessionSessionWithWorkoutWithSetsByDay(day)
+    // FIXME: not sure this is best idea
+    private val workoutCache: HashMap<Int,  Flow<SessionState<SessionWithWorkoutWithSets>>> = hashMapOf()
+
+    fun getWorkoutByDay(day: Int) : Flow<SessionState<SessionWithWorkoutWithSets>> {
+        if( !workoutCache.containsKey(day) ) {
+            Timber.d("polling for day: $day")
+            workoutCache[day] = workoutRepository.getSessionSessionWithWorkoutWithSetsByDay(day)
+        }
+        return workoutCache[day]!!
+    }
 
     /**
      * Updates the [HomeScreenState.currentDay] silently without notifying the observers.

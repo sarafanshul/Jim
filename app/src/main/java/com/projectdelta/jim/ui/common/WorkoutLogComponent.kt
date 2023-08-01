@@ -1,7 +1,6 @@
 package com.projectdelta.jim.ui.common
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,9 +20,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.projectdelta.jim.data.model.entity.Workout
+import com.projectdelta.jim.data.model.relation.WWSEParameterProvider
 import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
+import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.Constants.UI.ELEVATION_NORMAL
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
 import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
@@ -42,7 +45,7 @@ import com.projectdelta.jim.util.onClickWParam
 @Composable
 fun WorkoutLogComponent(
     workout: WorkoutWithSetsAndExercise,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     onClickWParamListener: onClickWParam<WorkoutWithSetsAndExercise>? = null
 ) {
     Card(
@@ -57,52 +60,61 @@ fun WorkoutLogComponent(
             onClickWParamListener?.invoke(workout)
         }
     ) {
-        Column {
-            Text(
-                modifier = Modifier.padding(
-                    horizontal = PADDING_NORMAL,
-                    vertical = PADDING_SMALL,
-                ),
-                text = workout.exercise?.name ?: NotFound.surpriseMe(),
-                fontWeight = FontWeight.Normal,
-                fontSize = TEXT_NOT_THAT_LARGE
-            )
-            Divider(
-                color = MaterialTheme.colorScheme.primary,
+        Text(
+            modifier = Modifier.padding(
+                horizontal = PADDING_NORMAL,
+                vertical = PADDING_SMALL,
+            ),
+            text = workout.exercise?.name ?: NotFound.surpriseMe(),
+            fontWeight = FontWeight.Normal,
+            fontSize = TEXT_NOT_THAT_LARGE
+        )
+        Divider(
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+        )
+        for (set in workout.sets.take(5)) { // take only first 5
+            SetLogComponent(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-            )
-            for (set in workout.sets.take(5)) { // take only first 5
-                SetLogComponent(
-                    modifier = Modifier
-                        .padding(0.dp, PADDING_SMALL, 0.dp, 1.dp) // top padding
-                        .fillMaxWidth(),
-                    set = set
-                )
-            }
-            if (workout.sets.size > 5) {
-                Text(
-                    buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                fontStyle = FontStyle.Italic,
-                                fontWeight = FontWeight.Light,
-                                fontSize = TEXT_SMALL_PLUS
-                            )
-                        ) {
-                            append("${workout.sets.size - 5} more")
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(horizontal = PADDING_NORMAL, 1.dp)
-                        .align(Alignment.End)
-                )
-            }
-            Spacer(
-                modifier = Modifier
-                    .padding(bottom = PADDING_SMALL)
+                    .padding(0.dp, PADDING_SMALL, 0.dp, 1.dp) // top padding
+                    .fillMaxWidth(),
+                set = set
             )
         }
+        if (workout.sets.size > 5) {
+            Text(
+                buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            fontStyle = FontStyle.Italic,
+                            fontWeight = FontWeight.Light,
+                            fontSize = TEXT_SMALL_PLUS
+                        )
+                    ) {
+                        append("${workout.sets.size - 5} more")
+                    }
+                },
+                modifier = Modifier
+                    .padding(horizontal = PADDING_NORMAL, 1.dp)
+                    .align(Alignment.End)
+            )
+        }
+        Spacer(
+            modifier = Modifier
+                .padding(bottom = PADDING_SMALL)
+        )
+    }
+}
+
+@Preview
+@Composable
+fun WorkoutLogComponentPreview(
+    @PreviewParameter(WWSEParameterProvider::class, limit = 1)
+    workout: WorkoutWithSetsAndExercise,
+) {
+    JimTheme {
+        WorkoutLogComponent(workout = workout)
     }
 }

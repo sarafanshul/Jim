@@ -5,10 +5,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.projectdelta.jim.data.model.entity.Workout
 import com.projectdelta.jim.data.model.entity.WorkoutSession
+import com.projectdelta.jim.data.model.relation.SWWWParameterProvider
 import com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets
 import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
+import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
 import com.projectdelta.jim.util.onClickWParam
 
@@ -35,5 +39,18 @@ fun WorkoutSessionComponent(
                 onClickWParamListener = onClickWParamAction
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WorkoutSessionComponentPreview(
+    @PreviewParameter(SWWWParameterProvider::class)
+    workoutSession: SessionWithWorkoutWithSets
+) {
+    JimTheme {
+        WorkoutSessionComponent(
+            workoutSession = workoutSession
+        )
     }
 }

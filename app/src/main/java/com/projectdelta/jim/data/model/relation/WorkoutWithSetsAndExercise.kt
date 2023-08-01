@@ -1,5 +1,6 @@
 package com.projectdelta.jim.data.model.relation
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.projectdelta.jim.data.model.entity.Exercise
@@ -28,3 +29,21 @@ data class WorkoutWithSetsAndExercise(
     )
     val exercise: Exercise?
 )
+
+/**
+ * Preview provider for [WorkoutWithSetsAndExercise]
+ */
+class WWSEParameterProvider : PreviewParameterProvider<WorkoutWithSetsAndExercise> {
+    override val values = sequenceOf(
+        WorkoutWithSetsAndExercise(
+            workout = Workout(0),
+            sets = List(6){
+                WorkoutSet(
+                    weight = 15.0*it,
+                    reps = 7 + it
+                )
+            },
+            exercise = Exercise(name = "Deadlift")
+        )
+    )
+}
