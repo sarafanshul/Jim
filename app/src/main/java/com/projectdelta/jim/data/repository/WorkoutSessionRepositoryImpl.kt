@@ -12,6 +12,7 @@ import com.projectdelta.jim.util.BaseId
 import com.projectdelta.jim.util.Constants.PagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
@@ -87,7 +88,8 @@ class WorkoutSessionRepositoryImpl(
                 SessionState.Session(it.first())
             else
                 SessionState.Empty
-        }.flowOn(workerDispatcher)
+        }.distinctUntilChanged()
+            .flowOn(workerDispatcher)
 
     override fun getAll(): Flow<List<WorkoutSession>> =
         dao.getAllSessions().flowOn(workerDispatcher)

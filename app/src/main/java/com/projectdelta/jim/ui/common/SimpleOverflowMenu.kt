@@ -18,7 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import com.projectdelta.jim.util.onClick
+import com.projectdelta.jim.util.callback
 
 /**
  * Wrapper around [DropdownMenu] for convenience
@@ -51,7 +51,7 @@ fun SimpleOverflowMenu(
  */
 @Composable
 fun SimpleOverflowMenuItem(
-    clickAction: onClick,
+    clickAction: callback,
     text: String,
     imageVector: ImageVector,
     accentColor: Color = MaterialTheme.colorScheme.primary
@@ -76,7 +76,7 @@ fun SimpleOverflowMenuItem(
  */
 @Composable
 fun SimpleOverflowMenuItem(
-    clickAction: onClick,
+    clickAction: callback,
     text: String,
     @DrawableRes imageResource: Int,
     accentColor: Color = MaterialTheme.colorScheme.primary

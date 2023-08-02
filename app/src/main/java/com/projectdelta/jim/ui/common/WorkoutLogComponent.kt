@@ -34,7 +34,7 @@ import com.projectdelta.jim.util.Constants.UI.ROUND_RADIUS_NORMAL
 import com.projectdelta.jim.util.Constants.UI.TEXT_NOT_THAT_LARGE
 import com.projectdelta.jim.util.Constants.UI.TEXT_SMALL_PLUS
 import com.projectdelta.jim.util.NotFound
-import com.projectdelta.jim.util.onClickWParam
+import com.projectdelta.jim.util.callbackWParam
 
 /**
  * Component for Logging [Workout]
@@ -46,7 +46,7 @@ import com.projectdelta.jim.util.onClickWParam
 fun WorkoutLogComponent(
     workout: WorkoutWithSetsAndExercise,
     modifier: Modifier = Modifier,
-    onClickWParamListener: onClickWParam<WorkoutWithSetsAndExercise>? = null
+    onClickWParamListener: callbackWParam<WorkoutWithSetsAndExercise>? = null
 ) {
     Card(
         shape = RoundedCornerShape(ROUND_RADIUS_NORMAL),

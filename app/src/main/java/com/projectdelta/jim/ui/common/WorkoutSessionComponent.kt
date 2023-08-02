@@ -14,7 +14,7 @@ import com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets
 import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
 import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
-import com.projectdelta.jim.util.onClickWParam
+import com.projectdelta.jim.util.callbackWParam
 
 /**
  * Component for preview-ing a workout session.
@@ -26,7 +26,7 @@ import com.projectdelta.jim.util.onClickWParam
 fun WorkoutSessionComponent(
     workoutSession: SessionWithWorkoutWithSets,
     modifier: Modifier = Modifier,
-    onClickWParamAction: onClickWParam<WorkoutWithSetsAndExercise>? = null
+    onClickWParamAction: callbackWParam<WorkoutWithSetsAndExercise>? = null
 ) {
     LazyColumn(
         modifier = modifier

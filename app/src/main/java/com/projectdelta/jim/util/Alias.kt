@@ -1,7 +1,7 @@
 package com.projectdelta.jim.util
 
-typealias onClickWParam<T> = (T) -> Boolean
-typealias onClick = () -> Unit
+typealias callbackWParam<T> = (T) -> Unit
+typealias callback = () -> Unit
 
 typealias BaseId = Int
 

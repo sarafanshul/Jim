@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,7 +51,7 @@ import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
 import com.projectdelta.jim.util.Constants.UI.TEXT_LARGE
 import com.projectdelta.jim.util.Constants.UI.TEXT_SMALL_PLUS
 import com.projectdelta.jim.util.TimeUtil
-import com.projectdelta.jim.util.onClick
+import com.projectdelta.jim.util.callback
 
 /**
  * Image clickable card with transparent background
@@ -66,7 +65,7 @@ import com.projectdelta.jim.util.onClick
 fun ImageButton(
     text: String,
     painter: Painter,
-    onClick: onClick,
+    onClick: callback,
     modifier: Modifier = Modifier,
     contentDescription: String = ""
 ) {
@@ -121,8 +120,8 @@ fun ImageButton(
  */
 @Composable
 fun EmptyWorkoutSessionComponent(
-    startNewWorkoutOnClick: onClick,
-    copyPreviousWorkoutOnClick: onClick,
+    startNewWorkoutOnClick: callback,
+    copyPreviousWorkoutOnClick: callback,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -191,9 +190,9 @@ fun EmptyWorkoutSessionComponent(
 @Composable
 fun DayInfoTopBarComponent(
     currentDay: Int,
-    onDateClick: onClick,
-    onBackClick: onClick,
-    onNextClick: onClick,
+    onDateClick: callback,
+    onBackClick: callback,
+    onNextClick: callback,
     modifier: Modifier = Modifier,
 ) {
     Column(
