@@ -7,4 +7,4 @@
 
 # Done
 - Database refactor
-[database schema](assets/db-v2.png)
+![database schema](assets/db-v2.png)
