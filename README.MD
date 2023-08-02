@@ -8,3 +8,7 @@
 # Done
 - Database refactor
 ![database schema](assets/db-v2.png)
+
+# Wireframes
+- Home Screen
+![Home screen 3D](assets/img.png)
