@@ -9,7 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.projectdelta.jim.ui.destinations.CalendarPreviewScreenDestination
 import com.projectdelta.jim.ui.destinations.WorkoutInfoScreenDestination
 import com.projectdelta.jim.ui.home.HomeScreenViewModel
-import com.projectdelta.jim.ui.home.MainTopAppBar
+import com.projectdelta.jim.ui.home.HomeTopAppBar
 import com.projectdelta.jim.ui.home.states.UIState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -52,7 +52,7 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            MainTopAppBar(viewModel)
+            HomeTopAppBar(viewModel)
         },
         content = {
             WorkoutSessionScreen(

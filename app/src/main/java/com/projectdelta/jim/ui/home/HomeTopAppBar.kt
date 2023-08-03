@@ -20,7 +20,7 @@ import com.projectdelta.jim.ui.home.events.HomeScreenEvent
 
 
 @Composable
-fun MainTopAppBar(
+fun HomeTopAppBar(
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.homeScreenState.collectAsState()
