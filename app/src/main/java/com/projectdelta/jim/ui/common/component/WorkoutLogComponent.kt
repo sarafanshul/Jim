@@ -1,4 +1,4 @@
-package com.projectdelta.jim.ui.common
+package com.projectdelta.jim.ui.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer

@@ -1,4 +1,4 @@
-package com.projectdelta.jim.ui.common
+package com.projectdelta.jim.ui.common.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import com.projectdelta.jim.R
 import com.projectdelta.jim.data.model.entity.WorkoutSet
+import com.projectdelta.jim.ui.common.widget.TextWithSubscript
 
 /**
  * Component for logging [WorkoutSet] info

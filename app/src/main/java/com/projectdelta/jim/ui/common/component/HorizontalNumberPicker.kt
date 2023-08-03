@@ -1,4 +1,4 @@
-package com.projectdelta.jim.ui.common
+package com.projectdelta.jim.ui.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults.indicatorLine
@@ -38,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.projectdelta.jim.R
+import com.projectdelta.jim.ui.common.widget.RepeatingIconButton
 import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
 import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
@@ -46,7 +46,8 @@ import com.projectdelta.jim.util.callbackWParam
 
 /**
  * An Horizontal number picker with two buttons for increment and decrement ,
- * Also supports input from keyboard
+ * - Supports input from keyboard
+ * - Supports Long Press to increment/decrement values
  * >> [[-]] __ [[+]]
  */
 @Composable
@@ -62,7 +63,7 @@ fun HorizontalNumberPicker(
             .wrapContentWidth(),
         horizontalArrangement = Arrangement.Center,
     ) {
-        IconButton(
+        RepeatingIconButton(
             onClick = onValueDecrement,
             modifier = Modifier
                 .align(Alignment.CenterVertically)
@@ -120,7 +121,7 @@ fun HorizontalNumberPicker(
                     unfocusedIndicatorLineThickness = 1.dp
                 )
         )
-        IconButton(
+        RepeatingIconButton(
             onClick = onValueIncrement,
             modifier = Modifier
                 .align(Alignment.CenterVertically)

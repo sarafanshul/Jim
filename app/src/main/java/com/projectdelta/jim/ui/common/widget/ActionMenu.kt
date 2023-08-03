@@ -1,4 +1,4 @@
-package com.projectdelta.jim.ui.common
+package com.projectdelta.jim.ui.common.widget
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons

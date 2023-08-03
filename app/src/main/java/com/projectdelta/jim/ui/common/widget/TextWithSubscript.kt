@@ -1,4 +1,4 @@
-package com.projectdelta.jim.ui.common
+package com.projectdelta.jim.ui.common.widget
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

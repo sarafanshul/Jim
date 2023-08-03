@@ -41,7 +41,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.projectdelta.jim.R
 import com.projectdelta.jim.data.state.SessionState
-import com.projectdelta.jim.ui.common.WorkoutSessionComponent
+import com.projectdelta.jim.ui.common.component.WorkoutSessionComponent
 import com.projectdelta.jim.ui.home.events.HomeScreenEvent
 import com.projectdelta.jim.ui.home.HomeScreenViewModel
 import com.projectdelta.jim.util.Constants

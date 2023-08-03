@@ -14,8 +14,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.projectdelta.jim.R
-import com.projectdelta.jim.ui.common.SimpleOverflowMenu
-import com.projectdelta.jim.ui.common.SimpleOverflowMenuItem
+import com.projectdelta.jim.ui.common.widget.SimpleOverflowMenu
+import com.projectdelta.jim.ui.common.widget.SimpleOverflowMenuItem
 import com.projectdelta.jim.ui.home.events.HomeScreenEvent
 
 

@@ -1,4 +1,4 @@
-package com.projectdelta.jim.ui.common
+package com.projectdelta.jim.ui.common.component
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationResult
