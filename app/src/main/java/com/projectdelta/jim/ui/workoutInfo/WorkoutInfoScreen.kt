@@ -9,9 +9,8 @@ import androidx.compose.ui.Modifier
 import com.projectdelta.jim.util.BaseId
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.spec.DestinationStyle
 
-@Destination()
+@Destination
 @Composable
 fun WorkoutInfoScreen(
     navigator: DestinationsNavigator,
