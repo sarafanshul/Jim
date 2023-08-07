@@ -19,6 +19,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -67,7 +68,10 @@ fun WorkoutLogComponent(
             ),
             text = workout.exercise?.name ?: NotFound.surpriseMe(),
             fontWeight = FontWeight.Normal,
-            fontSize = TEXT_NOT_THAT_LARGE
+            fontSize = TEXT_NOT_THAT_LARGE,
+            maxLines = 1,
+            softWrap = true,
+            overflow = TextOverflow.Ellipsis,
         )
         Divider(
             color = MaterialTheme.colorScheme.primary,

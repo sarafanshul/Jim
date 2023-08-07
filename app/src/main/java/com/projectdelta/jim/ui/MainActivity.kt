@@ -13,8 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 @AndroidEntryPoint
-class MainActivity(
-) : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

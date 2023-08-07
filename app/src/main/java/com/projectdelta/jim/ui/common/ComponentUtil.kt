@@ -2,6 +2,7 @@
 
 package com.projectdelta.jim.ui.common
 
+import android.content.res.Resources.getSystem
 import android.graphics.BlurMaskFilter
 import android.graphics.BlurMaskFilter.Blur
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -19,11 +20,16 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+fun Int.pxToDp(): Dp {
+    return (this / getSystem().displayMetrics.density).dp
+}
 
 /**
  * Neumorphism Shadow
@@ -57,6 +63,7 @@ fun Modifier.shadow(
         )
     }
 })
+
 
 /**
  * A modifier for handling hold press, i.e it'll call [onClick] constantly till Down.pressed
@@ -92,5 +99,33 @@ fun Modifier.repeatingClickable(
             waitForUpOrCancellation()
             heldButtonJob.cancel()
         }
+    }
+}
+
+/**
+ * Visibility modifier, works like [androidx.compose.animation.AnimatedVisibility],
+ * except it reserves space for the in-visible component.
+ */
+fun Modifier.visibility(visible: Boolean): Modifier {
+    return layout { measurable, constraints ->
+        val placeable = measurable.measure(constraints)
+
+        layout(placeable.width, placeable.height) {
+            if (visible) {
+                // place this item in the original position
+                placeable.placeRelative(0, 0)
+            }
+        }
+    }
+}
+
+/**
+ * Lets you add conditional [Modifier]s
+ */
+fun Modifier.conditional(condition : Boolean, modifier : Modifier.() -> Modifier) : Modifier {
+    return if (condition) {
+        then(modifier(Modifier))
+    } else {
+        this
     }
 }

@@ -2,13 +2,13 @@ package com.projectdelta.jim.data.model.entity
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.projectdelta.jim.util.BaseId
 import com.projectdelta.jim.util.Constants.Table.WORKOUT_SET_TABLE
 import kotlinx.parcelize.Parcelize
-import java.io.Serializable
 
 /**
  * A Set table to keep track of sets
@@ -50,3 +50,16 @@ data class WorkoutSet(
     val exerciseId: BaseId = 0,
 
 ) : BaseDBModel(), Parcelable
+
+/**
+ * Preview provider for [WorkoutSet]
+ */
+class WSTPreviewParameterProvider : PreviewParameterProvider<WorkoutSet> {
+    override val values = sequenceOf(
+        WorkoutSet(
+            id = 1,
+            weight = 150.0,
+            reps = 3,
+        )
+    )
+}

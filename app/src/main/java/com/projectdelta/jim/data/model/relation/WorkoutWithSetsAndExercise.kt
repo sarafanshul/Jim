@@ -43,7 +43,7 @@ class WWSEParameterProvider : PreviewParameterProvider<WorkoutWithSetsAndExercis
                     reps = 7 + it
                 )
             },
-            exercise = Exercise(name = "Deadlift")
+            exercise = Exercise(name = "Romanian Deadlift")
         )
     )
 }
