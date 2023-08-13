@@ -2,6 +2,7 @@ package com.projectdelta.jim.ui.common.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +38,8 @@ fun SetLogComponent(
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
         Image(
             painter = painterResource(
@@ -47,7 +49,7 @@ fun SetLogComponent(
                 color = if (set.note.isNotBlank())
                     MaterialTheme.colorScheme.primary
                 else
-                    Color.Gray.copy(alpha = 0.7f)
+                    Color(0xAABDC3C7)
             ),
             contentDescription = "message",
             modifier = Modifier
