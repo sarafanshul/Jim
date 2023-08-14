@@ -84,7 +84,7 @@ class DebugWorkoutSessionRepositoryImpl (
         TODO("Not yet implemented")
     }
 
-    override fun getSessionSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>> {
+    override fun getSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>> {
         TODO("Not yet implemented")
     }
 }

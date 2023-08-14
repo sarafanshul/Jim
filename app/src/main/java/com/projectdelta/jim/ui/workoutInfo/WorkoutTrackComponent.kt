@@ -20,19 +20,22 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.projectdelta.jim.data.model.entity.WorkoutSet
 import com.projectdelta.jim.data.model.relation.WWSEParameterProvider
 import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
+import com.projectdelta.jim.data.state.SessionState
 import com.projectdelta.jim.ui.common.component.HorizontalNumberPicker
 import com.projectdelta.jim.ui.common.component.SetLogComponent
 import com.projectdelta.jim.ui.common.conditional
+import com.projectdelta.jim.ui.common.widget.NotFoundFiller
 import com.projectdelta.jim.ui.theme.JimTheme
-import com.projectdelta.jim.ui.workoutInfo.states.WorkoutTrackButtonState
 import com.projectdelta.jim.ui.workoutInfo.states.WorkoutTrackUIState
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
 import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
@@ -42,10 +45,11 @@ import kotlinx.coroutines.flow.asStateFlow
 
 @Composable
 fun WorkoutTrackComponent(
-    workout: WorkoutWithSetsAndExercise,
+    workout: StateFlow<SessionState<WorkoutWithSetsAndExercise>>,
     uiState: StateFlow<WorkoutTrackUIState>,
     modifier: Modifier = Modifier,
 ) {
+    val state by uiState.collectAsState()
     Column(
         modifier = modifier
             .padding(horizontal = PADDING_NORMAL)
@@ -57,60 +61,52 @@ fun WorkoutTrackComponent(
             modifier = Modifier
                 .padding(PADDING_SMALL)
         )
+
         Divider(
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.primary
         )
 
-        var defaultWeight = remember { 0 }
-        var defaultReps = remember { 0 }
-        var btn1state : WorkoutTrackButtonState = remember { WorkoutTrackButtonState.Loading }
-        var btn2state : WorkoutTrackButtonState= remember { WorkoutTrackButtonState.Loading }
-        val state by uiState.collectAsState()
+        val defaultWeight = remember(state.set.weight.toInt()) {
+            mutableStateOf(state.set.weight.toInt())
+        }
 
-        when(val temp = state){
-            is WorkoutTrackUIState.CreateNew -> {
-                defaultWeight = 0
-                defaultReps = 0
-                btn1state = temp.button1State
-                btn2state = temp.button2State
-            }
-            is WorkoutTrackUIState.EditExisting -> {
-                defaultWeight = temp.set.weight.toInt()
-                defaultReps = temp.set.reps
-                btn1state = temp.button1State
-                btn2state = temp.button2State
-            }
+        val defaultRep = remember(state.set.reps) {
+            mutableStateOf(state.set.reps)
         }
 
         HorizontalNumberPicker(
             currentValue = defaultWeight,
-            onValueIncrement = { /*TODO*/ },
-            onValueDecrement = { /*TODO*/ },
-            onValueChangeListener = {},
+            onValueIncrement = state.onValueIncrementWt,
+            onValueDecrement = state.onValueDecrementWt,
+            onValueChange = state.onValueChangeWt,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(PADDING_NORMAL)
         )
+
         Text(
             text = "REPS",
             style = MaterialTheme.typography.labelMedium,
             modifier = Modifier
                 .padding(PADDING_SMALL)
         )
+
         Divider(
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.primary
         )
+
         HorizontalNumberPicker(
-            currentValue = defaultReps,
-            onValueIncrement = { /*TODO*/ },
-            onValueDecrement = { /*TODO*/ },
-            onValueChangeListener = {},
+            currentValue = defaultRep,
+            onValueIncrement = state.onValueIncrementReps,
+            onValueDecrement = state.onValueDecrementReps,
+            onValueChange = state.onValueChangeReps,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(PADDING_NORMAL)
         )
+
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
@@ -118,53 +114,66 @@ fun WorkoutTrackComponent(
                 .padding(vertical = PADDING_NORMAL)
         ) {
             TextButton(
-                onClick = { /*TODO*/ },
+                onClick = state.button1State.onClick,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = PADDING_NORMAL),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = btn1state.color
+                    containerColor = state.button1State.color
                 ),
             ) {
-                Text(text = btn1state.text)
+                Text(text = state.button1State.text)
             }
+
             TextButton(
-                onClick = { /*TODO*/ },
+                onClick = state.button2State.onClick,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = PADDING_NORMAL),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = btn2state.color
+                    containerColor = state.button2State.color
                 ),
             ) {
-                Text(text = btn2state.text)
+                Text(text = state.button2State.text)
             }
         }
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(workout.sets) {
-                SetLogComponent(
-                    set = it,
-                    index = it.id,
-                    onNotesClick = {},
+
+        val workoutState by workout.collectAsState()
+        when (val temp = workoutState) {
+            SessionState.Empty -> {
+                NotFoundFiller(
                     modifier = Modifier
-                        .conditional(
-                            state is WorkoutTrackUIState.EditExisting &&
-                                    (state as WorkoutTrackUIState.EditExisting).set == it
-                        ) {
-                            background((state as WorkoutTrackUIState.EditExisting).setSelectedColor)
-                        }
-                        .clickable {
-                            // update [EditExisting] here.
-                        }
-                        .padding(vertical = PADDING_NORMAL) // padding
+                        .padding(vertical = 20.dp)
+                        .fillMaxWidth(),
                 )
-                if( it != workout.sets.last() ) {
-                    Divider(
-                        thickness = 1.dp,
-                        modifier = Modifier.padding(horizontal = PADDING_NORMAL)
-                    )
+            }
+
+            is SessionState.Session -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(temp.session.sets) {
+                        SetLogComponent(
+                            set = it,
+                            index = it.id,
+                            onNotesClick = {},
+                            modifier = Modifier
+                                .conditional(
+                                    state is WorkoutTrackUIState.EditExisting &&
+                                            (state as WorkoutTrackUIState.EditExisting).set == it
+                                ) {
+                                    background((state as WorkoutTrackUIState.EditExisting).setSelectedColor)
+                                }
+                                .clickable { state.onWorkoutSetClick(it) }
+                                .padding(vertical = PADDING_NORMAL) // padding
+                        )
+                        if (it != temp.session.sets.last()) {
+                            Divider(
+                                thickness = 1.dp,
+                                modifier = Modifier.padding(horizontal = PADDING_NORMAL)
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -177,13 +186,21 @@ fun WorkoutTrackComponent(
 @Composable
 fun WorkoutTrackScreenCreateNewPreview(
     @PreviewParameter(WWSEParameterProvider::class)
-    workout: WorkoutWithSetsAndExercise
+    workout0: WorkoutWithSetsAndExercise
 ) {
     JimTheme {
 
-        val state: StateFlow<WorkoutTrackUIState> = MutableStateFlow(
-            WorkoutTrackUIState.CreateNew()
-        ).asStateFlow()
+        val state = remember {
+            MutableStateFlow(
+                WorkoutTrackUIState.CreateNew(WorkoutSet())
+            ).asStateFlow()
+        }
+
+        val workout = remember {
+            MutableStateFlow<SessionState<WorkoutWithSetsAndExercise>>(
+                SessionState.Session(workout0)
+            )
+        }
 
         Surface {
             Column(
@@ -200,19 +217,62 @@ fun WorkoutTrackScreenCreateNewPreview(
     }
 }
 
-@Preview(name = "Selected",showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Selected", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun WorkoutTrackScreenEditSelectedPreview(
     @PreviewParameter(WWSEParameterProvider::class)
-    workout: WorkoutWithSetsAndExercise
+    workout0: WorkoutWithSetsAndExercise
 ) {
     JimTheme {
 
-        val state: StateFlow<WorkoutTrackUIState> = MutableStateFlow(
-            WorkoutTrackUIState.EditExisting(
-                set = workout.sets[2]
+        val state = remember {
+            MutableStateFlow(
+                WorkoutTrackUIState.EditExisting(
+                    workoutSet = workout0.sets[2]
+                )
+            ).asStateFlow()
+        }
+
+        val workout = remember {
+            MutableStateFlow<SessionState<WorkoutWithSetsAndExercise>>(
+                SessionState.Session(workout0)
             )
-        ).asStateFlow()
+        }
+
+        Surface {
+            Column(
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                WorkoutTrackComponent(
+                    workout = workout,
+                    uiState = state
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+fun WorkoutTrackScreenSessionEmptyPreview(
+    @PreviewParameter(WWSEParameterProvider::class)
+    workout0: WorkoutWithSetsAndExercise
+) {
+    JimTheme {
+
+        val state = remember {
+            MutableStateFlow(
+                WorkoutTrackUIState.CreateNew(WorkoutSet())
+            ).asStateFlow()
+        }
+
+        val workout = remember {
+            MutableStateFlow<SessionState<WorkoutWithSetsAndExercise>>(
+                SessionState.Empty
+            )
+        }
 
         Surface {
             Column(

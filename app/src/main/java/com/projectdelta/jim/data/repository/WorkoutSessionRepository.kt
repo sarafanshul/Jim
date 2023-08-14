@@ -65,6 +65,6 @@ interface WorkoutSessionRepository : BaseDBRepository<WorkoutSession> {
     /**
      * Fetches [WorkoutSession] as [SessionWithWorkoutWithSets] JOIN object
      */
-    fun getSessionSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>>
+    fun getSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>>
 
 }

@@ -5,12 +5,15 @@ import androidx.paging.PagingData
 import com.projectdelta.jim.data.local.dao.WorkoutDao
 import com.projectdelta.jim.data.model.entity.Workout
 import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
+import com.projectdelta.jim.data.state.SessionState
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.util.BaseId
 import com.projectdelta.jim.util.Constants.PagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 
 class WorkoutRepositoryImpl(
     private val dao: WorkoutDao,
@@ -43,8 +46,14 @@ class WorkoutRepositoryImpl(
             pagingSourceFactory = { dao.getAllWorkoutsPaged() }
         ).flow.flowOn(workerDispatcher)
 
-    override fun getWorkoutWithSetsAndExerciseById(id: BaseId): Flow<List<WorkoutWithSetsAndExercise>> =
-        dao.getWorkoutWithSetsAndExerciseById(id).flowOn(workerDispatcher)
+    override fun getWorkoutWithSetsAndExerciseById(id: BaseId): Flow<SessionState<WorkoutWithSetsAndExercise>> =
+        dao.getWorkoutWithSetsAndExerciseById(id).flowOn(workerDispatcher).map {
+            if( it.isNotEmpty() )
+                SessionState.Session(it.first())
+            else
+                SessionState.Empty
+        }.distinctUntilChanged()
+            .flowOn(workerDispatcher)
 
     override fun getAllWorkoutWithSetsAndExercise(): Flow<List<WorkoutWithSetsAndExercise>> =
         dao.getAllWorkoutWithSetsAndExercise().flowOn(workerDispatcher)

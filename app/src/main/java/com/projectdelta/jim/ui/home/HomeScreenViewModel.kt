@@ -1,9 +1,7 @@
 package com.projectdelta.jim.ui.home
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets
@@ -91,7 +89,7 @@ class HomeScreenViewModel @Inject constructor(
     fun getWorkoutByDay(day: Int) : Flow<SessionState<SessionWithWorkoutWithSets>> {
         if( !workoutCache.containsKey(day) ) {
             Timber.d("polling for day: $day")
-            workoutCache[day] = workoutRepository.getSessionSessionWithWorkoutWithSetsByDay(day)
+            workoutCache[day] = workoutRepository.getSessionWithWorkoutWithSetsByDay(day)
         }
         return workoutCache[day]!!
     }

@@ -25,14 +25,14 @@ data class WorkoutSet(
     override var id: BaseId = 0,
 
     @SerializedName("note")
-    val note: String = "",
+    var note: String = "",
 
     // todo : Add implementation of metrics conversion
     @SerializedName("weight")
-    val weight: Double = 0.0,
+    var weight: Double = 0.0,
 
     @SerializedName("reps")
-    val reps: Int = 0,
+    var reps: Int = 0,
 
     @SerializedName("durationMs")
     val durationMs: Long = 0,
@@ -49,7 +49,17 @@ data class WorkoutSet(
     @SerializedName("exerciseId")
     val exerciseId: BaseId = 0,
 
-) : BaseDBModel(), Parcelable
+) : BaseDBModel(), Parcelable {
+    companion object{
+        fun buildNew(
+            workoutId: BaseId,
+            exerciseId: BaseId,
+        ) = WorkoutSet(
+            workoutId = workoutId,
+            exerciseId = exerciseId
+        )
+    }
+}
 
 /**
  * Preview provider for [WorkoutSet]

@@ -1,11 +1,13 @@
 package com.projectdelta.jim.ui.common.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +22,7 @@ import com.projectdelta.jim.data.model.entity.WorkoutSet
 import com.projectdelta.jim.ui.common.conditional
 import com.projectdelta.jim.ui.common.visibility
 import com.projectdelta.jim.ui.common.widget.TextWithSubscript
+import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.callback
 
 /**
@@ -109,7 +112,7 @@ fun SetLogComponentPreview(
     @PreviewParameter(provider = WSTPreviewParameterProvider::class)
     set: WorkoutSet,
 ) {
-    MaterialTheme {
+    JimTheme {
         Box(
             contentAlignment = Alignment.Center,
         ) {
@@ -121,21 +124,27 @@ fun SetLogComponentPreview(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    name = "Dark Selected",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun SetLogComponentPreview1(
     @PreviewParameter(provider = WSTPreviewParameterProvider::class)
     set: WorkoutSet,
 ) {
-    MaterialTheme {
-        Box(
-            contentAlignment = Alignment.Center,
-        ) {
-            SetLogComponent(
-                set = set.copy(note = "test"),
-                hasMedal = true,
-                index = 12,
-            )
+    JimTheme {
+        Surface {
+            Box(
+                contentAlignment = Alignment.Center,
+            ) {
+                SetLogComponent(
+                    set = set.copy(note = "test"),
+                    hasMedal = true,
+                    index = 12,
+                )
+            }
         }
     }
 }

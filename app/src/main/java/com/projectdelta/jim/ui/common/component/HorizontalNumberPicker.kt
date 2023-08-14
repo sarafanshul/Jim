@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,13 +50,21 @@ import com.projectdelta.jim.util.callbackWParam
  * - Supports input from keyboard
  * - Supports Long Press to increment/decrement values
  * >> [[-]] __ [[+]]
+ *
+ * **
+ * Issue: Since we are passing [currentValue] raw,
+ * whole [Composable] recomposes every value change,
+ * but only TextEdit needs change, sad, solve this ;)
+ * Resolution #1 : made [currentValue] as a [State]
+ * **
+ *
  */
 @Composable
 fun HorizontalNumberPicker(
-    currentValue: Int,
+    currentValue: State<Int>,
     onValueIncrement: callback,
     onValueDecrement: callback,
-    onValueChangeListener: callbackWParam<Int>,
+    onValueChange: callbackWParam<Int>,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -83,8 +92,8 @@ fun HorizontalNumberPicker(
         val tfv by remember(currentValue) {
             mutableStateOf(
                 TextFieldValue(
-                    text = currentValue.toString(),
-                    selection = TextRange(currentValue.toString().length)
+                    text = currentValue.value.toString(),
+                    selection = TextRange(currentValue.value.toString().length)
                 ) //place cursor at the end of the text
             )
         }
@@ -93,7 +102,7 @@ fun HorizontalNumberPicker(
             value = tfv,
             onValueChange = {
                 if (it.text.isDigitsOnly())
-                    onValueChangeListener(it.text.toIntOrNull() ?: 0)
+                    onValueChange(it.text.toIntOrNull() ?: 0)
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             textStyle = TextStyle(
@@ -147,10 +156,10 @@ fun HorizontalNumberPickerPreview() {
         val default = remember { mutableStateOf(124) }
 
         HorizontalNumberPicker(
-            currentValue = default.value,
+            currentValue = default,
             onValueIncrement = { default.value += 2 },
             onValueDecrement = { default.value -= 2 },
-            onValueChangeListener = { default.value = it },
+            onValueChange = { default.value = it },
             modifier = Modifier
                 .padding(PADDING_SMALL)
         )

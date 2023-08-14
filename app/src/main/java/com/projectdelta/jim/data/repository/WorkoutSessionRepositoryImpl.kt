@@ -82,7 +82,7 @@ class WorkoutSessionRepositoryImpl(
                 SessionState.Empty
         }.flowOn(workerDispatcher)
 
-    override fun getSessionSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>> =
+    override fun getSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>> =
         dao.getSessionWithWorkoutsWithSets(day).map {
             if (it.isNotEmpty())
                 SessionState.Session(it.first())
