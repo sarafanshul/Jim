@@ -31,7 +31,7 @@ object MockDebugData {
         for(i in exercises.indices)
             exercises[i].id = addEx(exercises[i]).toInt() // insert to db
 
-        for( day in 19500 .. 19600){
+        for( day in 19500 .. 19800){
             if( Random.nextInt() % 3 == 0 )
                 continue
             val session = WorkoutSession(

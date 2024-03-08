@@ -22,6 +22,9 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * TODO: Remove compose deps from Viewmodel, not a good practice.
+ */
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val workoutRepository: WorkoutSessionRepository,

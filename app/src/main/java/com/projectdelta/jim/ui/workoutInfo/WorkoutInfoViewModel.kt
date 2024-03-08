@@ -34,13 +34,6 @@ class WorkoutInfoViewModel @Inject constructor(
         observe()
     }
 
-    private fun observe() = viewModelScope.launch(worker) {
-        _workout.collectLatest {
-            if (it is SessionState.Session)
-                onWorkoutLoaded(it.session)
-        }
-    }
-
     private val _workout = MutableStateFlow<SessionState<WorkoutWithSetsAndExercise>>(
         SessionState.Empty
     )
@@ -55,11 +48,25 @@ class WorkoutInfoViewModel @Inject constructor(
     val workoutTrackUIState: StateFlow<WorkoutTrackUIState>
         get() = _workoutTrackUIState
 
+    private fun observe() = viewModelScope.launch(worker) {
+        _workout.collectLatest {
+            if (it is SessionState.Session)
+                onWorkoutLoaded(it.session)
+        }
+    }
+
     fun loadWorkout(id: BaseId) = viewModelScope.launch(worker) {
         workoutRepository.getWorkoutWithSetsAndExerciseById(id).collectLatest {
             _workout.value = it
         }
     }
+
+    private fun onWorkoutLoaded(workout: WorkoutWithSetsAndExercise) {
+        _workoutTrackUIState.update {
+            getNewWorkoutUIState(workout.workout.id, workout.workout.exerciseId)
+        }
+    }
+
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun handleWorkoutTrackEvent(event: WorkoutTrackEvent) = viewModelScope.launch(worker) {
@@ -84,7 +91,8 @@ class WorkoutInfoViewModel @Inject constructor(
 
             WorkoutTrackEvent.IncrementRep -> {
                 val rep = _workoutTrackUIState.value.set.reps
-                _workoutTrackUIState.value.set.reps = maxOf(rep + 1, 200)
+                _workoutTrackUIState.value.set.reps = minOf(rep + 1, 200)
+                _workoutTrackUIState.emit(_workoutTrackUIState.value.unchangedCopy())
             }
 
             WorkoutTrackEvent.IncrementWeight -> {
@@ -94,7 +102,12 @@ class WorkoutInfoViewModel @Inject constructor(
             is WorkoutTrackEvent.OnWorkoutSetClick -> {
                 if( _workoutTrackUIState.value.set == event.workoutSet ){
                     // remove selection
-
+                    _workoutTrackUIState.update {
+                        getNewWorkoutUIState(
+                            workoutId = event.workoutSet.workoutId,
+                            exerciseId = event.workoutSet.workoutId
+                        ) // use current defauts
+                    } // new workout ??
                 }else{
                     updateUIState(event.workoutSet) // update selected to new
                 }
@@ -161,44 +174,41 @@ class WorkoutInfoViewModel @Inject constructor(
         }
     }
 
-    private fun onWorkoutLoaded(workout: WorkoutWithSetsAndExercise) {
-        _workoutTrackUIState.update {
-            getNewWorkoutUIState(workout)
-        }
-    }
 
-    private fun getNewWorkoutUIState(workout: WorkoutWithSetsAndExercise) = WorkoutTrackUIState.CreateNew(
-        workoutSet = WorkoutSet.buildNew(
-            workoutId = workout.workout.id,
-            exerciseId = workout.workout.exerciseId
-        ),
-        incrementWt = {
-            handleWorkoutTrackEvent(WorkoutTrackEvent.IncrementWeight)
-        },
-        decrementWt = {
-            handleWorkoutTrackEvent(WorkoutTrackEvent.DecrementWeight)
-        },
-        changeWt = {
-            handleWorkoutTrackEvent(WorkoutTrackEvent.UpdateWeight(it.toDouble()))
-        },
-        incrementReps = {
-            handleWorkoutTrackEvent(WorkoutTrackEvent.IncrementRep)
-        },
-        decrementReps = {
-            handleWorkoutTrackEvent(WorkoutTrackEvent.DecrementRep)
-        },
-        changeReps = {
-            handleWorkoutTrackEvent(WorkoutTrackEvent.UpdateRep(it))
-        },
-        workoutSetClick = {
-            handleWorkoutTrackEvent(WorkoutTrackEvent.OnWorkoutSetClick(it))
-        },
-        onSave = {
-            handleWorkoutTrackEvent(WorkoutTrackEvent.SaveWorkoutSet)
-        },
-        onClear = {
-            handleWorkoutTrackEvent(WorkoutTrackEvent.ClearWorkoutSet)
-        },
-    )
+    private fun getNewWorkoutUIState(workoutId: BaseId, exerciseId: BaseId) : WorkoutTrackUIState {
+        return WorkoutTrackUIState.CreateNew(
+            workoutSet = WorkoutSet.buildNew(
+                workoutId = workoutId,
+                exerciseId = exerciseId,
+            ),
+            incrementWt = {
+                handleWorkoutTrackEvent(WorkoutTrackEvent.IncrementWeight)
+            },
+            decrementWt = {
+                handleWorkoutTrackEvent(WorkoutTrackEvent.DecrementWeight)
+            },
+            changeWt = {
+                handleWorkoutTrackEvent(WorkoutTrackEvent.UpdateWeight(it.toDouble()))
+            },
+            incrementReps = {
+                handleWorkoutTrackEvent(WorkoutTrackEvent.IncrementRep)
+            },
+            decrementReps = {
+                handleWorkoutTrackEvent(WorkoutTrackEvent.DecrementRep)
+            },
+            changeReps = {
+                handleWorkoutTrackEvent(WorkoutTrackEvent.UpdateRep(it))
+            },
+            workoutSetClick = {
+                handleWorkoutTrackEvent(WorkoutTrackEvent.OnWorkoutSetClick(it))
+            },
+            onSave = {
+                handleWorkoutTrackEvent(WorkoutTrackEvent.SaveWorkoutSet)
+            },
+            onClear = {
+                handleWorkoutTrackEvent(WorkoutTrackEvent.ClearWorkoutSet)
+            },
+        )
+    }
 
 }

@@ -25,6 +25,7 @@ sealed class WorkoutTrackUIState(
     val onValueChangeReps: callbackWParam<Int>,
     val onWorkoutSetClick: callbackWParam<WorkoutSet>,
 ) {
+    abstract fun unchangedCopy(): WorkoutTrackUIState
 
     object Loading : WorkoutTrackUIState(
         set = WorkoutSet(),
@@ -37,7 +38,9 @@ sealed class WorkoutTrackUIState(
         onValueDecrementReps = {},
         onValueChangeReps = { },
         onWorkoutSetClick = {},
-    )
+    ){
+        override fun unchangedCopy(): WorkoutTrackUIState = this // since this's an object
+    }
 
     data class CreateNew(
         val workoutSet: WorkoutSet,
@@ -61,7 +64,9 @@ sealed class WorkoutTrackUIState(
         onValueDecrementReps = decrementReps,
         onValueChangeReps = changeReps,
         onWorkoutSetClick = workoutSetClick,
-    )
+    ){
+        override fun unchangedCopy(): WorkoutTrackUIState = copy()
+    }
 
     data class EditExisting(
         val workoutSet: WorkoutSet,
@@ -86,7 +91,9 @@ sealed class WorkoutTrackUIState(
         onValueDecrementReps = decrementReps,
         onValueChangeReps = changeReps,
         onWorkoutSetClick = workoutSetClick,
-    )
+    ){
+        override fun unchangedCopy(): WorkoutTrackUIState = copy()
+    }
 
 }
 
