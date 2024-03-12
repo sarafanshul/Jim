@@ -26,7 +26,6 @@ import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.callback
 import com.projectdelta.jim.util.component.NonInlineUIWrapper
 import com.projectdelta.jim.util.system.lang.numberFormatLocale
-import java.util.Locale
 
 /**
  * Component for logging [WorkoutSet] info
@@ -97,7 +96,7 @@ fun SetLogComponent(
             )
             TextWithSubscript(
                 textNormal = setWeight()
-                    .numberFormatLocale(locale = Locale.getDefault())
+                    .numberFormatLocale(formatter = "%,.1f")
                     .padStart(5, ' '),
                 textSubscript = "Kgs",
                 modifier = Modifier

@@ -276,7 +276,8 @@ fun WorkoutSessionScreen(
     val uiState by viewModel.homeScreenState.collectAsState()
 
     val pagerState = rememberPagerState(
-        initialPage = uiState.currentDay
+        initialPage = uiState.currentDay,
+        pageCount = { Int.MAX_VALUE }
     )
 
     LaunchedEffect(uiState) {// handle ui state changes
@@ -323,7 +324,6 @@ fun WorkoutSessionScreen(
         )
 
         HorizontalPager(
-            pageCount = Int.MAX_VALUE,
             state = pagerState,
             modifier = Modifier
                 .weight(9.5f)

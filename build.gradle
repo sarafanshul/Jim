@@ -1,17 +1,19 @@
 buildscript {
     ext {
-        agp_version = "8.1.0"
-        compose_version = "1.4.3"
-        kotlin_version = "1.8.21"
-        hilt_version = "2.44"
-        material3_version = "1.1.0"
-        room_version = "2.5.2"
-        paging_version = "3.1.1"
+        agp_version = "8.2.0"
+        compose_version = "1.5.3"
+        lifecycle_runtime = "2.7.0"
+        kotlin_version = "1.9.10"
+        ktx_core_version = "1.12.0"
+        hilt_version = "2.48"
+        material3_version = "1.1.2"
+        room_version = "2.6.1"
+        paging_version = "3.2.1"
         datastore_version = "1.0.0"
         gson_version = "2.10.1"
-        accompanist_version = "0.30.1"
-        nav_version = "2.6.0"
-        compose_destinations_version = "1.8.42-beta"
+        accompanist_version = "0.32.0"
+        nav_version = "2.7.7"
+        compose_destinations_version = "1.9.63"
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
@@ -19,7 +21,7 @@ plugins {
     id 'com.android.library' version "$agp_version" apply false
     id "org.jetbrains.kotlin.android" version "$kotlin_version" apply false
     id "com.google.dagger.hilt.android" version "$hilt_version" apply false
-    id 'com.google.devtools.ksp' version '1.8.21-1.0.11' apply false
+    id 'com.google.devtools.ksp' version '1.9.10-1.0.13' apply false
 }
 
 tasks.register('clean', Delete) {
