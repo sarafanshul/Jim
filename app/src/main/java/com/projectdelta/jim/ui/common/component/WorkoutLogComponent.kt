@@ -1,20 +1,24 @@
 package com.projectdelta.jim.ui.common.component
 
-import androidx.compose.foundation.background
+import android.content.res.Configuration
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -37,6 +41,7 @@ import com.projectdelta.jim.util.Constants.UI.TEXT_SMALL_PLUS
 import com.projectdelta.jim.util.NotFound
 import com.projectdelta.jim.util.callbackWParam
 
+
 /**
  * Component for Logging [Workout]
  * @param workout [Workout] data
@@ -45,28 +50,38 @@ import com.projectdelta.jim.util.callbackWParam
  */
 @Composable
 fun WorkoutLogComponent(
-    workout: WorkoutWithSetsAndExercise,
+    workout: () -> WorkoutWithSetsAndExercise,
     modifier: Modifier = Modifier,
     onClickWParamListener: callbackWParam<WorkoutWithSetsAndExercise>? = null
 ) {
-    Card(
-        shape = RoundedCornerShape(ROUND_RADIUS_NORMAL),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = ELEVATION_NORMAL
-        ),
+    // hardcoded color for now
+    val background = MaterialTheme.colorScheme.primaryContainer
+
+    Column(
         modifier = modifier
-            .background(Color.White, RoundedCornerShape(ROUND_RADIUS_NORMAL))
-            .fillMaxWidth(),
-        onClick = {
-            onClickWParamListener?.invoke(workout)
-        }
+            .shadow(
+                elevation = ELEVATION_NORMAL,
+                shape = RoundedCornerShape(ROUND_RADIUS_NORMAL),
+                clip = true
+            )
+            .fillMaxWidth()
+            .drawBehind {
+                drawRect(
+                    color = background
+                )
+            }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { onClickWParamListener?.invoke(workout()) }
+            ),
     ) {
         Text(
             modifier = Modifier.padding(
                 horizontal = PADDING_NORMAL,
                 vertical = PADDING_SMALL,
             ),
-            text = workout.exercise?.name ?: NotFound.surpriseMe(),
+            text = workout().exercise?.name ?: NotFound.surpriseMe(),
             fontWeight = FontWeight.Normal,
             fontSize = TEXT_NOT_THAT_LARGE,
             maxLines = 1,
@@ -79,15 +94,17 @@ fun WorkoutLogComponent(
                 .fillMaxWidth()
                 .height(1.dp)
         )
-        for (set in workout.sets.take(5)) { // take only first 5
+        for (set in workout().sets.take(5)) { // take only first 5
             SetLogComponent(
                 modifier = Modifier
                     .padding(0.dp, PADDING_SMALL, 0.dp, 1.dp) // top padding
                     .fillMaxWidth(),
-                set = set
+                setWeight = { set.weight },
+                setReps = { set.reps },
+                setNote = { set.note },
             )
         }
-        if (workout.sets.size > 5) {
+        if (workout().sets.size > 5) {
             Text(
                 buildAnnotatedString {
                     withStyle(
@@ -97,7 +114,7 @@ fun WorkoutLogComponent(
                             fontSize = TEXT_SMALL_PLUS
                         )
                     ) {
-                        append("${workout.sets.size - 5} more")
+                        append("${workout().sets.size - 5} more")
                     }
                 },
                 modifier = Modifier
@@ -112,13 +129,32 @@ fun WorkoutLogComponent(
     }
 }
 
-@Preview
+@Preview(showSystemUi = false, showBackground = false)
 @Composable
 fun WorkoutLogComponentPreview(
     @PreviewParameter(WWSEParameterProvider::class, limit = 1)
     workout: WorkoutWithSetsAndExercise,
 ) {
     JimTheme {
-        WorkoutLogComponent(workout = workout)
+        Surface {
+            WorkoutLogComponent(workout = { workout })
+        }
+    }
+}
+
+@Preview(
+    name = "Dark Mode",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun WorkoutLogComponentDarkModePreview(
+    @PreviewParameter(WWSEParameterProvider::class, limit = 1)
+    workout: WorkoutWithSetsAndExercise,
+) {
+    JimTheme {
+        Surface {
+            WorkoutLogComponent(workout = { workout })
+        }
     }
 }

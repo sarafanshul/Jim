@@ -1,5 +1,11 @@
 package com.projectdelta.jim.ui.home.screens
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,8 +48,8 @@ import androidx.compose.ui.unit.dp
 import com.projectdelta.jim.R
 import com.projectdelta.jim.data.state.SessionState
 import com.projectdelta.jim.ui.common.component.WorkoutSessionComponent
-import com.projectdelta.jim.ui.home.events.HomeScreenEvent
 import com.projectdelta.jim.ui.home.HomeScreenViewModel
+import com.projectdelta.jim.ui.home.events.HomeScreenEvent
 import com.projectdelta.jim.util.Constants
 import com.projectdelta.jim.util.Constants.StringRes.NO_WORKOUT_LOG
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
@@ -328,29 +334,41 @@ fun WorkoutSessionScreen(
             val workoutSessionState by viewModel.getWorkoutByDay(day)
                 .collectAsState(SessionState.Empty)
 
-            when (workoutSessionState) {
-                is SessionState.Empty -> {
-                    EmptyWorkoutSessionComponent(
-                        startNewWorkoutOnClick = {
-                            viewModel.handleEvent(HomeScreenEvent.CreateNewWorkoutEvent)
-                        },
-                        copyPreviousWorkoutOnClick = {
-                            viewModel.handleEvent(HomeScreenEvent.LaunchCalendarEvent(copy = true))
-                        },
-                        modifier = Modifier
-                    )
+            AnimatedContent(
+                targetState = workoutSessionState,
+                label = "WorkoutSessionHomeAnimation",
+                transitionSpec = {
+                    // enter animation: (fade in + slide up),
+                    // exit animation: (fade out)
+                    fadeIn() + slideInVertically(
+                        animationSpec = tween(400),
+                        initialOffsetY = { fullHeight -> fullHeight }
+                    ) with fadeOut(animationSpec = tween(200))
                 }
+            ) { state ->
+                when (state) {
+                    is SessionState.Empty -> {
+                        EmptyWorkoutSessionComponent(
+                            startNewWorkoutOnClick = {
+                                viewModel.handleEvent(HomeScreenEvent.CreateNewWorkoutEvent)
+                            },
+                            copyPreviousWorkoutOnClick = {
+                                viewModel.handleEvent(HomeScreenEvent.LaunchCalendarEvent(copy = true))
+                            },
+                            modifier = Modifier
+                        )
+                    }
 
-                is SessionState.Session -> {
-                    WorkoutSessionComponent(
-                        workoutSession = (workoutSessionState as SessionState.Session).session,
-                        modifier = Modifier
-                            .fillMaxHeight(),
-                        onClickWParamAction = {
-                            viewModel.handleEvent(HomeScreenEvent.WorkoutSelectedEvent(it))
-                            true
-                        }
-                    )
+                    is SessionState.Session -> {
+                        WorkoutSessionComponent(
+                            workoutSession = state.session,
+                            modifier = Modifier
+                                .fillMaxHeight(),
+                            onClickWParamAction = {
+                                viewModel.handleEvent(HomeScreenEvent.WorkoutSelectedEvent(it))
+                            }
+                        )
+                    }
                 }
             }
         }

@@ -51,7 +51,7 @@ object Constants {
 
         val PADDING_NORMAL = 10.dp
         val PADDING_SMALL = 4.dp
-        val ROUND_RADIUS_NORMAL = 6.dp
+        val ROUND_RADIUS_NORMAL = 8.dp
         val ELEVATION_NORMAL = 6.dp
 
     }

@@ -1,8 +1,9 @@
 package com.projectdelta.jim.ui.common.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,9 +32,14 @@ fun WorkoutSessionComponent(
     LazyColumn(
         modifier = modifier
     ) {
-        items(workoutSession.workoutWithSetAndExercises) { workout ->
+        items(
+            count = workoutSession.workoutWithSetAndExercises.size,
+            key = { idx ->
+                workoutSession.workoutWithSetAndExercises[idx].workout.id
+            }
+        ) itemContent@{ idx ->
             WorkoutLogComponent(
-                workout = workout,
+                workout = { workoutSession.workoutWithSetAndExercises[idx] },
                 modifier = Modifier
                     .padding(PADDING_NORMAL),
                 onClickWParamListener = onClickWParamAction
@@ -42,15 +48,21 @@ fun WorkoutSessionComponent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_TYPE_NORMAL,
+    name = "sample session preview"
+)
 @Composable
 fun WorkoutSessionComponentPreview(
     @PreviewParameter(SWWWParameterProvider::class)
     workoutSession: SessionWithWorkoutWithSets
 ) {
     JimTheme {
-        WorkoutSessionComponent(
-            workoutSession = workoutSession
-        )
+        Surface {
+            WorkoutSessionComponent(
+                workoutSession = workoutSession
+            )
+        }
     }
 }

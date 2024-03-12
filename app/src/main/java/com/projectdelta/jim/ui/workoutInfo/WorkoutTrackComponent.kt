@@ -161,7 +161,9 @@ fun WorkoutTrackComponent(
                 ) {
                     items(temp.session.sets) {
                         SetLogComponent(
-                            set = it,
+                            setWeight = {it.weight},
+                            setReps = {it.reps},
+                            setNote = {it.note},
                             index = it.id,
                             onNotesClick = {},
                             modifier = Modifier

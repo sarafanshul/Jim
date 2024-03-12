@@ -24,15 +24,22 @@ import com.projectdelta.jim.ui.common.visibility
 import com.projectdelta.jim.ui.common.widget.TextWithSubscript
 import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.callback
+import com.projectdelta.jim.util.component.NonInlineUIWrapper
+import com.projectdelta.jim.util.system.lang.numberFormatLocale
+import java.util.Locale
 
 /**
  * Component for logging [WorkoutSet] info
  * @param modifier [Modifier]
- * @param set [WorkoutSet] data
+ * @param setWeight [WorkoutSet.weight] in closure
+ * @param setNote [WorkoutSet.note] in closure
+ * @param setReps [WorkoutSet.reps] in closure
  */
 @Composable
 fun SetLogComponent(
-    set: WorkoutSet,
+    setWeight: () -> Double,
+    setNote: () -> String,
+    setReps: () -> Int,
     modifier: Modifier = Modifier,
     index: Int? = null,
     hasMedal: Boolean? = null,
@@ -44,65 +51,68 @@ fun SetLogComponent(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(
-                id = R.drawable.baseline_message_24,
-            ),
-            colorFilter = ColorFilter.tint(
-                color = if (set.note.isNotBlank())
-                    MaterialTheme.colorScheme.primary
-                else
-                    Color(0xAABDC3C7)
-            ),
-            contentDescription = "message",
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-                .visibility(set.note.isNotBlank() || onNotesClick != null)
-                .conditional(onNotesClick != null) {
-                    clickable(onClick = onNotesClick!!)
-                },
-        )
-        Image(
-            painter = painterResource(
-                id = R.drawable.trophy_24px,
-            ),
-            colorFilter = ColorFilter.tint(
-                color = MaterialTheme.colorScheme.primary
-            ),
-            contentDescription = "message",
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-                .visibility(hasMedal != null)
-                .conditional(onMedalClick != null) {
-                    clickable(onClick = onMedalClick!!)
-                },
-        )
-        TextWithSubscript(
-            textNormal = index.toString(),
-            textSubscript = "",
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-                .visibility(index != null),
-        )
-        TextWithSubscript(
-            textNormal = set.weight
-                .toString().padStart(5, ' '),
-            textSubscript = "Kgs",
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .weight(3f),
-        )
-        TextWithSubscript(
-            textNormal = set.reps
-                .toString().padStart(2, ' '),
-            textSubscript = "reps",
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .weight(3f),
-        )
+        NonInlineUIWrapper {
+            Image(
+                painter = painterResource(
+                    id = R.drawable.baseline_message_24,
+                ),
+                colorFilter = ColorFilter.tint(
+                    color = if (setNote().isNotBlank())
+                        MaterialTheme.colorScheme.primary
+                    else
+                        Color(0xAABDC3C7)
+                ),
+                contentDescription = "message",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .weight(1f)
+                    .visibility(setNote().isNotBlank() || onNotesClick != null)
+                    .conditional(onNotesClick != null) {
+                        clickable(onClick = onNotesClick!!)
+                    },
+            )
+            Image(
+                painter = painterResource(
+                    id = R.drawable.trophy_24px,
+                ),
+                colorFilter = ColorFilter.tint(
+                    color = MaterialTheme.colorScheme.primary
+                ),
+                contentDescription = "message",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .weight(1f)
+                    .visibility(hasMedal != null)
+                    .conditional(onMedalClick != null) {
+                        clickable(onClick = onMedalClick!!)
+                    },
+            )
+            TextWithSubscript(
+                textNormal = index.toString(),
+                textSubscript = "",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .weight(1f)
+                    .visibility(index != null),
+            )
+            TextWithSubscript(
+                textNormal = setWeight()
+                    .numberFormatLocale(locale = Locale.getDefault())
+                    .padStart(5, ' '),
+                textSubscript = "Kgs",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .weight(3f),
+            )
+            TextWithSubscript(
+                textNormal = setReps()
+                    .toString().padStart(2, ' '),
+                textSubscript = "reps",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .weight(3f),
+            )
+        }
     }
 }
 
@@ -117,7 +127,9 @@ fun SetLogComponentPreview(
             contentAlignment = Alignment.Center,
         ) {
             SetLogComponent(
-                set = set,
+                setWeight = { set.weight },
+                setReps = { set.reps },
+                setNote = { set.note },
                 onNotesClick = {}
             )
         }
@@ -140,7 +152,9 @@ fun SetLogComponentPreview1(
                 contentAlignment = Alignment.Center,
             ) {
                 SetLogComponent(
-                    set = set.copy(note = "test"),
+                    setWeight = { set.weight },
+                    setReps = { set.reps },
+                    setNote = { "test" },
                     hasMedal = true,
                     index = 12,
                 )
