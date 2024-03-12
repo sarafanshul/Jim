@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -29,17 +30,20 @@ fun WorkoutSessionComponent(
     modifier: Modifier = Modifier,
     onClickWParamAction: callbackWParam<WorkoutWithSetsAndExercise>? = null
 ) {
+    val workoutWithSetAndExercises = remember(workoutSession) {
+        workoutSession.workoutWithSetAndExercises
+    }
     LazyColumn(
         modifier = modifier
     ) {
         items(
-            count = workoutSession.workoutWithSetAndExercises.size,
+            count = workoutWithSetAndExercises.size,
             key = { idx ->
-                workoutSession.workoutWithSetAndExercises[idx].workout.id
+                workoutWithSetAndExercises[idx].workout.id
             }
         ) itemContent@{ idx ->
             WorkoutLogComponent(
-                workout = { workoutSession.workoutWithSetAndExercises[idx] },
+                workout = { workoutWithSetAndExercises[idx] },
                 modifier = Modifier
                     .padding(PADDING_NORMAL),
                 onClickWParamListener = onClickWParamAction
@@ -51,7 +55,7 @@ fun WorkoutSessionComponent(
 @Preview(
     showBackground = true,
     uiMode = Configuration.UI_MODE_TYPE_NORMAL,
-    name = "sample session preview"
+    name = "sample session preview", device = "id:pixel_6"
 )
 @Composable
 fun WorkoutSessionComponentPreview(
