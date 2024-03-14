@@ -65,7 +65,7 @@ fun WorkoutSessionComponentPreview(
     JimTheme {
         Surface {
             WorkoutSessionComponent(
-                workoutSession = workoutSession
+                workoutSession = remember { workoutSession }
             )
         }
     }

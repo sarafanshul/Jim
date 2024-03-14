@@ -1,10 +1,8 @@
 package com.projectdelta.jim.ui.workoutInfo.states
 
 import androidx.compose.ui.graphics.Color
-import com.projectdelta.jim.data.model.entity.Workout
 import com.projectdelta.jim.data.model.entity.WorkoutSet
-import com.projectdelta.jim.ui.workoutInfo.events.WorkoutTrackEvent
-import com.projectdelta.jim.util.callback
+import com.projectdelta.jim.util.unitCallback
 import com.projectdelta.jim.util.callbackWParam
 
 /**
@@ -17,11 +15,11 @@ sealed class WorkoutTrackUIState(
     var set: WorkoutSet,
     val button1State: WorkoutTrackButtonState,
     val button2State: WorkoutTrackButtonState,
-    val onValueIncrementWt: callback,
-    val onValueDecrementWt: callback,
+    val onValueIncrementWt: unitCallback,
+    val onValueDecrementWt: unitCallback,
     val onValueChangeWt: callbackWParam<Int>,
-    val onValueIncrementReps: callback,
-    val onValueDecrementReps: callback,
+    val onValueIncrementReps: unitCallback,
+    val onValueDecrementReps: unitCallback,
     val onValueChangeReps: callbackWParam<Int>,
     val onWorkoutSetClick: callbackWParam<WorkoutSet>,
 ) {
@@ -44,13 +42,13 @@ sealed class WorkoutTrackUIState(
 
     data class CreateNew(
         val workoutSet: WorkoutSet,
-        val onSave: callback = {},
-        val onClear: callback = {},
-        val incrementWt: callback = {},
-        val decrementWt: callback = {},
+        val onSave: unitCallback = {},
+        val onClear: unitCallback = {},
+        val incrementWt: unitCallback = {},
+        val decrementWt: unitCallback = {},
         val changeWt: callbackWParam<Int> = {},
-        val incrementReps: callback = {},
-        val decrementReps: callback = {},
+        val incrementReps: unitCallback = {},
+        val decrementReps: unitCallback = {},
         val changeReps: callbackWParam<Int> = {},
         val workoutSetClick: callbackWParam<WorkoutSet> = {},
     ) : WorkoutTrackUIState(
@@ -70,13 +68,13 @@ sealed class WorkoutTrackUIState(
 
     data class EditExisting(
         val workoutSet: WorkoutSet,
-        val onSave: callback = {},
-        val onDelete: callback = {},
-        val incrementWt: callback = {},
-        val decrementWt: callback = {},
+        val onSave: unitCallback = {},
+        val onDelete: unitCallback = {},
+        val incrementWt: unitCallback = {},
+        val decrementWt: unitCallback = {},
         val changeWt: callbackWParam<Int> = {},
-        val incrementReps: callback = {},
-        val decrementReps: callback = {},
+        val incrementReps: unitCallback = {},
+        val decrementReps: unitCallback = {},
         val changeReps: callbackWParam<Int> = {},
         val setSelectedColor: Color = Color(0x80A5D6A7),
         val workoutSetClick: callbackWParam<WorkoutSet> = {},
@@ -103,18 +101,18 @@ sealed class WorkoutTrackUIState(
 sealed class WorkoutTrackButtonState(
     val text: String,
     val color: Color,
-    val onClick: callback, // empty for default.
+    val onClick: unitCallback, // empty for default.
 ) {
-    data class Save(val callback: callback = {}) :
+    data class Save(val callback: unitCallback = {}) :
         WorkoutTrackButtonState("SAVE", Color(0xFF2196F3), onClick = callback) // blue
 
-    data class Clear(val callback: callback = {}) :
+    data class Clear(val callback: unitCallback = {}) :
         WorkoutTrackButtonState("CLEAR", Color(0xFFEF5350), onClick = callback) // something red
 
-    data class Edit(val callback: callback = {}) :
+    data class Edit(val callback: unitCallback = {}) :
         WorkoutTrackButtonState("EDIT", Color(0xFF26A69A), onClick = callback) // green
 
-    data class Delete(val callback: callback = {}) :
+    data class Delete(val callback: unitCallback = {}) :
         WorkoutTrackButtonState("DELETE", Color(0xFFEF5350), onClick = callback) // something red
 
     object Loading : WorkoutTrackButtonState("Loading ...", Color(0xFFF9A825), onClick = {}) // or-ange

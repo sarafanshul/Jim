@@ -6,7 +6,7 @@ buildscript {
         kotlin_version = "1.9.10"
         ktx_core_version = "1.12.0"
         hilt_version = "2.48"
-        material3_version = "1.1.2"
+        material3_version = "1.2.1"
         room_version = "2.6.1"
         paging_version = "3.2.1"
         datastore_version = "1.0.0"

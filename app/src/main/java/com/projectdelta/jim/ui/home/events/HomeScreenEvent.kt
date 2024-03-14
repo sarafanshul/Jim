@@ -7,6 +7,10 @@ sealed class HomeScreenEvent {
     data class DateChangeEvent(val newDate: Int, val forceScroll: Boolean = false) :
         HomeScreenEvent()
 
+    object NextDayClickEvent : HomeScreenEvent()
+
+    object PreviousDayClickEvent : HomeScreenEvent()
+
     object CreateNewWorkoutEvent : HomeScreenEvent()
 
     data class LaunchCalendarEvent(val copy: Boolean = false) : HomeScreenEvent()

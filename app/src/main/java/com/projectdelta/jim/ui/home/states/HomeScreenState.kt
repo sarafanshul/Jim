@@ -1,5 +1,8 @@
 package com.projectdelta.jim.ui.home.states
 
+import androidx.compose.runtime.Stable
+
+@Stable
 data class HomeScreenState(
-    var currentDay: Int,
+    val currentDay: Int,
 )

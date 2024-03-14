@@ -42,7 +42,7 @@ import com.projectdelta.jim.ui.common.widget.RepeatingIconButton
 import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
 import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
-import com.projectdelta.jim.util.callback
+import com.projectdelta.jim.util.unitCallback
 import com.projectdelta.jim.util.callbackWParam
 
 /**
@@ -62,8 +62,8 @@ import com.projectdelta.jim.util.callbackWParam
 @Composable
 fun HorizontalNumberPicker(
     currentValue: State<Int>,
-    onValueIncrement: callback,
-    onValueDecrement: callback,
+    onValueIncrement: unitCallback,
+    onValueDecrement: unitCallback,
     onValueChange: callbackWParam<Int>,
     modifier: Modifier = Modifier,
 ) {

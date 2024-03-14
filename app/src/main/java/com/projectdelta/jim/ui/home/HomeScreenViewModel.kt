@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,9 +32,7 @@ class HomeScreenViewModel @Inject constructor(
     @IODispatcher private val worker: CoroutineDispatcher,
 ) : ViewModel() {
 
-    private val _homeScreenState = MutableStateFlow(
-        HomeScreenState(getCurrentDayFromEpoch())
-    )
+    private val _homeScreenState = MutableStateFlow( HomeScreenState(getCurrentDayFromEpoch()) )
     val homeScreenState = _homeScreenState.asStateFlow()
 
     private val _uiState = mutableStateOf<UIState>(UIState.Default)
@@ -83,6 +82,18 @@ class HomeScreenViewModel @Inject constructor(
             is HomeScreenEvent.LaunchAnalysisScreenEvent -> {
                 Timber.d("Launch analysis screen")
             }
+
+            is HomeScreenEvent.NextDayClickEvent -> {
+                _homeScreenState.update {
+                    it.copy(currentDay = it.currentDay + 1)
+                }
+            }
+
+            is HomeScreenEvent.PreviousDayClickEvent -> {
+                _homeScreenState.update {
+                    it.copy(currentDay = it.currentDay - 1)
+                }
+            }
         }
     }
 
@@ -90,21 +101,12 @@ class HomeScreenViewModel @Inject constructor(
     private val workoutCache: HashMap<Int,  Flow<SessionState<SessionWithWorkoutWithSets>>> = hashMapOf()
 
     fun getWorkoutByDay(day: Int) : Flow<SessionState<SessionWithWorkoutWithSets>> {
-        if( !workoutCache.containsKey(day) ) {
-            Timber.d("polling for day: $day")
-            workoutCache[day] = workoutRepository.getSessionWithWorkoutWithSetsByDay(day)
-        }
-        return workoutCache[day]!!
-    }
-
-    /**
-     * Updates the [HomeScreenState.currentDay] silently without notifying the observers.
-     * This works (till now) because the object ref of the [MutableStateFlow] remains the same
-     * and only value is updated.
-     * **May god this doesn't break**.
-     */
-    fun updateCurrentDaySilently(day: Int) {
-        _homeScreenState.value.currentDay = day
+        return workoutRepository.getSessionWithWorkoutWithSetsByDay(day)
+//        if( !workoutCache.containsKey(day) ) {
+//            Timber.d("polling for day: $day")
+//            workoutCache[day] = workoutRepository.getSessionWithWorkoutWithSetsByDay(day)
+//        }
+//        return workoutCache[day]!!
     }
 
     /**

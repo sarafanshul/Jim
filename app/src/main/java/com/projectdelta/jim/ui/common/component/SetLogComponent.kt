@@ -23,7 +23,7 @@ import com.projectdelta.jim.ui.common.conditional
 import com.projectdelta.jim.ui.common.visibility
 import com.projectdelta.jim.ui.common.widget.TextWithSubscript
 import com.projectdelta.jim.ui.theme.JimTheme
-import com.projectdelta.jim.util.callback
+import com.projectdelta.jim.util.unitCallback
 import com.projectdelta.jim.util.component.NonInlineUIWrapper
 import com.projectdelta.jim.util.system.lang.numberFormatLocale
 
@@ -42,8 +42,8 @@ fun SetLogComponent(
     modifier: Modifier = Modifier,
     index: Int? = null,
     hasMedal: Boolean? = null,
-    onNotesClick: callback? = null,
-    onMedalClick: callback? = null,
+    onNotesClick: unitCallback? = null,
+    onMedalClick: unitCallback? = null,
 ) {
     Row(
         modifier = modifier,

@@ -9,8 +9,8 @@ import java.util.logging.SimpleFormatter
 object TimeUtil {
 
     const val DAY_TO_MINUTE = 24 * 60L
-    const val DAY_TO_SECOND = DAY_TO_MINUTE * 60
-    const val DAY_TO_MILLISECOND = DAY_TO_SECOND * 1000
+    const val DAY_TO_SECOND = DAY_TO_MINUTE * 60L
+    const val DAY_TO_MILLISECOND = DAY_TO_SECOND * 1000L
 
     /**
      * Returns number of days in span of milliseconds
