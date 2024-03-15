@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.projectdelta.jim.ui.destinations.CalendarPreviewScreenDestination
@@ -11,6 +12,7 @@ import com.projectdelta.jim.ui.destinations.WorkoutInfoScreenDestination
 import com.projectdelta.jim.ui.home.HomeScreenViewModel
 import com.projectdelta.jim.ui.home.HomeTopAppBar
 import com.projectdelta.jim.ui.home.states.UIState
+import com.projectdelta.jim.util.TimeUtil.getCurrentDayFromEpoch
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -23,6 +25,10 @@ fun HomeScreen(
     navigator: DestinationsNavigator,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
+
+    LaunchedEffect(Unit){ // set today, if coming from home-screen
+        viewModel.setCurrentDay(getCurrentDayFromEpoch())
+    }
 
     when (val uiState = viewModel.uiState.value) {
         is UIState.LaunchCalendarScreen -> {

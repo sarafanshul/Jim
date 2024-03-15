@@ -11,12 +11,12 @@ interface ExerciseRepository : BaseDBRepository<Exercise> {
      * @param substring substring to match
      * @return [List] of all [Exercise] found
      */
-    fun getByNameLike(substring: String): Flow<List<Exercise>>
+    suspend fun getByNameLike(substring: String): Flow<List<Exercise>>
 
     /**
      * Fetches all [Exercise] where name `LIKE` [substring] Paged
      * @param substring substring to match
      * @return [List] of all [Exercise] found
      */
-    fun getByNameLikePaged(substring: String): Flow<PagingData<Exercise>>
+    suspend fun getByNameLikePaged(substring: String): Flow<PagingData<Exercise>>
 }

@@ -16,55 +16,62 @@ interface WorkoutSessionRepository : BaseDBRepository<WorkoutSession> {
      * @param end (also included)
      * @return [List]<[WorkoutSession]> if found.
      */
-    fun getByIdRanged(start: BaseId, end: BaseId): Flow<List<WorkoutSession>>
+    suspend fun getByIdRanged(start: BaseId, end: BaseId): Flow<List<WorkoutSession>>
 
     /**
      * Fetches [WorkoutSession] and it's Workouts in form of [SessionWithWorkouts]
      */
-    fun getSessionWithWorkoutsById(id: BaseId): Flow<List<SessionWithWorkouts>>
+    suspend fun getSessionWithWorkoutsById(id: BaseId): Flow<List<SessionWithWorkouts>>
 
     /**
      * Fetches all [WorkoutSession] from database Joined [SessionWithWorkouts], ORDER_BY ASC
      * @return [List] of all [SessionWithWorkouts]
      */
-    fun getAllSessionsWithWorkouts(): Flow<List<SessionWithWorkouts>>
+    suspend fun getAllSessionsWithWorkouts(): Flow<List<SessionWithWorkouts>>
 
     /**
      * Fetches all [WorkoutSession] from database Joined [SessionWithWorkouts], ORDER_BY ASC
      * @return [PagingData]<[SessionWithWorkouts]>
      */
-    fun getAllSessionsWithWorkoutsPaged(): Flow<PagingData<SessionWithWorkouts>>
+    suspend fun getAllSessionsWithWorkoutsPaged(): Flow<PagingData<SessionWithWorkouts>>
 
     /**
      * Fetches [WorkoutSession] and it's Workouts in form of Relation: [SessionWithWorkoutWithSets]
      */
-    fun getSessionWithWorkoutsWithSets(id: BaseId): Flow<List<SessionWithWorkoutWithSets>>
+    suspend fun getSessionWithWorkoutsWithSets(id: BaseId): Flow<List<SessionWithWorkoutWithSets>>
 
     /**
      * Fetches all [WorkoutSession] from database Joined [SessionWithWorkoutWithSets], ORDER_BY ASC
      * @return [List] of all [SessionWithWorkoutWithSets]
      */
-    fun getAllSessionWithWorkoutsWithSets(): Flow<List<SessionWithWorkoutWithSets>>
+    suspend fun getAllSessionWithWorkoutsWithSets(): Flow<List<SessionWithWorkoutWithSets>>
 
     /**
      * Fetches all [WorkoutSession] from database Joined [SessionWithWorkoutWithSets], ORDER_BY ASC
      * @return [PagingData]<[SessionWithWorkoutWithSets]>
      */
-    fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionWithWorkoutWithSets>>
+    suspend fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionWithWorkoutWithSets>>
 
     /**
      * Fetches [WorkoutSession] as [SessionState] JOIN object
      */
-    fun getSessionByDay(day: Int): Flow<SessionState<WorkoutSession>>
+    suspend fun getSessionByDay(day: Int): Flow<SessionState<WorkoutSession>>
 
     /**
      * Fetches [WorkoutSession] as [SessionWithWorkouts] JOIN object
      */
-    fun getSessionWithWorkoutsByDay(day: Int): Flow<SessionState<SessionWithWorkouts>>
+    suspend fun getSessionWithWorkoutsByDay(day: Int): Flow<SessionState<SessionWithWorkouts>>
 
     /**
      * Fetches [WorkoutSession] as [SessionWithWorkoutWithSets] JOIN object
      */
-    fun getSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>>
+    suspend fun getSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>>
+
+    /**
+     * Fetches [WorkoutSession] as [SessionWithWorkoutWithSets] JOIN object in a inclusive [ [startDay] , [endDay] ] range
+     *
+     * note : make this paged ?
+     */
+    suspend fun getSessionWithWorkoutWithSetsByDayRanged(startDay: Int, endDay: Int): Flow<List<SessionState<SessionWithWorkoutWithSets>>>
 
 }

@@ -17,33 +17,33 @@ class WorkoutSetRepositoryImpl(
     @IODispatcher private val workerDispatcher: CoroutineDispatcher,
 ) : WorkoutSetRepository {
 
-    override fun insert(obj: WorkoutSet): Long =
+    override suspend fun insert(obj: WorkoutSet): Long =
         dao.insert(obj)
 
-    override fun insert(vararg obj: WorkoutSet): List<Long> =
+    override suspend fun insert(vararg obj: WorkoutSet): List<Long> =
         dao.insert(*obj)
 
-    override fun insertAll(objects: List<WorkoutSet>): List<Long> =
+    override suspend fun insertAll(objects: List<WorkoutSet>): List<Long> =
         dao.insertAll(objects)
 
-    override fun update(obj: WorkoutSet) =
+    override suspend fun update(obj: WorkoutSet) =
         dao.update(obj)
 
-    override fun delete(obj: WorkoutSet) =
+    override suspend fun delete(obj: WorkoutSet) =
         dao.delete(obj)
 
-    override fun getById(id: BaseId): Flow<WorkoutSet?> =
+    override suspend fun getById(id: BaseId): Flow<WorkoutSet?> =
         dao.getById(id).flowOn(workerDispatcher)
 
-    override fun getAll(): Flow<List<WorkoutSet>> =
+    override suspend fun getAll(): Flow<List<WorkoutSet>> =
         dao.getAll().flowOn(workerDispatcher)
 
-    override fun getAllPaged(): Flow<PagingData<WorkoutSet>> =
+    override suspend fun getAllPaged(): Flow<PagingData<WorkoutSet>> =
         Pager(
             config = PagingSource.defaultPagingConfig,
             pagingSourceFactory = { dao.getAllPaged() }
         ).flow.flowOn(workerDispatcher)
 
-    override fun getWorkoutSetAndWorkoutById(id: BaseId): Flow<List<WorkoutSetAndWorkout>> =
+    override suspend fun getWorkoutSetAndWorkoutById(id: BaseId): Flow<List<WorkoutSetAndWorkout>> =
         dao.getWorkoutSetAndWorkoutById(id).flowOn(workerDispatcher)
 }

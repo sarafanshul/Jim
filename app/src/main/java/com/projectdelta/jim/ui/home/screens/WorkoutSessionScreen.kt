@@ -5,7 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -42,18 +42,25 @@ fun WorkoutSessionScreen(
 
     val pagerState = rememberPagerState(
         initialPage = uiState.currentDay,
-        pageCount = { 100000 }
+        pageCount = { 100000 } // todo: by default only 50 pages.
     )
 
     LaunchedEffect(uiState) {// handle ui state changes
         pagerState.animateScrollToPage(uiState.currentDay, 0f)
     }
 
-    LaunchedEffect(pagerState.currentPage) {
+
+    LaunchedEffect(pagerState.settledPage) {
         viewModel.handleEvent(
-            HomeScreenEvent.DateChangeEvent(pagerState.currentPage)
+            HomeScreenEvent.PageChangeEvent(pagerState.settledPage)
         )
     }
+
+//    LaunchedEffect(pagerState.targetPage) {
+//        viewModel.cacheWorkout(maxOf(pagerState.targetPage - 1, 0))
+//        viewModel.cacheWorkout(pagerState.targetPage)
+//        viewModel.cacheWorkout(minOf(pagerState.targetPage + 1, pagerState.pageCount))
+//    }
 
     Column(
         modifier = modifier,
@@ -61,7 +68,7 @@ fun WorkoutSessionScreen(
     ) {
 
         DayInfoTopBarComponent(
-            currentDay = { uiState.currentDay },
+            currentDay = { pagerState.currentPage },
             onDateClick = {
                 viewModel.handleEvent(
                     HomeScreenEvent.DateChangeEvent(
@@ -92,15 +99,15 @@ fun WorkoutSessionScreen(
                 .weight(9.5f)
                 .fillMaxSize()
                 .padding(bottom = PADDING_SMALL),
-            beyondBoundsPageCount = 1,
+            beyondBoundsPageCount = 1, // check this <<<
 //            key = {idx ->
 //                workoutSessionState = viewModel.getWorkoutByDay(idx)
 //            }
         ) { day ->
             // FIXME : This spams db for queries (left, right for every scroll), bad refactor this.
-            val workoutSessionState by viewModel.getWorkoutByDay(day)
+
+            val workoutSessionState by viewModel.getWorkout(day)
                 .collectAsState(SessionState.Empty)
-//            viewModel.handleEvent( HomeScreenEvent.DateChangeEvent(day) )
 
             AnimatedContent(
                 targetState = workoutSessionState,
@@ -111,7 +118,7 @@ fun WorkoutSessionScreen(
                     fadeIn() + slideInVertically(
                         animationSpec = tween(400),
                         initialOffsetY = { fullHeight -> fullHeight }
-                    ) with fadeOut(animationSpec = tween(200))
+                    ) togetherWith fadeOut(animationSpec = tween(200))
                 }
             ) { state ->
                 when (state) {

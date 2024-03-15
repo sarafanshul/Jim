@@ -74,6 +74,14 @@ interface WorkoutSessionDao : BaseDao<WorkoutSession> {
     fun getSessionWithWorkoutsWithSets(id: BaseId): Flow<List<SessionWithWorkoutWithSets>>
 
     /**
+     * Fetches [WorkoutSession] and it's Workouts in form of Relation: [SessionWithWorkoutWithSets]
+     *
+     * TL;DR the issue with this is that it does not return an empty object for `id` data was not found.
+     */
+    @Query("SELECT * FROM $WORKOUT_SESSION_TABLE WHERE id BETWEEN :startId AND :endId")
+    fun getSessionWithWorkoutsWithSetsRanged(startId: BaseId, endId: BaseId): Flow<List<SessionWithWorkoutWithSets>>
+
+    /**
      * Fetches all [WorkoutSession] from database Joined [SessionWithWorkoutWithSets], ORDER_BY ASC
      * @return [List] of all [SessionWithWorkoutWithSets]
      */

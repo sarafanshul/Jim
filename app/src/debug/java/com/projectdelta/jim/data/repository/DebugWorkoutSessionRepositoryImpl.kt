@@ -16,75 +16,79 @@ class DebugWorkoutSessionRepositoryImpl (
     @IODispatcher private val workerDispatcher: CoroutineDispatcher,
 ) : WorkoutSessionRepository {
 
-    override fun insert(obj: WorkoutSession): Long {
+    override suspend fun insert(obj: WorkoutSession): Long {
         TODO("Not yet implemented")
     }
 
-    override fun insert(vararg obj: WorkoutSession): List<Long> {
+    override suspend fun insert(vararg obj: WorkoutSession): List<Long> {
         TODO("Not yet implemented")
     }
 
-    override fun insertAll(objects: List<WorkoutSession>): List<Long> {
+    override suspend fun insertAll(objects: List<WorkoutSession>): List<Long> {
         TODO("Not yet implemented")
     }
 
-    override fun update(obj: WorkoutSession) {
+    override suspend fun update(obj: WorkoutSession) {
         TODO("Not yet implemented")
     }
 
-    override fun delete(obj: WorkoutSession) {
+    override suspend fun delete(obj: WorkoutSession) {
         TODO("Not yet implemented")
     }
 
-    override fun getById(id: BaseId): Flow<WorkoutSession?> {
+    override suspend fun getById(id: BaseId): Flow<WorkoutSession?> {
         TODO("Not yet implemented")
     }
 
-    override fun getAll(): Flow<List<WorkoutSession>> {
+    override suspend fun getAll(): Flow<List<WorkoutSession>> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllPaged(): Flow<PagingData<WorkoutSession>> {
+    override suspend fun getAllPaged(): Flow<PagingData<WorkoutSession>> {
         TODO("Not yet implemented")
     }
 
-    override fun getByIdRanged(start: BaseId, end: BaseId): Flow<List<WorkoutSession>> {
+    override suspend fun getByIdRanged(start: BaseId, end: BaseId): Flow<List<WorkoutSession>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSessionWithWorkoutsById(id: BaseId): Flow<List<SessionWithWorkouts>> {
+    override suspend fun getSessionWithWorkoutsById(id: BaseId): Flow<List<SessionWithWorkouts>> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllSessionsWithWorkouts(): Flow<List<SessionWithWorkouts>> {
+    override suspend fun getAllSessionsWithWorkouts(): Flow<List<SessionWithWorkouts>> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllSessionsWithWorkoutsPaged(): Flow<PagingData<SessionWithWorkouts>> {
+    override suspend fun getAllSessionsWithWorkoutsPaged(): Flow<PagingData<SessionWithWorkouts>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSessionWithWorkoutsWithSets(id: BaseId): Flow<List<SessionWithWorkoutWithSets>> {
+    override suspend fun getSessionWithWorkoutsWithSets(id: BaseId): Flow<List<SessionWithWorkoutWithSets>> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllSessionWithWorkoutsWithSets(): Flow<List<SessionWithWorkoutWithSets>> {
+    override suspend fun getAllSessionWithWorkoutsWithSets(): Flow<List<SessionWithWorkoutWithSets>> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionWithWorkoutWithSets>> {
+    override suspend fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionWithWorkoutWithSets>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSessionByDay(day: Int): Flow<SessionState<WorkoutSession>> {
+    override suspend fun getSessionByDay(day: Int): Flow<SessionState<WorkoutSession>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSessionWithWorkoutsByDay(day: Int): Flow<SessionState<SessionWithWorkouts>> {
+    override suspend fun getSessionWithWorkoutsByDay(day: Int): Flow<SessionState<SessionWithWorkouts>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>> {
+    override suspend fun getSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getSessionWithWorkoutWithSetsByDayRanged(startDay: Int, endDay: Int): Flow<List<SessionState<SessionWithWorkoutWithSets>>> {
         TODO("Not yet implemented")
     }
 }

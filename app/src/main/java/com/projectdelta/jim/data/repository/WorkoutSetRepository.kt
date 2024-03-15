@@ -10,5 +10,5 @@ interface WorkoutSetRepository : BaseDBRepository<WorkoutSet> {
     /**
      * Fetches [WorkoutSet] mapped with it's parent Workout
      */
-    fun getWorkoutSetAndWorkoutById(id: BaseId) : Flow<List<WorkoutSetAndWorkout>>
+    suspend fun getWorkoutSetAndWorkoutById(id: BaseId) : Flow<List<WorkoutSetAndWorkout>>
 }

@@ -1,5 +1,6 @@
 package com.projectdelta.jim.data.model.relation
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.room.Embedded
 import androidx.room.Relation
@@ -11,6 +12,7 @@ import com.projectdelta.jim.data.model.entity.WorkoutSet
  * [Relation] class for fetching a [Workout] with it's all [WorkoutSet]
  * and associated [Exercise]
  */
+@Immutable
 data class WorkoutWithSetsAndExercise(
     @Embedded
     val workout: Workout,

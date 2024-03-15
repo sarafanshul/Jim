@@ -21,52 +21,52 @@ class WorkoutSessionRepositoryImpl(
     @IODispatcher private val workerDispatcher: CoroutineDispatcher,
 ) : WorkoutSessionRepository {
 
-    override fun insert(obj: WorkoutSession): Long =
+    override suspend fun insert(obj: WorkoutSession): Long =
         dao.insert(obj)
 
-    override fun insert(vararg obj: WorkoutSession): List<Long> =
+    override suspend fun insert(vararg obj: WorkoutSession): List<Long> =
         dao.insert(*obj)
 
-    override fun insertAll(objects: List<WorkoutSession>): List<Long> =
+    override suspend fun insertAll(objects: List<WorkoutSession>): List<Long> =
         dao.insertAll(objects)
 
-    override fun update(obj: WorkoutSession) =
+    override suspend fun update(obj: WorkoutSession) =
         dao.update(obj)
 
-    override fun delete(obj: WorkoutSession) =
+    override suspend fun delete(obj: WorkoutSession) =
         dao.delete(obj)
 
-    override fun getById(id: BaseId): Flow<WorkoutSession?> =
+    override suspend fun getById(id: BaseId): Flow<WorkoutSession?> =
         dao.getById(id).flowOn(workerDispatcher)
 
-    override fun getByIdRanged(start: BaseId, end: BaseId): Flow<List<WorkoutSession>> =
+    override suspend fun getByIdRanged(start: BaseId, end: BaseId): Flow<List<WorkoutSession>> =
         dao.getByIdRanged(start, end).flowOn(workerDispatcher)
 
-    override fun getSessionWithWorkoutsById(id: BaseId): Flow<List<SessionWithWorkouts>> =
+    override suspend fun getSessionWithWorkoutsById(id: BaseId): Flow<List<SessionWithWorkouts>> =
         dao.getSessionWithWorkoutsById(id).flowOn(workerDispatcher)
 
-    override fun getAllSessionsWithWorkouts(): Flow<List<SessionWithWorkouts>> =
+    override suspend fun getAllSessionsWithWorkouts(): Flow<List<SessionWithWorkouts>> =
         dao.getAllSessionsWithWorkouts().flowOn(workerDispatcher)
 
-    override fun getAllSessionsWithWorkoutsPaged(): Flow<PagingData<SessionWithWorkouts>> =
+    override suspend fun getAllSessionsWithWorkoutsPaged(): Flow<PagingData<SessionWithWorkouts>> =
         Pager(
             config = PagingSource.defaultPagingConfig,
             pagingSourceFactory = { dao.getAllSessionsWithWorkoutsPaged() }
         ).flow.flowOn(workerDispatcher)
 
-    override fun getSessionWithWorkoutsWithSets(id: BaseId): Flow<List<SessionWithWorkoutWithSets>> =
+    override suspend fun getSessionWithWorkoutsWithSets(id: BaseId): Flow<List<SessionWithWorkoutWithSets>> =
         dao.getSessionWithWorkoutsWithSets(id).flowOn(workerDispatcher)
 
-    override fun getAllSessionWithWorkoutsWithSets(): Flow<List<SessionWithWorkoutWithSets>> =
+    override suspend fun getAllSessionWithWorkoutsWithSets(): Flow<List<SessionWithWorkoutWithSets>> =
         dao.getAllSessionWithWorkoutsWithSets().flowOn(workerDispatcher)
 
-    override fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionWithWorkoutWithSets>> =
+    override suspend fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionWithWorkoutWithSets>> =
         Pager(
             config = PagingSource.defaultPagingConfig,
             pagingSourceFactory = { dao.getAllSessionWithWorkoutsWithSetsPaged() }
         ).flow.flowOn(workerDispatcher)
 
-    override fun getSessionByDay(day: Int): Flow<SessionState<WorkoutSession>> =
+    override suspend fun getSessionByDay(day: Int): Flow<SessionState<WorkoutSession>> =
         dao.getById(day).map {
             if (it != null)
                 SessionState.Session(it)
@@ -74,7 +74,7 @@ class WorkoutSessionRepositoryImpl(
                 SessionState.Empty
         }.flowOn(workerDispatcher)
 
-    override fun getSessionWithWorkoutsByDay(day: Int): Flow<SessionState<SessionWithWorkouts>> =
+    override suspend fun getSessionWithWorkoutsByDay(day: Int): Flow<SessionState<SessionWithWorkouts>> =
         dao.getSessionWithWorkoutsById(day).map {
             if (it.isNotEmpty())
                 SessionState.Session(it.first())
@@ -82,7 +82,7 @@ class WorkoutSessionRepositoryImpl(
                 SessionState.Empty
         }.flowOn(workerDispatcher)
 
-    override fun getSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>> =
+    override suspend fun getSessionWithWorkoutWithSetsByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>> =
         dao.getSessionWithWorkoutsWithSets(day).map {
             if (it.isNotEmpty())
                 SessionState.Session(it.first())
@@ -91,10 +91,17 @@ class WorkoutSessionRepositoryImpl(
         }.distinctUntilChanged()
             .flowOn(workerDispatcher)
 
-    override fun getAll(): Flow<List<WorkoutSession>> =
+    override suspend fun getSessionWithWorkoutWithSetsByDayRanged(
+        startDay: Int,
+        endDay: Int
+    ): Flow<List<SessionState<SessionWithWorkoutWithSets>>> {
+        TODO()
+    }
+
+    override suspend fun getAll(): Flow<List<WorkoutSession>> =
         dao.getAllSessions().flowOn(workerDispatcher)
 
-    override fun getAllPaged(): Flow<PagingData<WorkoutSession>> =
+    override suspend fun getAllPaged(): Flow<PagingData<WorkoutSession>> =
         Pager(
             config = PagingSource.defaultPagingConfig,
             pagingSourceFactory = { dao.getAllSessionsPaged() }

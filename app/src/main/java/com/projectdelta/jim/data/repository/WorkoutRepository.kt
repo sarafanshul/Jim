@@ -13,17 +13,17 @@ interface WorkoutRepository : BaseDBRepository<Workout> {
     /**
      * Fetches [WorkoutSet] & [Workout] managed by [WorkoutWithSetsAndExercise] relation
      */
-    fun getWorkoutWithSetsAndExerciseById(id: BaseId): Flow<SessionState<WorkoutWithSetsAndExercise>>
+    suspend fun getWorkoutWithSetsAndExerciseById(id: BaseId): Flow<SessionState<WorkoutWithSetsAndExercise>>
 
     /**
      * Fetches all [WorkoutWithSetsAndExercise] from `WORKOUT_TABLE`
      * @return [List] of all [WorkoutWithSetsAndExercise]
      */
-    fun getAllWorkoutWithSetsAndExercise(): Flow<List<WorkoutWithSetsAndExercise>>
+    suspend fun getAllWorkoutWithSetsAndExercise(): Flow<List<WorkoutWithSetsAndExercise>>
 
     /**
      * Fetches all [WorkoutWithSetsAndExercise] from `WORKOUT_TABLE`, Paged, ORDER_BY ASC
      * @return [PagingData]<[WorkoutWithSetsAndExercise]>
      */
-    fun getAllWorkoutWithSetsAndExercisePaged(): Flow<PagingData<WorkoutWithSetsAndExercise>>
+    suspend fun getAllWorkoutWithSetsAndExercisePaged(): Flow<PagingData<WorkoutWithSetsAndExercise>>
 }

@@ -16,37 +16,37 @@ class ExerciseRepositoryImpl(
     @IODispatcher private val workerDispatcher: CoroutineDispatcher,
 ) : ExerciseRepository {
 
-    override fun insert(obj: Exercise): Long =
+    override suspend fun insert(obj: Exercise): Long =
         dao.insert(obj)
 
-    override fun insert(vararg obj: Exercise): List<Long> =
+    override suspend fun insert(vararg obj: Exercise): List<Long> =
         dao.insert(*obj)
 
-    override fun insertAll(objects: List<Exercise>): List<Long> =
+    override suspend fun insertAll(objects: List<Exercise>): List<Long> =
         dao.insertAll(objects)
 
-    override fun update(obj: Exercise) =
+    override suspend fun update(obj: Exercise) =
         dao.update(obj)
 
-    override fun delete(obj: Exercise) =
+    override suspend fun delete(obj: Exercise) =
         dao.delete(obj)
 
-    override fun getById(id: BaseId): Flow<Exercise?> =
+    override suspend fun getById(id: BaseId): Flow<Exercise?> =
         dao.getById(id).flowOn(workerDispatcher)
 
-    override fun getByNameLike(substring: String): Flow<List<Exercise>> =
+    override suspend fun getByNameLike(substring: String): Flow<List<Exercise>> =
         dao.getByNameLike(substring).flowOn(workerDispatcher)
 
-    override fun getByNameLikePaged(substring: String): Flow<PagingData<Exercise>> =
+    override suspend fun getByNameLikePaged(substring: String): Flow<PagingData<Exercise>> =
         Pager(
             config = PagingSource.defaultPagingConfig,
             pagingSourceFactory = { dao.getByNameLikePaged(substring) }
         ).flow.flowOn(workerDispatcher)
 
-    override fun getAll(): Flow<List<Exercise>> =
+    override suspend fun getAll(): Flow<List<Exercise>> =
         dao.getAllExercises().flowOn(workerDispatcher)
 
-    override fun getAllPaged(): Flow<PagingData<Exercise>> =
+    override suspend fun getAllPaged(): Flow<PagingData<Exercise>> =
         Pager(
             config = PagingSource.defaultPagingConfig,
             pagingSourceFactory = { dao.getAllExercisesPaged() }

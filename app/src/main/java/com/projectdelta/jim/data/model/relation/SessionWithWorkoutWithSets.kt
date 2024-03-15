@@ -1,5 +1,6 @@
 package com.projectdelta.jim.data.model.relation
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.room.Embedded
 import androidx.room.Relation
@@ -14,6 +15,7 @@ import kotlin.random.Random
  * associated [Workout], WorkoutSet, Exercise in form of
  * [WorkoutWithSetsAndExercise] mapped
  */
+@Immutable
 data class SessionWithWorkoutWithSets(
 
     @Embedded
