@@ -4,6 +4,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets
 import com.projectdelta.jim.data.repository.WorkoutSessionRepository
 import com.projectdelta.jim.data.state.SessionState
@@ -17,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -101,6 +105,9 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private suspend fun updateCurrentDayAndNotifyObservers(day: Int) {
+        if( day == currentDay ){
+            return
+        }
         withContext(worker) {
             currentDay = day
             _homeScreenState.update {
@@ -110,34 +117,10 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    // FIXME: not sure this is best idea
-    private val workoutCache: HashMap<Int, Flow<SessionState<SessionWithWorkoutWithSets>>> = hashMapOf()
-
-    fun getWorkout(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>>{
-        if( !workoutCache.containsKey(day) ){
-            cacheWorkout(day)
-        }
-        return workoutCache[day]!!
-    }
-
-    fun cacheWorkout(day: Int){
-        viewModelScope.launch {
-            if (! workoutCache.containsKey(day)) {
-                workoutCache[day] = flowOf(SessionState.Empty)
-                workoutCache[day] = getWorkoutByDay(day)
-            }
-        }
-    }
-
-    suspend fun getWorkoutByDay(day: Int): Flow<SessionState<SessionWithWorkoutWithSets>> {
-        return withContext(viewModelScope.coroutineContext + worker) {
-            workoutRepository.getSessionWithWorkoutWithSetsByDay(day)
-//            if (!workoutCache.containsKey(day)) {
-//                Timber.d("polling for day: $day")
-//                workoutCache[day] = workoutRepository.getSessionWithWorkoutWithSetsByDay(day)
-//            }
-//            workoutCache[day]!!
-        }
+    fun getWorkoutSessionPaged(): Flow<PagingData<SessionState<SessionWithWorkoutWithSets>>> {
+        return workoutRepository
+            .getAllSessionWithWorkoutsWithSetsPaged()
+            .cachedIn(viewModelScope)
     }
 
     /**

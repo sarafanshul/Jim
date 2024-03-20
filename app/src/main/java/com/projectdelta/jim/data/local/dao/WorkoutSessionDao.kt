@@ -70,6 +70,12 @@ interface WorkoutSessionDao : BaseDao<WorkoutSession> {
     /**
      * Fetches [WorkoutSession] and it's Workouts in form of Relation: [SessionWithWorkoutWithSets]
      */
+    @Query("SELECT * FROM $WORKOUT_SESSION_TABLE WHERE id = :day")
+    fun getSessionWithWorkoutsWithSetsByDay(day: BaseId): List<SessionWithWorkoutWithSets>
+
+    /**
+     * Fetches [WorkoutSession] and it's Workouts in form of Relation: [SessionWithWorkoutWithSets]
+     */
     @Query("SELECT * FROM $WORKOUT_SESSION_TABLE WHERE id = :id")
     fun getSessionWithWorkoutsWithSets(id: BaseId): Flow<List<SessionWithWorkoutWithSets>>
 

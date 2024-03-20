@@ -97,9 +97,9 @@ dependencies {
 
 
     // hilt-di
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0' // viewModels
+    implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$dagger_hilt_version"
+    implementation "androidx.hilt:hilt-navigation-compose:$androidx_hilt_version" // viewModels
 
     // logging
     implementation 'com.jakewharton.timber:timber:5.0.1'
@@ -128,6 +128,9 @@ dependencies {
 
     // gson
     implementation "com.google.code.gson:gson:$gson_version"
+
+    // retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
 
 
     testImplementation "androidx.room:room-testing:$room_version"

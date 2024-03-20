@@ -50,7 +50,7 @@ interface WorkoutSessionRepository : BaseDBRepository<WorkoutSession> {
      * Fetches all [WorkoutSession] from database Joined [SessionWithWorkoutWithSets], ORDER_BY ASC
      * @return [PagingData]<[SessionWithWorkoutWithSets]>
      */
-    suspend fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionWithWorkoutWithSets>>
+    fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionState<SessionWithWorkoutWithSets>>>
 
     /**
      * Fetches [WorkoutSession] as [SessionState] JOIN object

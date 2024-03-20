@@ -53,4 +53,4 @@ data class Exercise(
     @[SerializedName("category") ColumnInfo(name = "category")]
     val category: String? = DEFAULT_VALUE_STR
 
-) : BaseDBModel(), Serializable
+) : BaseModel(), Serializable

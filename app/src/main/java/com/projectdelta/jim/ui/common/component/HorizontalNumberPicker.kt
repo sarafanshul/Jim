@@ -40,8 +40,8 @@ import androidx.core.text.isDigitsOnly
 import com.projectdelta.jim.R
 import com.projectdelta.jim.ui.common.widget.RepeatingIconButton
 import com.projectdelta.jim.ui.theme.JimTheme
-import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
-import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
+import com.projectdelta.jim.ui.theme.Dimens.PADDING_NORMAL
+import com.projectdelta.jim.ui.theme.Dimens.PADDING_SMALL
 import com.projectdelta.jim.util.unitCallback
 import com.projectdelta.jim.util.callbackWParam
 

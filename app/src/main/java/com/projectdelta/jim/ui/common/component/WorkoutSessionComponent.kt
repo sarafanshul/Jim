@@ -15,7 +15,7 @@ import com.projectdelta.jim.data.model.relation.SWWWParameterProvider
 import com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets
 import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
 import com.projectdelta.jim.ui.theme.JimTheme
-import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
+import com.projectdelta.jim.ui.theme.Dimens.PADDING_NORMAL
 import com.projectdelta.jim.util.callbackWParam
 
 /**

@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -26,10 +27,12 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.ApiStatus.Experimental
 
 fun Int.pxToDp(): Dp {
     return (this / getSystem().displayMetrics.density).dp
 }
+
 
 /**
  * Neumorphism Shadow
@@ -70,6 +73,7 @@ fun Modifier.shadow(
  *
  * @see <a href="https://proandroiddev.com/creating-a-repeating-button-with-jetpack-compose-b39c4f559f7d">for more info</a>
  */
+@Experimental
 fun Modifier.repeatingClickable(
     interactionSource: InteractionSource,
     enabled: Boolean = true,
@@ -77,7 +81,7 @@ fun Modifier.repeatingClickable(
     minDelayMillis: Long = 60,
     delayDecayFactor: Float = .20f,
     onClick: () -> Unit
-): Modifier = composed {
+): Modifier = this then Modifier.composed {
 
     val currentClickListener by rememberUpdatedState(onClick)
     val isEnabled by rememberUpdatedState(enabled)
@@ -102,6 +106,7 @@ fun Modifier.repeatingClickable(
     }
 }
 
+
 /**
  * Visibility modifier, works like [androidx.compose.animation.AnimatedVisibility],
  * except it reserves space for the in-visible component.
@@ -119,6 +124,7 @@ fun Modifier.visibility(visible: Boolean): Modifier {
     }
 }
 
+
 /**
  * Lets you add conditional [Modifier]s
  */
@@ -129,3 +135,17 @@ fun Modifier.conditional(condition : Boolean, modifier : Modifier.() -> Modifier
         this
     }
 }
+
+
+/**
+ * Compose recomposes only the "nearest" scope. A scope is non-inline Composable function that returns Unit.
+ * Implementation of functions like Row, Column, Box, and Layout in Compose.
+ * These functions are marked as inline, which means they don't create separate scopes
+ * but pass their call block directly to the call site.
+ * This causes un-necessary recompositions.
+ */
+@Composable
+fun NonInlineUIWrapper(content: @Composable () -> Unit) {
+    content()
+}
+

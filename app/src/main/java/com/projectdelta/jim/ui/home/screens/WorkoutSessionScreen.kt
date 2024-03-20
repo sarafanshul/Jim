@@ -19,16 +19,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.projectdelta.jim.data.state.SessionState
 import com.projectdelta.jim.ui.common.component.EmptyWorkoutSessionComponent
 import com.projectdelta.jim.ui.common.component.WorkoutSessionComponent
 import com.projectdelta.jim.ui.home.HomeScreenViewModel
 import com.projectdelta.jim.ui.home.component.DayInfoTopBarComponent
 import com.projectdelta.jim.ui.home.events.HomeScreenEvent
-import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
+import com.projectdelta.jim.ui.theme.Dimens.PADDING_SMALL
 import com.projectdelta.jim.util.TimeUtil
+import kotlinx.coroutines.Dispatchers
 
 /**
  * Workout Session Main Screen
@@ -45,22 +48,19 @@ fun WorkoutSessionScreen(
         pageCount = { 100000 } // todo: by default only 50 pages.
     )
 
+    val worker = rememberCoroutineScope { Dispatchers.IO }
+
+    val lazySessions = viewModel.getWorkoutSessionPaged().collectAsLazyPagingItems(worker.coroutineContext)
+
     LaunchedEffect(uiState) {// handle ui state changes
         pagerState.animateScrollToPage(uiState.currentDay, 0f)
     }
-
 
     LaunchedEffect(pagerState.settledPage) {
         viewModel.handleEvent(
             HomeScreenEvent.PageChangeEvent(pagerState.settledPage)
         )
     }
-
-//    LaunchedEffect(pagerState.targetPage) {
-//        viewModel.cacheWorkout(maxOf(pagerState.targetPage - 1, 0))
-//        viewModel.cacheWorkout(pagerState.targetPage)
-//        viewModel.cacheWorkout(minOf(pagerState.targetPage + 1, pagerState.pageCount))
-//    }
 
     Column(
         modifier = modifier,
@@ -100,14 +100,10 @@ fun WorkoutSessionScreen(
                 .fillMaxSize()
                 .padding(bottom = PADDING_SMALL),
             beyondBoundsPageCount = 1, // check this <<<
-//            key = {idx ->
-//                workoutSessionState = viewModel.getWorkoutByDay(idx)
-//            }
         ) { day ->
             // FIXME : This spams db for queries (left, right for every scroll), bad refactor this.
 
-            val workoutSessionState by viewModel.getWorkout(day)
-                .collectAsState(SessionState.Empty)
+            val workoutSessionState = lazySessions[day]
 
             AnimatedContent(
                 targetState = workoutSessionState,
@@ -122,17 +118,6 @@ fun WorkoutSessionScreen(
                 }
             ) { state ->
                 when (state) {
-                    is SessionState.Empty -> {
-                        EmptyWorkoutSessionComponent(
-                            startNewWorkoutOnClick = {
-                                viewModel.handleEvent(HomeScreenEvent.CreateNewWorkoutEvent)
-                            },
-                            copyPreviousWorkoutOnClick = {
-                                viewModel.handleEvent(HomeScreenEvent.LaunchCalendarEvent(copy = true))
-                            },
-                            modifier = Modifier
-                        )
-                    }
 
                     is SessionState.Session -> {
                         WorkoutSessionComponent(
@@ -142,6 +127,18 @@ fun WorkoutSessionScreen(
                             onClickWParamAction = {
                                 viewModel.handleEvent(HomeScreenEvent.WorkoutSelectedEvent(it))
                             }
+                        )
+                    }
+
+                    is SessionState.Empty, null -> {
+                        EmptyWorkoutSessionComponent(
+                            startNewWorkoutOnClick = {
+                                viewModel.handleEvent(HomeScreenEvent.CreateNewWorkoutEvent)
+                            },
+                            copyPreviousWorkoutOnClick = {
+                                viewModel.handleEvent(HomeScreenEvent.LaunchCalendarEvent(copy = true))
+                            },
+                            modifier = Modifier
                         )
                     }
                 }

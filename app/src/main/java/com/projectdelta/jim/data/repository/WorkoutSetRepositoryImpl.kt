@@ -7,7 +7,7 @@ import com.projectdelta.jim.data.model.entity.WorkoutSet
 import com.projectdelta.jim.data.model.relation.WorkoutSetAndWorkout
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.util.BaseId
-import com.projectdelta.jim.util.Constants.PagingSource
+import com.projectdelta.jim.util.paging.Config
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -40,7 +40,7 @@ class WorkoutSetRepositoryImpl(
 
     override suspend fun getAllPaged(): Flow<PagingData<WorkoutSet>> =
         Pager(
-            config = PagingSource.defaultPagingConfig,
+            config = Config.defaultPagingConfig,
             pagingSourceFactory = { dao.getAllPaged() }
         ).flow.flowOn(workerDispatcher)
 

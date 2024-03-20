@@ -4,6 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.projectdelta.jim.util.BaseId
 
 @Immutable
-abstract class BaseDBModel {
+abstract class BaseModel {
     abstract var id : BaseId
 }

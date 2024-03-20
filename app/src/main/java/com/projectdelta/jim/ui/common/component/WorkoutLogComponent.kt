@@ -32,12 +32,12 @@ import com.projectdelta.jim.data.model.entity.Workout
 import com.projectdelta.jim.data.model.relation.WWSEParameterProvider
 import com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise
 import com.projectdelta.jim.ui.theme.JimTheme
-import com.projectdelta.jim.util.Constants.UI.ELEVATION_NORMAL
-import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
-import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
-import com.projectdelta.jim.util.Constants.UI.ROUND_RADIUS_NORMAL
-import com.projectdelta.jim.util.Constants.UI.TEXT_NOT_THAT_LARGE
-import com.projectdelta.jim.util.Constants.UI.TEXT_SMALL_PLUS
+import com.projectdelta.jim.ui.theme.Dimens.ELEVATION_NORMAL
+import com.projectdelta.jim.ui.theme.Dimens.PADDING_NORMAL
+import com.projectdelta.jim.ui.theme.Dimens.PADDING_SMALL
+import com.projectdelta.jim.ui.theme.Dimens.ROUND_RADIUS_NORMAL
+import com.projectdelta.jim.ui.theme.Dimens.TEXT_NOT_THAT_LARGE
+import com.projectdelta.jim.ui.theme.Dimens.TEXT_SMALL_PLUS
 import com.projectdelta.jim.util.NotFound
 import com.projectdelta.jim.util.callbackWParam
 

@@ -72,7 +72,7 @@ class DebugWorkoutSessionRepositoryImpl (
         TODO("Not yet implemented")
     }
 
-    override suspend fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionWithWorkoutWithSets>> {
+    override fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionState<SessionWithWorkoutWithSets>>> {
         TODO("Not yet implemented")
     }
 

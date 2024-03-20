@@ -1,17 +1,16 @@
 package com.projectdelta.jim.data.repository
 
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
-import com.projectdelta.jim.data.model.entity.BaseDBModel
+import com.projectdelta.jim.data.model.entity.BaseModel
 import com.projectdelta.jim.data.model.entity.WorkoutSession
 import com.projectdelta.jim.util.BaseId
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Base Repository for [BaseDBModel] objects, utilising BaseDao,
+ * Base Repository for [BaseModel] objects, utilising BaseDao,
  * This has all basic crud operations
  */
-interface BaseDBRepository<T : BaseDBModel> {
+interface BaseDBRepository<T : BaseModel> {
     /**
      * Inserts item in database
      * @param obj item to be inserted

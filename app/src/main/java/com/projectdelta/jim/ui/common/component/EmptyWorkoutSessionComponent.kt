@@ -19,6 +19,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import com.projectdelta.jim.R
 import com.projectdelta.jim.data.state.SessionState
+import com.projectdelta.jim.ui.theme.Dimens.PADDING_SMALL
+import com.projectdelta.jim.ui.theme.Dimens.TEXT_LARGE
+import com.projectdelta.jim.ui.theme.Strings.NO_WORKOUT_LOG
 import com.projectdelta.jim.util.Constants
 import com.projectdelta.jim.util.unitCallback
 
@@ -45,10 +48,10 @@ fun EmptyWorkoutSessionComponent(
                     SpanStyle(
                         color = Color.Gray,
                         fontWeight = FontWeight.Bold,
-                        fontSize = Constants.UI.TEXT_LARGE
+                        fontSize = TEXT_LARGE
                     )
                 ) {
-                    append(Constants.StringRes.NO_WORKOUT_LOG)
+                    append(NO_WORKOUT_LOG)
                 }
             },
             modifier = Modifier
@@ -67,7 +70,7 @@ fun EmptyWorkoutSessionComponent(
             modifier = Modifier
                 .weight(1.2f)
                 .fillMaxWidth(0.5f)
-                .padding(Constants.UI.PADDING_SMALL, Constants.UI.PADDING_SMALL)
+                .padding(PADDING_SMALL, PADDING_SMALL)
         )
 
         Spacer(
@@ -84,7 +87,7 @@ fun EmptyWorkoutSessionComponent(
             modifier = Modifier
                 .weight(1.2f)
                 .fillMaxWidth(0.5f)
-                .padding(Constants.UI.PADDING_SMALL, Constants.UI.PADDING_SMALL)
+                .padding(PADDING_SMALL, PADDING_SMALL)
         )
     }
 }

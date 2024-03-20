@@ -5,7 +5,6 @@ import androidx.annotation.Keep
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets
 import com.projectdelta.jim.util.BaseId
 import com.projectdelta.jim.util.Constants.Table.WORKOUT_SESSION_TABLE
 import kotlinx.parcelize.Parcelize
@@ -27,7 +26,7 @@ data class WorkoutSession(
     @PrimaryKey(autoGenerate = false)
     override var id: BaseId = 0,
 
-) : BaseDBModel(), Parcelable
+) : BaseModel(), Parcelable
 
 
 /**

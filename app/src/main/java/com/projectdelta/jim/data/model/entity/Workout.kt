@@ -35,4 +35,4 @@ data class Workout(
     @SerializedName("exerciseId")
     val exerciseId: BaseId = 0,
 
-) : BaseDBModel(), Parcelable
+) : BaseModel(), Parcelable

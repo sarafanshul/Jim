@@ -24,7 +24,7 @@ import com.projectdelta.jim.ui.common.visibility
 import com.projectdelta.jim.ui.common.widget.TextWithSubscript
 import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.util.unitCallback
-import com.projectdelta.jim.util.component.NonInlineUIWrapper
+import com.projectdelta.jim.ui.common.NonInlineUIWrapper
 import com.projectdelta.jim.util.system.lang.numberFormatLocale
 
 /**

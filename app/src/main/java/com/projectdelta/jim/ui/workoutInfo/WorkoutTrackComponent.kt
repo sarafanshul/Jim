@@ -39,8 +39,8 @@ import com.projectdelta.jim.ui.common.conditional
 import com.projectdelta.jim.ui.common.widget.NotFoundFiller
 import com.projectdelta.jim.ui.theme.JimTheme
 import com.projectdelta.jim.ui.workoutInfo.states.WorkoutTrackUIState
-import com.projectdelta.jim.util.Constants.UI.PADDING_NORMAL
-import com.projectdelta.jim.util.Constants.UI.PADDING_SMALL
+import com.projectdelta.jim.ui.theme.Dimens.PADDING_NORMAL
+import com.projectdelta.jim.ui.theme.Dimens.PADDING_SMALL
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

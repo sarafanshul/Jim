@@ -6,7 +6,7 @@ import com.projectdelta.jim.data.local.dao.ExerciseDao
 import com.projectdelta.jim.data.model.entity.Exercise
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.util.BaseId
-import com.projectdelta.jim.util.Constants.PagingSource
+import com.projectdelta.jim.util.paging.Config
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -39,7 +39,7 @@ class ExerciseRepositoryImpl(
 
     override suspend fun getByNameLikePaged(substring: String): Flow<PagingData<Exercise>> =
         Pager(
-            config = PagingSource.defaultPagingConfig,
+            config = Config.defaultPagingConfig,
             pagingSourceFactory = { dao.getByNameLikePaged(substring) }
         ).flow.flowOn(workerDispatcher)
 
@@ -48,7 +48,7 @@ class ExerciseRepositoryImpl(
 
     override suspend fun getAllPaged(): Flow<PagingData<Exercise>> =
         Pager(
-            config = PagingSource.defaultPagingConfig,
+            config = Config.defaultPagingConfig,
             pagingSourceFactory = { dao.getAllExercisesPaged() }
         ).flow.flowOn(workerDispatcher)
 }

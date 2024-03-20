@@ -5,7 +5,7 @@ package com.projectdelta.jim.data.state
  */
 sealed class SessionState<out T> {
 
-    object Empty : SessionState<Nothing>()
+    data object Empty : SessionState<Nothing>()
 
     data class Session<T>(val session: T) : SessionState<T>()
 }

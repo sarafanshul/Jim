@@ -49,7 +49,7 @@ data class WorkoutSet(
     @SerializedName("exerciseId")
     val exerciseId: BaseId = 0,
 
-) : BaseDBModel(), Parcelable {
+) : BaseModel(), Parcelable {
     companion object{
         fun buildNew(
             workoutId: BaseId,

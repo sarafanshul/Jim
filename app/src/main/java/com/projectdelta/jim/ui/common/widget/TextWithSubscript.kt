@@ -12,6 +12,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
+import com.projectdelta.jim.ui.theme.Dimens.TEXT_MEDIUM
+import com.projectdelta.jim.ui.theme.Dimens.TEXT_SMALL
 import com.projectdelta.jim.util.Constants
 
 /**
@@ -22,8 +24,8 @@ fun TextWithSubscript(
     textNormal: String,
     textSubscript: String,
     modifier: Modifier = Modifier,
-    fontSizeNormal: TextUnit = Constants.UI.TEXT_MEDIUM,
-    fontSizeSubscript: TextUnit = Constants.UI.TEXT_SMALL,
+    fontSizeNormal: TextUnit = TEXT_MEDIUM,
+    fontSizeSubscript: TextUnit = TEXT_SMALL,
     textAlign: TextAlign = TextAlign.Center,
 ) {
     Text(

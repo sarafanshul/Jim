@@ -4,9 +4,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Update
-import com.projectdelta.jim.data.model.entity.BaseDBModel
+import com.projectdelta.jim.data.model.entity.BaseModel
 
-interface BaseDao<in T : BaseDBModel> {
+interface BaseDao<in T : BaseModel> {
 
     /**
      * Inserts item in database

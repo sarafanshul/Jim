@@ -2,6 +2,7 @@ package com.projectdelta.jim.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.projectdelta.jim.data.local.dao.WorkoutSessionDao
 import com.projectdelta.jim.data.model.entity.WorkoutSession
 import com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets
@@ -9,12 +10,15 @@ import com.projectdelta.jim.data.model.relation.SessionWithWorkouts
 import com.projectdelta.jim.data.state.SessionState
 import com.projectdelta.jim.di.qualifiers.IODispatcher
 import com.projectdelta.jim.util.BaseId
-import com.projectdelta.jim.util.Constants.PagingSource
+import com.projectdelta.jim.util.paging.Config
+import com.projectdelta.jim.util.paging.LocalPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class WorkoutSessionRepositoryImpl(
     private val dao: WorkoutSessionDao,
@@ -50,8 +54,8 @@ class WorkoutSessionRepositoryImpl(
 
     override suspend fun getAllSessionsWithWorkoutsPaged(): Flow<PagingData<SessionWithWorkouts>> =
         Pager(
-            config = PagingSource.defaultPagingConfig,
-            pagingSourceFactory = { dao.getAllSessionsWithWorkoutsPaged() }
+            config = Config.defaultPagingConfig,
+            pagingSourceFactory = { dao.getAllSessionsWithWorkoutsPaged() },
         ).flow.flowOn(workerDispatcher)
 
     override suspend fun getSessionWithWorkoutsWithSets(id: BaseId): Flow<List<SessionWithWorkoutWithSets>> =
@@ -60,10 +64,24 @@ class WorkoutSessionRepositoryImpl(
     override suspend fun getAllSessionWithWorkoutsWithSets(): Flow<List<SessionWithWorkoutWithSets>> =
         dao.getAllSessionWithWorkoutsWithSets().flowOn(workerDispatcher)
 
-    override suspend fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionWithWorkoutWithSets>> =
+    override fun getAllSessionWithWorkoutsWithSetsPaged(): Flow<PagingData<SessionState<SessionWithWorkoutWithSets>>> =
         Pager(
-            config = PagingSource.defaultPagingConfig,
-            pagingSourceFactory = { dao.getAllSessionWithWorkoutsWithSetsPaged() }
+            config = Config.customLocalDBPagerConfig,
+            pagingSourceFactory = {
+                LocalPagingSource(
+                    loadData = loadData@{ day ->
+                        withContext(workerDispatcher){
+                            val response = dao.getSessionWithWorkoutsWithSetsByDay(day)
+                            Timber.d("load Called for : $day, response_size: ${response.size}")
+                            if (response.isEmpty()) {
+                                SessionState.Empty
+                            } else {
+                                SessionState.Session(response.first())
+                            }
+                        }
+                    }
+                )
+            }
         ).flow.flowOn(workerDispatcher)
 
     override suspend fun getSessionByDay(day: Int): Flow<SessionState<WorkoutSession>> =
@@ -103,7 +121,7 @@ class WorkoutSessionRepositoryImpl(
 
     override suspend fun getAllPaged(): Flow<PagingData<WorkoutSession>> =
         Pager(
-            config = PagingSource.defaultPagingConfig,
+            config = Config.defaultPagingConfig,
             pagingSourceFactory = { dao.getAllSessionsPaged() }
         ).flow.flowOn(workerDispatcher)
 }
