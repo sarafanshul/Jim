@@ -5,11 +5,8 @@ import android.content.res.Resources;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -29,16 +26,12 @@ public class JSONUtils {
     public static <T> Optional<T> getJsonFileAsClass(final Resources resources, final int resId, final Class<T> classType) {
 
         InputStream resourceReader = resources.openRawResource(resId);
-        Writer writer = new StringWriter();
 
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(resourceReader, StandardCharsets.UTF_8));
-            String line = reader.readLine();
-            while (line != null) {
-                writer.write(line);
-                line = reader.readLine();
-            }
-            return Optional.of(constructUsingGson(classType, writer.toString()));
+            // ⚡ Bolt: Parse directly from the stream instead of loading the entire string into memory.
+            // This reduces memory usage and avoids redundant string allocation, especially for large JSON files.
+            InputStreamReader reader = new InputStreamReader(resourceReader, StandardCharsets.UTF_8);
+            return Optional.of(constructUsingGson(classType, reader));
         } catch (Exception e) {
             // Crashlytics.logException(e);
             Timber.e(e, "Unhandled exception while using JSONResourceReader");
@@ -55,11 +48,12 @@ public class JSONUtils {
     /**
      * Build an object from the specified JSON resource using Gson.
      *
-     * @param type The type of the object to build.
+     * @param type   The type of the object to build.
+     * @param reader The InputStreamReader containing the JSON.
      * @return An object of type T, with member fields populated using Gson.
      */
-    private static <T> T constructUsingGson(final Class<T> type, final String jsonString) {
+    private static <T> T constructUsingGson(final Class<T> type, final InputStreamReader reader) {
         Gson gson = new GsonBuilder().create();
-        return gson.fromJson(jsonString, type);
+        return gson.fromJson(reader, type);
     }
 }
