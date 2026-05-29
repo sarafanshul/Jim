@@ -31,7 +31,7 @@ object TimeUtil {
     fun getCurrentDayFromEpoch() =
         millisecondsToDays(System.currentTimeMillis())
 
-    private val calendarInstance = Calendar.getInstance() // cached calendar instance
+    private val formatters = java.util.concurrent.ConcurrentHashMap<Pair<String, Locale>, ThreadLocal<SimpleDateFormat>>() // cached formatters
 
     /**
      * Returns the day in a formatted string.
@@ -40,9 +40,24 @@ object TimeUtil {
      * @return formatted date
      */
     fun getDayFormatted( day : Int, format: String = "EEEE, dd MMMM yyyy" ) : String {
-        val sdf = SimpleDateFormat(format, Locale.getDefault())
-        calendarInstance.timeInMillis = day * DAY_TO_MILLISECOND
-        return sdf.format(calendarInstance.time)
+        // Bolt ⚡: Cache SimpleDateFormat instances to prevent expensive re-allocations
+        // during frequent Jetpack Compose recompositions (e.g. DayInfoTopBarComponent)
+        // ThreadLocal is used because SimpleDateFormat is not thread-safe.
+        val locale = Locale.getDefault()
+        val key = Pair(format, locale)
+        val threadLocalSdf = formatters.getOrPut(key) {
+            object : ThreadLocal<SimpleDateFormat>() {
+                override fun initialValue(): SimpleDateFormat {
+                    return SimpleDateFormat(format, locale)
+                }
+            }
+        }
+        val sdf = threadLocalSdf.get()!!
+
+        // Use a new Calendar instance if needed to avoid thread-safety issues with Calendar
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = day * DAY_TO_MILLISECOND
+        return sdf.format(calendar.time)
     }
 
 }
