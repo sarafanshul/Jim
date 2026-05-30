@@ -8,8 +8,6 @@ import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -29,16 +27,10 @@ public class JSONUtils {
     public static <T> Optional<T> getJsonFileAsClass(final Resources resources, final int resId, final Class<T> classType) {
 
         InputStream resourceReader = resources.openRawResource(resId);
-        Writer writer = new StringWriter();
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(resourceReader, StandardCharsets.UTF_8));
-            String line = reader.readLine();
-            while (line != null) {
-                writer.write(line);
-                line = reader.readLine();
-            }
-            return Optional.of(constructUsingGson(classType, writer.toString()));
+            return Optional.of(constructUsingGson(classType, reader));
         } catch (Exception e) {
             // Crashlytics.logException(e);
             Timber.e(e, "Unhandled exception while using JSONResourceReader");
@@ -58,8 +50,8 @@ public class JSONUtils {
      * @param type The type of the object to build.
      * @return An object of type T, with member fields populated using Gson.
      */
-    private static <T> T constructUsingGson(final Class<T> type, final String jsonString) {
+    private static <T> T constructUsingGson(final Class<T> type, final BufferedReader reader) {
         Gson gson = new GsonBuilder().create();
-        return gson.fromJson(jsonString, type);
+        return gson.fromJson(reader, type);
     }
 }
