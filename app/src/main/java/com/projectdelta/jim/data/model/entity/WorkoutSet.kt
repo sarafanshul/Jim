@@ -15,7 +15,13 @@ import kotlinx.parcelize.Parcelize
  */
 @Keep
 @Parcelize
-@Entity(tableName = WORKOUT_SET_TABLE)
+@Entity(
+    tableName = WORKOUT_SET_TABLE,
+    indices = [
+        androidx.room.Index("workoutId"),
+        androidx.room.Index("exerciseId")
+    ]
+)
 data class WorkoutSet(
 
     /**

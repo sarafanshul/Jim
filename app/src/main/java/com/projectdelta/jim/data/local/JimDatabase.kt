@@ -61,12 +61,22 @@ abstract class JimDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_1_2 = object : androidx.room.migration.Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_table_sessionId` ON `workout_table` (`sessionId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_table_exerciseId` ON `workout_table` (`exerciseId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_set_table_workoutId` ON `workout_set_table` (`workoutId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_set_table_exerciseId` ON `workout_set_table` (`exerciseId`)")
+            }
+        }
+
         private fun buildDatabase(application: Application): JimDatabase {
             return Room.databaseBuilder(
                 application,
                 JimDatabase::class.java,
                 NAME
-            ).addCallback(object : Callback() {
+            ).addMigrations(MIGRATION_1_2)
+            .addCallback(object : Callback() {
                 override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
                     super.onDestructiveMigration(db)
                 }
