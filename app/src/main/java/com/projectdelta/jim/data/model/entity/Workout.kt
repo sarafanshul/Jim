@@ -13,7 +13,13 @@ import kotlinx.parcelize.Parcelize
  * Denotes a Workout, mapped with respective objects.
  */
 @Keep
-@Entity(tableName = WORKOUT_TABLE)
+@Entity(
+    tableName = WORKOUT_TABLE,
+    indices = [
+        androidx.room.Index(value = ["sessionId"]),
+        androidx.room.Index(value = ["exerciseId"])
+    ]
+)
 @Parcelize
 data class Workout(
 
