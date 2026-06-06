@@ -23,6 +23,7 @@ import com.projectdelta.jim.util.Converters
 import com.projectdelta.jim.util.JSONUtils
 import com.projectdelta.jim.util.MockDebugData
 import java.util.concurrent.Executors
+import androidx.room.migration.Migration
 
 @Database(
     entities = [
@@ -49,6 +50,15 @@ abstract class JimDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: JimDatabase? = null
 
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_table_sessionId` ON `workout_table` (`sessionId`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_table_exerciseId` ON `workout_table` (`exerciseId`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_set_table_workoutId` ON `workout_set_table` (`workoutId`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_set_table_exerciseId` ON `workout_set_table` (`exerciseId`)")
+            }
+        }
+
         fun getInstance(application: Application): JimDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null)
@@ -66,7 +76,8 @@ abstract class JimDatabase : RoomDatabase() {
                 application,
                 JimDatabase::class.java,
                 NAME
-            ).addCallback(object : Callback() {
+            ).addMigrations(MIGRATION_1_2)
+            .addCallback(object : Callback() {
                 override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
                     super.onDestructiveMigration(db)
                 }
