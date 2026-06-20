@@ -1,0 +1,123 @@
+Downloading https://services.gradle.org/distributions/gradle-8.1-bin.zip
+...........10%............20%............30%............40%............50%............60%............70%............80%...........90%............100%
+
+Welcome to Gradle 8.1!
+
+Here are the highlights of this release:
+ - Stable configuration cache
+ - Experimental Kotlin DSL assignment syntax
+ - Building with Java 20
+
+For more details see https://docs.gradle.org/8.1/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+Checking the license for package Android SDK Build-Tools 33.0.1 in /opt/android-sdk/licenses
+License for package Android SDK Build-Tools 33.0.1 accepted.
+Preparing "Install Android SDK Build-Tools 33.0.1 v.33.0.1".
+"Install Android SDK Build-Tools 33.0.1 v.33.0.1" ready.
+Installing Android SDK Build-Tools 33.0.1 in /opt/android-sdk/build-tools/33.0.1
+"Install Android SDK Build-Tools 33.0.1 v.33.0.1" complete.
+"Install Android SDK Build-Tools 33.0.1 v.33.0.1" finished.
+Checking the license for package Android SDK Platform 33 in /opt/android-sdk/licenses
+License for package Android SDK Platform 33 accepted.
+Preparing "Install Android SDK Platform 33 (revision 3)".
+"Install Android SDK Platform 33 (revision 3)" ready.
+Installing Android SDK Platform 33 in /opt/android-sdk/platforms/android-33
+"Install Android SDK Platform 33 (revision 3)" complete.
+"Install Android SDK Platform 33 (revision 3)" finished.
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResValues
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:mergeDebugResources
+> Task :app:parseDebugLocalResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:javaPreCompileDebug
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:desugarDebugFileDependencies
+> Task :app:mergeDebugJniLibFolders
+> Task :app:checkDebugDuplicateClasses
+> Task :app:mergeDebugNativeLibs NO-SOURCE
+> Task :app:processDebugManifestForPackage
+> Task :app:mergeExtDexDebug
+> Task :app:stripDebugDebugSymbols NO-SOURCE
+> Task :app:mergeLibDexDebug
+> Task :app:processDebugResources
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+
+> Task :app:kspDebugKotlin
+w: [ksp] Composable HomeScreen: Usage of `start` and `navGraph` parameters of @Destination is deprecated.
+Use '@RootNavGraph(start = true)' instead.
+
+> Task :app:kaptGenerateStubsDebugKotlin
+
+> Task :app:kaptDebugKotlin
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutSessionDao.java:59: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract kotlinx.coroutines.flow.Flow<java.util.List<com.projectdelta.jim.data.model.relation.SessionWithWorkouts>> getSessionWithWorkoutsById(int id);
+                                                                                                                               ^
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutSessionDao.java:67: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract kotlinx.coroutines.flow.Flow<java.util.List<com.projectdelta.jim.data.model.relation.SessionWithWorkouts>> getAllSessionsWithWorkouts();
+                                                                                                                               ^
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutSessionDao.java:75: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract androidx.paging.PagingSource<java.lang.Integer, com.projectdelta.jim.data.model.relation.SessionWithWorkouts> getAllSessionsWithWorkoutsPaged();
+                                                                                                                                  ^
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutSessionDao.java:82: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract kotlinx.coroutines.flow.Flow<java.util.List<com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets>> getSessionWithWorkoutsWithSets(int id);
+                                                                                                                                      ^
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutSessionDao.java:90: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract kotlinx.coroutines.flow.Flow<java.util.List<com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets>> getAllSessionWithWorkoutsWithSets();
+                                                                                                                                      ^
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutSessionDao.java:98: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract androidx.paging.PagingSource<java.lang.Integer, com.projectdelta.jim.data.model.relation.SessionWithWorkoutWithSets> getAllSessionWithWorkoutsWithSetsPaged();
+                                                                                                                                         ^
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutDao.java:50: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract kotlinx.coroutines.flow.Flow<java.util.List<com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise>> getWorkoutWithSetsAndExerciseById(int id);
+                                                                                                                                      ^
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutDao.java:58: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract kotlinx.coroutines.flow.Flow<java.util.List<com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise>> getAllWorkoutWithSetsAndExercise();
+                                                                                                                                      ^
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutDao.java:66: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract androidx.paging.PagingSource<java.lang.Integer, com.projectdelta.jim.data.model.relation.WorkoutWithSetsAndExercise> getAllWorkoutWithSetsAndExercisePaged();
+                                                                                                                                         ^
+/app/app/build/tmp/kapt3/stubs/debug/com/projectdelta/jim/data/local/dao/WorkoutSetDao.java:48: warning: The return value includes a POJO with a @Relation. It is usually desired to annotate this method with @Transaction to avoid possibility of inconsistent results between the POJO and its relations. See https://developer.android.com/reference/androidx/room/Transaction.html for details.
+    public abstract kotlinx.coroutines.flow.Flow<java.util.List<com.projectdelta.jim.data.model.relation.WorkoutSetAndWorkout>> getWorkoutSetAndWorkoutById(int id);
+                                                                                                                                ^
+
+> Task :app:compileDebugKotlin
+w: file:///app/app/src/main/java/com/projectdelta/jim/ui/calendar/CalendarPreviewScreen.kt:15:5 Parameter 'navigator' is never used
+w: file:///app/app/src/main/java/com/projectdelta/jim/ui/calendar/CalendarPreviewScreen.kt:16:5 Parameter 'day' is never used
+w: file:///app/app/src/main/java/com/projectdelta/jim/ui/calendar/CalendarPreviewScreen.kt:17:5 Parameter 'copy' is never used
+w: file:///app/app/src/main/java/com/projectdelta/jim/ui/home/screens/WorkoutSessionScreen.kt:351:29 The expression is unused
+w: file:///app/app/src/main/java/com/projectdelta/jim/ui/workoutInfo/WorkoutInfoScreen.kt:17:5 Parameter 'navigator' is never used
+w: file:///app/app/src/main/java/com/projectdelta/jim/ui/workoutInfo/WorkoutTrackComponent.kt:268:5 Parameter 'workout0' is never used
+
+> Task :app:compileDebugJavaWithJavac
+> Task :app:hiltAggregateDepsDebug
+> Task :app:hiltJavaCompileDebug
+> Task :app:processDebugJavaRes
+> Task :app:transformDebugClassesWithAsm
+> Task :app:mergeDebugJavaResource
+> Task :app:dexBuilderDebug
+> Task :app:mergeDebugGlobalSynthetics
+> Task :app:mergeProjectDexDebug
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect
+> Task :app:assembleDebug
+
+BUILD SUCCESSFUL in 4m
+40 actionable tasks: 40 executed

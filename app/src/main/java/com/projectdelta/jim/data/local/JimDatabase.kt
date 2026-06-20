@@ -16,6 +16,7 @@ import com.projectdelta.jim.data.model.entity.Exercise
 import com.projectdelta.jim.data.model.ExerciseWrapper
 import com.projectdelta.jim.data.model.entity.Workout
 import com.projectdelta.jim.data.model.entity.WorkoutSession
+import androidx.room.migration.Migration
 import com.projectdelta.jim.data.model.entity.WorkoutSet
 import com.projectdelta.jim.util.Constants.Database.VERSION
 import com.projectdelta.jim.util.Constants.Database.NAME
@@ -46,6 +47,15 @@ abstract class JimDatabase : RoomDatabase() {
 
     companion object {
 
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_table_sessionId` ON `workout_table` (`sessionId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_table_exerciseId` ON `workout_table` (`exerciseId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_set_table_workoutId` ON `workout_set_table` (`workoutId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_set_table_exerciseId` ON `workout_set_table` (`exerciseId`)")
+            }
+        }
+
         @Volatile
         private var INSTANCE: JimDatabase? = null
 
@@ -66,7 +76,9 @@ abstract class JimDatabase : RoomDatabase() {
                 application,
                 JimDatabase::class.java,
                 NAME
-            ).addCallback(object : Callback() {
+            )
+            .addMigrations(MIGRATION_1_2)
+            .addCallback(object : Callback() {
                 override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
                     super.onDestructiveMigration(db)
                 }

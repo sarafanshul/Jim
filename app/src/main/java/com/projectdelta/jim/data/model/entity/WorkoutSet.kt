@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.projectdelta.jim.util.BaseId
@@ -12,10 +13,18 @@ import kotlinx.parcelize.Parcelize
 
 /**
  * A Set table to keep track of sets
+ * Performance Optimization: Adding indices to foreign key / relation columns
+ * to avoid full table scans during relation queries.
  */
 @Keep
 @Parcelize
-@Entity(tableName = WORKOUT_SET_TABLE)
+@Entity(
+    tableName = WORKOUT_SET_TABLE,
+    indices = [
+        Index(value = ["workoutId"]),
+        Index(value = ["exerciseId"])
+    ]
+)
 data class WorkoutSet(
 
     /**

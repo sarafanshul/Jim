@@ -3,6 +3,7 @@ package com.projectdelta.jim.data.model.entity
 import android.os.Parcelable
 import androidx.annotation.Keep
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.projectdelta.jim.util.BaseId
@@ -11,9 +12,17 @@ import kotlinx.parcelize.Parcelize
 
 /**
  * Denotes a Workout, mapped with respective objects.
+ * Performance Optimization: Adding indices to foreign key / relation columns
+ * to avoid full table scans during relation queries.
  */
 @Keep
-@Entity(tableName = WORKOUT_TABLE)
+@Entity(
+    tableName = WORKOUT_TABLE,
+    indices = [
+        Index(value = ["sessionId"]),
+        Index(value = ["exerciseId"])
+    ]
+)
 @Parcelize
 data class Workout(
 
