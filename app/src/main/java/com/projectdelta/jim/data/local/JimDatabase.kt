@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.projectdelta.jim.BuildConfig
 import com.projectdelta.jim.R
@@ -45,6 +46,15 @@ abstract class JimDatabase : RoomDatabase() {
     abstract fun workoutSetDao(): WorkoutSetDao
 
     companion object {
+
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_table_sessionId` ON `workout_table` (`sessionId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_table_exerciseId` ON `workout_table` (`exerciseId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_set_table_workoutId` ON `workout_set_table` (`workoutId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_workout_set_table_exerciseId` ON `workout_set_table` (`exerciseId`)")
+            }
+        }
 
         @Volatile
         private var INSTANCE: JimDatabase? = null
@@ -98,7 +108,8 @@ abstract class JimDatabase : RoomDatabase() {
                         }
                     }
                 }
-            }).fallbackToDestructiveMigration()
+            }).addMigrations(MIGRATION_1_2)
+                .fallbackToDestructiveMigration()
                 .build()
         }
 
