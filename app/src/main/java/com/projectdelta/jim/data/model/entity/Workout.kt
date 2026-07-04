@@ -11,9 +11,21 @@ import kotlinx.parcelize.Parcelize
 
 /**
  * Denotes a Workout, mapped with respective objects.
+ *
+ * Performance Optimization (Bolt):
+ * Added database indices to [sessionId] and [exerciseId].
+ * Room uses these fields heavily to resolve @Relation queries.
+ * Indexing them prevents full table scans during lookup, resulting in
+ * faster reads when fetching workout sessions and associated workouts.
  */
 @Keep
-@Entity(tableName = WORKOUT_TABLE)
+@Entity(
+    tableName = WORKOUT_TABLE,
+    indices = [
+        androidx.room.Index(value = ["sessionId"]),
+        androidx.room.Index(value = ["exerciseId"])
+    ]
+)
 @Parcelize
 data class Workout(
 

@@ -11,11 +11,23 @@ import com.projectdelta.jim.util.Constants.Table.WORKOUT_SET_TABLE
 import kotlinx.parcelize.Parcelize
 
 /**
- * A Set table to keep track of sets
+ * A Set table to keep track of sets.
+ *
+ * Performance Optimization (Bolt):
+ * Added database indices to [workoutId] and [exerciseId].
+ * Room frequently queries these fields to resolve @Relation mappings.
+ * Indexing these fields prevents full table scans and significantly improves
+ * the query performance when fetching WorkoutSets related to a specific Workout or Exercise.
  */
 @Keep
 @Parcelize
-@Entity(tableName = WORKOUT_SET_TABLE)
+@Entity(
+    tableName = WORKOUT_SET_TABLE,
+    indices = [
+        androidx.room.Index(value = ["workoutId"]),
+        androidx.room.Index(value = ["exerciseId"])
+    ]
+)
 data class WorkoutSet(
 
     /**
